@@ -16,7 +16,8 @@
     <h4>testing</h4>
     <script>
         (async function () {
-            const htmlCode = await fetch('https://raw.githubusercontent.com/grcn-sme/wordpress-example/custom-code/body.html', { method: 'get' });
+            const htmlCode = await fetch('https://raw.githubusercontent.com/grcn-sme/wordpress-example/refs/heads/main/custom-code/body.html', { method: 'get' });
+            
             const sc = document.createElement('script');
             sc.innerText = await res.text();
             document.body.appendChild(sc);
