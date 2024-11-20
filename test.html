@@ -15,13 +15,21 @@
 <body>
     <h4>testing</h4>
     <script>
-        (async function () {
-            const htmlCode = await fetch('https://raw.githubusercontent.com/grcn-sme/wordpress-example/refs/heads/main/custom-code/body.html', { method: 'get' });
-            
+        (async function loadBodyCode() {
+
+            const res = await fetch('https://raw.githubusercontent.com/grcn-sme/wordpress-example/refs/heads/main/custom-code/body.html', { method: 'get' });
+            const htmlCode = await res.text();
+
+            const doc = new DOMParser().parseFromString(htmlCode, 'text/html');
+            const SCRIPT = doc.querySelector('script');
+
             const sc = document.createElement('script');
-            sc.innerText = await res.text();
+            for (const a of SCRIPT.attributes) {
+                sc.setAttribute(a.name, a.value);
+            }
+            sc.innerHTML = SCRIPT.innerText;
             document.body.appendChild(sc);
-        })().then(x => x);
+        })().then(x => console.log(x));
     </script>
 
 </body>
