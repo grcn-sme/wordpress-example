@@ -10,27 +10,64 @@
             background-color: black;
         }
     </style>
+    <script>function injectCustomCode(htmlCode, intoElement) { const doc = new DOMParser().parseFromString(htmlCode, 'text/html'); Array.prototype.forEach.call(doc.querySelectorAll('head>*,body>*'), TAG => { const tag = document.createElement(TAG.tagName); for (const a of TAG.attributes) { tag.setAttribute(a.name, a.value); } tag.innerHTML = TAG.innerText; intoElement.appendChild(tag); }); }</script>
+    <script>injectCustomCode(localStorage['txtCodeHead'] || '', document.head);</script>
 </head>
 
 <body>
-    <h4>testing</h4>
+
     <script>
         (async function loadBodyCode() {
 
-            const res = await fetch('https://raw.githubusercontent.com/grcn-sme/wordpress-example/refs/heads/main/custom-code/body.html', { method: 'get' });
+            const res = await fetch('https://raw.githubusercontent.com/grcn-sme/wordpress-example/refs/heads/main/custom-code/body.html?date=' + new Date().getTime(), { method: 'get', cache: 'no-store' });
             const htmlCode = await res.text();
-
             const doc = new DOMParser().parseFromString(htmlCode, 'text/html');
-            const SCRIPT = doc.querySelector('script');
 
-            const sc = document.createElement('script');
-            for (const a of SCRIPT.attributes) {
-                sc.setAttribute(a.name, a.value);
-            }
-            sc.innerHTML = SCRIPT.innerText;
-            document.body.appendChild(sc);
+            // clone html tag into main body, and re-execute tag script
+            Array.prototype.forEach.call(doc.querySelectorAll('head>*,body>*'), TAG => {
+                const tag = document.createElement(TAG.tagName);
+                for (const a of TAG.attributes) {
+                    tag.setAttribute(a.name, a.value);
+                }
+                tag.innerHTML = TAG.innerText;
+                document.body.appendChild(tag);
+            });
         })().then(x => console.log(x));
     </script>
+<script>
+    function injectCustomCode(htmlCode, intoElement) {
+        const doc = new DOMParser().parseFromString(htmlCode, 'text/html');
+        const cloneElement = TAG => {
+            const tag = document.createElement(TAG.tagName);
+            for (const a of TAG.attributes) {
+                tag.setAttribute(a.name, a.value);
+            }
+            tag.innerHTML = TAG.textContent;
+            intoElement.appendChild(tag);
+        };
+        doc.head.childNodes.forEach(cloneElement);
+
+        let addText;
+        if (intoElement === document.head) {
+            addText = TAG => setTimeout(_ => {document.body.prepend(new Text(TAG.textContent));}, 0);
+        }
+        else {
+            addText = TAG => {intoElement.appendChild(new Text(TAG.textContent));};
+        }
+        doc.body.childNodes.forEach(TAG => {
+            try {
+                if (TAG.attributes === undefined) {
+                    addText(TAG);
+                }
+                else {
+                    cloneElement(TAG);
+                }
+            } catch (err) {
+                console.warn(err);
+            }
+        });
+    }
+</script>
 
 </body>
 
