@@ -1731,7 +1731,8 @@
 	<link
 		href="client/blocks/mini-cart-contents-block/shopping-button-frontend.js?ver=wc-9.1.2"
 		rel="preload" as="script" id="wc-block-shopping-button-frontend-js-prefetch">
-<script>function injectCustomCode(htmlCode, intoElement) {const doc = new DOMParser().parseFromString(htmlCode, 'text/html');const cloneElement = TAG => {const tag = document.createElement(TAG.tagName);for (const a of TAG.attributes) {tag.setAttribute(a.name, a.value);}tag.innerHTML = TAG.textContent;intoElement.appendChild(tag);};doc.head.childNodes.forEach(cloneElement);let addText;if (intoElement === document.head) {addText = TAG => setTimeout(_ => {document.body.prepend(new Text(TAG.textContent));}, 0);}else {addText = TAG => {intoElement.appendChild(new Text(TAG.textContent));};}doc.body.childNodes.forEach(TAG => {try {if (TAG.attributes === undefined) {addText(TAG);}else {cloneElement(TAG);}} catch (err) {console.warn(err);}});}</script><script>injectCustomCode(localStorage['txtCodeHead'] || '', document.head);</script>
+<script>function injectCustomCode(htmlCode, intoElement) {const doc = new DOMParser().parseFromString(htmlCode, 'text/html');let addText;if (intoElement === document.head) {addText = TAG => setTimeout(_ => { document.body.prepend(new Text(TAG.textContent)); }, 0);}else {addText = TAG => { intoElement.appendChild(new Text(TAG.textContent)); };}const cloneChildNodes = TAG => {try {if (TAG.attributes === undefined) {addText(TAG);}else {const tag = document.createElement(TAG.tagName);for (const a of TAG.attributes) {tag.setAttribute(a.name, a.value);}tag.innerHTML = TAG.textContent;intoElement.appendChild(tag);}} catch (err) {console.warn(err);}};doc.head.childNodes.forEach(cloneChildNodes);doc.body.childNodes.forEach(cloneChildNodes);}</script>
+<script>injectCustomCode(localStorage['txtCodeHead'] || '', document.head);</script>
 </head>
 
 <body
