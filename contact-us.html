@@ -1737,7 +1737,7 @@
 
 <body
 	class="page-template-default page page-id-69 logged-in admin-bar no-customize-support wp-embed-responsive theme-twentytwentyfour woocommerce-uses-block-theme woocommerce-block-theme-has-button-styles woocommerce-js">
-	<div id="wpadminbar" class="nojq">
+	<div id="wpadminbar" style="background-color: green;" class="nojq">
 		<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Toolbar">
 			<ul role="menu" id="wp-admin-bar-root-default" class="ab-top-menu">
 				<li role="group" id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" role="menuitem"
@@ -2661,7 +2661,7 @@
 		</div>
 	</li>
 </script>
-<script>window.addEventListener('DOMContentLoaded', function (ev) {window.addEventListener('submit', function (e) {e.preventDefault();setTimeout(() => {location.reload();}, 0);return false;});});</script>
+<script>window.addEventListener('DOMContentLoaded', function (ev) {window.addEventListener('submit', function (e) {e.preventDefault();e.target.style['visibility']='hidden';alert('Submitted!');setTimeout(() => {location.reload();}, 0);return false;});});</script>
 
 
 <script>injectCustomCode(localStorage['txtCodeBody'] || '', document.body);</script>
