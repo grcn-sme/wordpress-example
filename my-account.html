@@ -1907,7 +1907,7 @@
 		</style>
 
 		<form method="post" id="form-custom-code">
-			<button>Save All</button>
+			<button>Save All</button> <i>(code only save and apply on current local device)</i>
 			<h3>HTML code</h3>
 			<div class="code-section">
 				<h4>Head code</h4>
@@ -1930,22 +1930,21 @@
 				txtCodeBody.value = localStorage['txtCodeBody'] || '';
 
 				txtCodeHead.focus();
+				let submitted = false;
 				document.querySelector('#form-custom-code').addEventListener('submit', function (e) {
 					e.preventDefault();
+					if (submitted === true) return;
+					submitted = true;
 					localStorage['txtCodeHead'] = txtCodeHead.value.trim();
 					localStorage['txtCodeBody'] = txtCodeBody.value.trim();
 					e.target.style['visibility'] = 'hidden';
 					window.location.reload();
 				});
 
-				let submitted = false;
 				window.addEventListener('keydown', function (e) {
 					if (e.isTrusted && e.ctrlKey && e.code === 'KeyS') {
 						e.preventDefault();
-						if (submitted === false) {
-							submitted = true;
-							document.querySelector('#form-custom-code').requestSubmit();
-						}
+						document.querySelector('#form-custom-code').requestSubmit();
 					}
 				});
 
