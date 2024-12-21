@@ -198,8 +198,8 @@ h1.has-background,h2.has-background,h3.has-background,h4.has-background,h5.has-b
 			z-index: 100000;
 		}
 </style>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<script id="jquery-core-js"></script>
+<script id="jquery-migrate-js"></script>
 <script src="js/zoom/jquery.zoom.min.js?ver=1.7.21-wc.9.1.2" id="zoom-js" defer data-wp-strategy="defer"></script>
 <script src="js/flexslider/jquery.flexslider.min.js?ver=2.7.2-wc.9.1.2" id="flexslider-js" defer data-wp-strategy="defer"></script>
 <script src="js/photoswipe/photoswipe.min.js?ver=4.1.1-wc.9.1.2" id="photoswipe-js" defer data-wp-strategy="defer"></script>
@@ -224,8 +224,8 @@ var woocommerce_params = {"ajax_url":"\/grcn\/wp-admin\/admin-ajax.php","wc_ajax
 <script type="importmap" id="wp-importmap">
 {"imports":{"@wordpress\/interactivity":"https:\/\/techsol-tdcx.com\/grcn\/wp-includes\/js\/dist\/script-modules\/interactivity\/index.min.js?ver=06b8f695ef48ab2d9277"}}
 </script>
-<script type="module" src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/script-modules/block-library/navigation/view.min.js?ver=8ff192874fc8910a284c" id="@wordpress/block-library/navigation/view-js-module"></script>
-<link rel="modulepreload" href="wp-includes/js/dist/script-modules/interactivity/index.min.js?ver=06b8f695ef48ab2d9277" id="@wordpress/interactivity-js-modulepreload">	<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>
+<script type="module"  id="@wordpress/block-library/navigation/view-js-module"></script>
+<link rel="modulepreload"  id="@wordpress/interactivity-js-modulepreload">	<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>
 	<style id="wpforms-css-vars-root">
 				:root {
 					--wpforms-field-border-radius: 3px;
@@ -932,14 +932,14 @@ var woocommerce_params = {"ajax_url":"\/grcn\/wp-admin\/admin-ajax.php","wc_ajax
 			document.body.className = c;
 		})();
 	</script>
-	<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/hooks.min.js?ver=4d63a3d491d11ffd8ac6" id="wp-hooks-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0" id="wp-polyfill-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6" id="wp-i18n-js"></script>
+	<script id="wp-hooks-js"></script>
+<script id="wp-polyfill-js"></script>
+<script id="wp-i18n-js"></script>
 <script id="wp-i18n-js-after">
 wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
 </script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/url.min.js?ver=e87eb76272a3a08402d2" id="wp-url-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/api-fetch.min.js?ver=d387b816bc1ed2042e28" id="wp-api-fetch-js"></script>
+<script id="wp-url-js"></script>
+<script id="wp-api-fetch-js"></script>
 <script id="wp-api-fetch-js-after">
 wp.apiFetch.use( wp.apiFetch.createRootURLMiddleware( "https://techsol-tdcx.com/grcn/wp-json/" ) );
 wp.apiFetch.nonceMiddleware = wp.apiFetch.createNonceMiddleware( "56a55e7529" );
@@ -957,20 +957,20 @@ var wcSettings = wcSettings || JSON.parse( decodeURIComponent( '%7B%22shippingCo
 var wcBlocksMiniCartFrontendDependencies = JSON.parse( decodeURIComponent( '%7B%22wc-blocks-vendors-frontend%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-content%5C%2Fplugins%5C%2Fwoocommerce%5C%2Fassets%5C%2Fclient%5C%2Fblocks%5C%2Fwc-blocks-vendors-frontend.js%22%2C%22version%22%3A%22cbe41c7abb3949767748%22%2C%22before%22%3A%22%22%2C%22after%22%3A%22%22%2C%22translations%22%3Afalse%7D%2C%22wc-blocks-components%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-content%5C%2Fplugins%5C%2Fwoocommerce%5C%2Fassets%5C%2Fclient%5C%2Fblocks%5C%2Fblocks-components.js%22%2C%22version%22%3A%22211abb6906805368a551%22%2C%22before%22%3A%22%22%2C%22after%22%3A%22%22%2C%22translations%22%3Afalse%7D%2C%22wp-warning%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-includes%5C%2Fjs%5C%2Fdist%5C%2Fwarning.min.js%22%2C%22version%22%3A%22ed7c8b0940914f4fe44b%22%2C%22before%22%3A%22%22%2C%22after%22%3A%22%22%2C%22translations%22%3Afalse%7D%2C%22wc-blocks-checkout%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-content%5C%2Fplugins%5C%2Fwoocommerce%5C%2Fassets%5C%2Fclient%5C%2Fblocks%5C%2Fblocks-checkout.js%22%2C%22version%22%3A%225980872eb77817dd6b18%22%2C%22before%22%3A%22%22%2C%22after%22%3A%22%22%2C%22translations%22%3Afalse%7D%2C%22wp-autop%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-includes%5C%2Fjs%5C%2Fdist%5C%2Fautop.min.js%22%2C%22version%22%3A%229fb50649848277dd318d%22%2C%22before%22%3A%22%22%2C%22after%22%3A%22%22%2C%22translations%22%3Afalse%7D%2C%22wp-style-engine%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-includes%5C%2Fjs%5C%2Fdist%5C%2Fstyle-engine.min.js%22%2C%22version%22%3A%2208cc10e9532531e22456%22%2C%22before%22%3A%22%22%2C%22after%22%3A%22%22%2C%22translations%22%3Afalse%7D%2C%22wp-wordcount%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-includes%5C%2Fjs%5C%2Fdist%5C%2Fwordcount.min.js%22%2C%22version%22%3A%2255d8c2bf3dc99e7ea5ec%22%2C%22before%22%3A%22%22%2C%22after%22%3A%22%22%2C%22translations%22%3Afalse%7D%2C%22wc-payment-method-cod%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-content%5C%2Fplugins%5C%2Fwoocommerce%5C%2Fassets%5C%2Fclient%5C%2Fblocks%5C%2Fwc-payment-method-cod.js%22%2C%22version%22%3A%225f402826b33bac8f9e43%22%2C%22before%22%3A%22%22%2C%22after%22%3A%22%22%2C%22translations%22%3Afalse%7D%2C%22wc-block-mini-cart-component-frontend%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-content%5C%2Fplugins%5C%2Fwoocommerce%5C%2Fassets%5C%2Fclient%5C%2Fblocks%5C%2Fmini-cart-component-frontend.js%22%2C%22version%22%3A%2264d11b5b30724a537c38%22%2C%22translations%22%3A%22%22%7D%2C%22wc-block-empty-cart-frontend%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-content%5C%2Fplugins%5C%2Fwoocommerce%5C%2Fassets%5C%2Fclient%5C%2Fblocks%5C%2Fmini-cart-contents-block%5C%2Fempty-cart-frontend.js%22%2C%22version%22%3A%22wc-9.1.2%22%7D%2C%22wc-block-filled-cart-frontend%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-content%5C%2Fplugins%5C%2Fwoocommerce%5C%2Fassets%5C%2Fclient%5C%2Fblocks%5C%2Fmini-cart-contents-block%5C%2Ffilled-cart-frontend.js%22%2C%22version%22%3A%22wc-9.1.2%22%7D%2C%22wc-block-shopping-button-frontend%22%3A%7B%22src%22%3A%22https%3A%5C%2F%5C%2Ftechsol-tdcx.com%5C%2Fgrcn%5C%2Fwp-content%5C%2Fplugins%5C%2Fwoocommerce%5C%2Fassets%5C%2Fclient%5C%2Fblocks%5C%2Fmini-cart-contents-block%5C%2Fshopping-button-frontend.js%22%2C%22version%22%3A%22wc-9.1.2%22%7D%7D' ) );
 </script>
 <script src="client/blocks/mini-cart-frontend.js?ver=eba896c62201a23c4175" id="wc-mini-cart-block-frontend-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/vendor/react.min.js?ver=18.3.1" id="react-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/vendor/react-jsx-runtime.min.js?ver=18.3.1" id="react-jsx-runtime-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/deprecated.min.js?ver=e1f84915c5e8ae38964c" id="wp-deprecated-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/dom.min.js?ver=93117dfee2692b04b770" id="wp-dom-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/vendor/react-dom.min.js?ver=18.3.1" id="react-dom-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/escape-html.min.js?ver=6561a406d2d232a6fbd2" id="wp-escape-html-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/element.min.js?ver=cb762d190aebbec25b27" id="wp-element-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/is-shallow-equal.min.js?ver=e0f9f1d78d83f5196979" id="wp-is-shallow-equal-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/keycodes.min.js?ver=034ff647a54b018581d3" id="wp-keycodes-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/priority-queue.min.js?ver=9c21c957c7e50ffdbf48" id="wp-priority-queue-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/compose.min.js?ver=85f0708cd2e6b26addeb" id="wp-compose-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/private-apis.min.js?ver=4b858962c15c2c7a135f" id="wp-private-apis-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/redux-routine.min.js?ver=a0a172871afaeb261566" id="wp-redux-routine-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/data.min.js?ver=7c62e39de0308c73d50c" id="wp-data-js"></script>
+<script id="react-js"></script>
+<script id="react-jsx-runtime-js"></script>
+<script id="wp-deprecated-js"></script>
+<script id="wp-dom-js"></script>
+<script id="react-dom-js"></script>
+<script id="wp-escape-html-js"></script>
+<script id="wp-element-js"></script>
+<script id="wp-is-shallow-equal-js"></script>
+<script id="wp-keycodes-js"></script>
+<script id="wp-priority-queue-js"></script>
+<script id="wp-compose-js"></script>
+<script id="wp-private-apis-js"></script>
+<script id="wp-redux-routine-js"></script>
+<script id="wp-data-js"></script>
 <script id="wp-data-js-after">
 ( function() {
 	var userId = 0;
@@ -980,9 +980,9 @@ var wcBlocksMiniCartFrontendDependencies = JSON.parse( decodeURIComponent( '%7B%
 } )();
 </script>
 <script src="client/blocks/wc-blocks-registry.js?ver=1c879273bd5c193cad0a" id="wc-blocks-registry-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/data-controls.min.js?ver=49f5587e8b90f9e7cc7e" id="wp-data-controls-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/html-entities.min.js?ver=2cd3358363e0675638fb" id="wp-html-entities-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/notices.min.js?ver=673a68a7ac2f556ed50b" id="wp-notices-js"></script>
+<script id="wp-data-controls-js"></script>
+<script id="wp-html-entities-js"></script>
+<script id="wp-notices-js"></script>
 <script id="wc-blocks-middleware-js-before">
 			var wcBlocksMiddlewareConfig = {
 				storeApiNonce: '54fd7d1aad',
@@ -993,9 +993,9 @@ var wcBlocksMiniCartFrontendDependencies = JSON.parse( decodeURIComponent( '%7B%
 <script src="client/blocks/wc-blocks-middleware.js?ver=ca04183222edaf8a26be" id="wc-blocks-middleware-js"></script>
 <script src="client/blocks/wc-blocks-data.js?ver=3b21c127321dcdffaeba" id="wc-blocks-data-store-js"></script>
 <script src="client/blocks/wc-interactivity.js?ver=wc-9.1.2" id="wc-interactivity-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/dom-ready.min.js?ver=f77871ff7694fffea381" id="wp-dom-ready-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/a11y.min.js?ver=3156534cc54473497e14" id="wp-a11y-js"></script>
-<script src="https://techsol-tdcx.com/grcn/wp-includes/js/dist/primitives.min.js?ver=aef2543ab60c8c9bb609" id="wp-primitives-js"></script>
+<script id="wp-dom-ready-js"></script>
+<script id="wp-a11y-js"></script>
+<script id="wp-primitives-js"></script>
 <script src="client/blocks/product-button-interactivity-frontend.js?ver=cb28f5957f4ece0c48e5" id="wc-product-button-interactivity-frontend-js"></script>
 <script id="wp-block-template-skip-link-js-after">
 	( function() {
