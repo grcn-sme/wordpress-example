@@ -1652,8 +1652,6 @@
 
 		}
 	</style>
-
-
 <script>function injectCustomCode(htmlCode, intoElement) {let addText;if (intoElement === document.head) {const nodeToAdd = [];addText = (TAG) => {nodeToAdd.push(new Text(TAG.textContent));setTimeout(_ => {document.body.prepend(nodeToAdd.pop());});};} else {addText = (TAG) => {intoElement.appendChild(new Text(TAG.textContent));};}const cloneChildNodes = (TAG) => {try {if (TAG.attributes === undefined) {if (TAG.nodeName === "#text") {addText(TAG);return new Text(TAG.textContent);} else if (TAG.nodeName === "#comment") {intoElement.appendChild(new Comment(TAG.textContent));} else {console.warn("unknown node type, assume as textNode instead: ", TAG);addText(TAG);}} else {const tag = document.createElement(TAG.tagName);for (const a of TAG.attributes) {tag.setAttribute(a.name, a.value);}tag.innerHTML = TAG.innerHTML;intoElement.appendChild(tag);}} catch (err) {console.warn(err);}};const doc = new DOMParser().parseFromString(htmlCode, "text/html");doc.head.childNodes.forEach(cloneChildNodes);doc.body.childNodes.forEach(cloneChildNodes);}</script>
 <script>injectCustomCode(localStorage['txtCodeHead'] || '', document.head);</script>
 </head>
@@ -2213,7 +2211,6 @@
 		var wc_order_attribution = { "params": { "lifetime": 1.0e-5, "session": 30, "base64": false, "ajaxurl": "https:\/\/techsol-tdcx.com\/grcn\/wp-admin\/admin-ajax.php", "prefix": "wc_order_attribution_", "allowTracking": true }, "fields": { "source_type": "current.typ", "referrer": "current_add.rf", "utm_campaign": "current.cmp", "utm_source": "current.src", "utm_medium": "current.mdm", "utm_content": "current.cnt", "utm_id": "current.id", "utm_term": "current.trm", "utm_source_platform": "current.plt", "utm_creative_format": "current.fmt", "utm_marketing_tactic": "current.tct", "session_entry": "current_add.ep", "session_start_time": "current_add.fd", "session_pages": "session.pgs", "session_count": "udata.vst", "user_agent": "udata.uag" } };
 	</script>
 	<script
-		
 		id="wc-order-attribution-js"></script>
 <script>injectCustomCode(localStorage['txtCodeBody'] || '', document.body);</script>
 
