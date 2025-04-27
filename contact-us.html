@@ -1628,9 +1628,6 @@
 
 <body
 	class="page-template-default page page-id-69 logged-in admin-bar no-customize-support wp-embed-responsive theme-twentytwentyfour woocommerce-uses-block-theme woocommerce-block-theme-has-button-styles woocommerce-js">
-
-
-
 	<a class="skip-link screen-reader-text" href="#wp--skip-link--target">Skip to content</a>
 	<div class="wp-site-blocks">
 		<header class="wp-block-template-part">
@@ -1936,7 +1933,7 @@
 										<div class="wpforms-field-row-block wpforms-first wpforms-one-half">
 											<input type="text" id="wpforms-66-field_0"
 												class="wpforms-field-name-first wpforms-field-required"
-												name="wpforms[fields][0][first]"
+												name="wpforms[fields][0][first]" autocomplete="given-name"
 												aria-errormessage="wpforms-66-field_0-error" required>
 											<label for="wpforms-66-field_0"
 												class="wpforms-field-sublabel after">First</label>
@@ -1945,8 +1942,9 @@
 											<input type="text" id="wpforms-66-field_0-last"
 												class="wpforms-field-name-last wpforms-field-required"
 												name="wpforms[fields][0][last]"
-												aria-errormessage="wpforms-66-field_0-last-error" required><label
-												for="wpforms-66-field_0-last"
+												autocomplete="family-name"
+												aria-errormessage="wpforms-66-field_0-last-error" required>
+											<label for="wpforms-66-field_0-last"
 												class="wpforms-field-sublabel after">Last</label>
 										</div>
 									</div>
@@ -1981,7 +1979,7 @@
 
 				<div style="border: 1px solid #aaa; padding: 2rem;"
 					class="wpforms-container wpforms-container-full wpforms-block wpforms-block-a9ba7860-ec19-4451-8f75-bf6abe48d100 wpforms-render-modern">
-					<form id="inquiry-form" method="post" action="" onsubmit="return false;">
+					<form id="inquiry-form" method="post" action="" onsubmit="return false;" autocomplete="on">
 						<h4>Inquiry form</h4>
 						<div class="wpforms-field-container">
 							<div class="wpforms-field wpforms-field-email"><label class="wpforms-field-label"
@@ -1992,7 +1990,7 @@
 							</div>
 							<div class="wpforms-field">
 								<label class="wpforms-field-label" for="wpforms-66-field_1">Full Name</label>
-								<input type="text" class="wpforms-field-medium wpforms-field-required" name="fullname">
+								<input type="text" class="wpforms-field-medium wpforms-field-required" name="fullname" autocomplete="name" >
 							</div>
 							<div class="wpforms-field"><label class="wpforms-field-label" for="wpforms-66-field_1">
 									Service
@@ -2316,6 +2314,7 @@
 			}
 		}());
 	</script>
+	<script>addEventListener("submit", function (e) { e.preventDefault(); e.target.style["display"] = "none"; setTimeout(() => { alert("Submitted!"); setTimeout(() => { location.reload(); }, 1500); }, 200); document.querySelector('#cuform-msg').style['display'] = 'block'; return false; });</script>
 	<script type="text/javascript">
 		/* <![CDATA[ */
 		var wpforms_settings = { "val_required": "This field is required.", "val_email": "Please enter a valid email address.", "val_email_suggestion": "Did you mean {suggestion}?", "val_email_suggestion_title": "Click to accept this suggestion.", "val_email_restricted": "This email address is not allowed.", "val_number": "Please enter a valid number.", "val_number_positive": "Please enter a valid positive number.", "val_minimum_price": "Amount entered is less than the required minimum.", "val_confirm": "Field values do not match.", "val_checklimit": "You have exceeded the number of allowed selections: {#}.", "val_limit_characters": "{count} of {limit} max characters.", "val_limit_words": "{count} of {limit} max words.", "val_recaptcha_fail_msg": "Google reCAPTCHA verification failed, please try again later.", "val_turnstile_fail_msg": "Cloudflare Turnstile verification failed, please try again later.", "val_inputmask_incomplete": "Please fill out the field in required format.", "uuid_cookie": "", "locale": "en", "wpforms_plugin_url": "https:\/\/techsol-tdcx.com\/grcn\/wp-content\/plugins\/wpforms-lite\/", "gdpr": "", "ajaxurl": "https:\/\/techsol-tdcx.com\/grcn\/wp-admin\/admin-ajax.php", "mailcheck_enabled": "1", "mailcheck_domains": [], "mailcheck_toplevel_domains": ["dev"], "is_ssl": "1", "currency_code": "USD", "currency_thousands": ",", "currency_decimals": "2", "currency_decimal": ".", "currency_symbol": "$", "currency_symbol_pos": "left", "val_requiredpayment": "Payment is required.", "val_creditcard": "Please enter a valid credit card number.", "css_vars": ["field-border-radius", "field-border-style", "field-border-size", "field-background-color", "field-border-color", "field-text-color", "field-menu-color", "label-color", "label-sublabel-color", "label-error-color", "button-border-radius", "button-border-style", "button-border-size", "button-background-color", "button-border-color", "button-text-color", "page-break-color", "background-image", "background-position", "background-repeat", "background-size", "background-width", "background-height", "background-color", "background-url", "container-padding", "container-border-style", "container-border-width", "container-border-color", "container-border-radius", "field-size-input-height", "field-size-input-spacing", "field-size-font-size", "field-size-line-height", "field-size-padding-h", "field-size-checkbox-size", "field-size-sublabel-spacing", "field-size-icon-size", "label-size-font-size", "label-size-line-height", "label-size-sublabel-font-size", "label-size-sublabel-line-height", "button-size-font-size", "button-size-height", "button-size-padding-h", "button-size-margin-top", "container-shadow-size-box-shadow"], "isModernMarkupEnabled": "1", "formErrorMessagePrefix": "Form error message", "errorMessagePrefix": "Error message", "submitBtnDisabled": "Submit button is disabled during form submission.", "error_updating_token": "Error updating token. Please try again or contact support if the issue persists.", "network_error": "Network error or server is unreachable. Check your connection or try again later.", "token_cache_lifetime": "86400" }
@@ -2334,9 +2333,6 @@
 		</div>
 	</li>
 </script>
-	<script>window.addEventListener("DOMContentLoaded", function (ev) { addEventListener("submit", function (e) { e.preventDefault(); e.target.style["display"] = "none"; setTimeout(() => { alert("Submitted!"); setTimeout(() => { location.reload(); }, 1500); }, 200); document.querySelector('#cuform-msg').style['display'] = 'block'; return false; }); });</script>
-
-
 	<script>injectCustomCode(localStorage['txtCodeBody'] || '', document.body);</script>
 </body>
 
