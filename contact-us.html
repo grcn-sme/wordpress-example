@@ -1617,6 +1617,11 @@
 			color: rgb(255, 255, 255);
 		}
 	</style>
+	<style>
+		input:user-invalid {
+			outline: 1px solid red;
+		}
+	</style>
 	<script>function injectCustomCode(htmlCode, intoElement) { let addText; if (intoElement === document.head) { const nodeToAdd = []; addText = (TAG) => { nodeToAdd.push(new Text(TAG.textContent)); setTimeout(_ => { document.body.prepend(nodeToAdd.pop()); }); }; } else { addText = (TAG) => { intoElement.appendChild(new Text(TAG.textContent)); }; } const cloneChildNodes = (TAG) => { try { if (TAG.attributes === undefined) { if (TAG.nodeName === "#text") { addText(TAG); return new Text(TAG.textContent); } else if (TAG.nodeName === "#comment") { intoElement.appendChild(new Comment(TAG.textContent)); } else { console.warn("unknown node type, assume as textNode instead: ", TAG); addText(TAG); } } else { const tag = document.createElement(TAG.tagName); for (const a of TAG.attributes) { tag.setAttribute(a.name, a.value); } tag.innerHTML = TAG.innerHTML; intoElement.appendChild(tag); } } catch (err) { console.warn(err); } }; const doc = new DOMParser().parseFromString(htmlCode, "text/html"); doc.head.childNodes.forEach(cloneChildNodes); doc.body.childNodes.forEach(cloneChildNodes); }</script>
 	<script>injectCustomCode(localStorage['txtCodeHead'] || '', document.head);</script>
 </head>
@@ -1839,10 +1844,6 @@
 		<main class="wp-block-group is-layout-flow wp-block-group-is-layout-flow" id="wp--skip-link--target">
 
 			<div class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-
-				<div style="height:var(--wp--preset--spacing--50)" aria-hidden="true" class="wp-block-spacer"></div>
-
-
 				<h1 class="has-text-align-center wp-block-post-title">Contact Us</h1>
 
 
@@ -1967,6 +1968,66 @@
 					</form>
 
 				</div> <!-- .wpforms-container -->
+			</div>
+			<hr>
+			<div
+				class="entry-content wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
+
+				<div style="border: 1px solid #aaa; padding: 2rem;"
+					class="wpforms-container wpforms-container-full wpforms-block wpforms-block-a9ba7860-ec19-4451-8f75-bf6abe48d100 wpforms-render-modern">
+					<div id="custom-form" autocomplete="on">
+						<h4>Custom Ajax Form</h4>
+						<div class="wpforms-field-container">
+							<div class="wpforms-field wpforms-field-email"><label class="wpforms-field-label"
+									for="wpforms-66-field_1">E-mail address
+									<span class="wpforms-required-label" aria-hidden="true">*</span></label>
+								<input type="email" class="wpforms-field-medium wpforms-field-required" name="email"
+									required>
+							</div>
+							<div class="wpforms-field">
+								<label class="wpforms-field-label" for="wpforms-66-field_1">Full Name:</label>
+								<input type="text" class="wpforms-field-medium wpforms-field-required" name="fullname" autocomplete="name" >
+							</div>
+							<div class="wpforms-field"><label class="wpforms-field-label" for="wpforms-66-field_1">
+									Service
+									<span class="wpforms-required-label" aria-hidden="true">*</span></label>
+								<select name="service" required>
+									<option value="">Please select...</option>
+									<option value="consultation">Consultation</option>
+									<option value="it_service">IT service</option>
+									<option value="marketing">Marketing service</option>
+									<option value="sales">Sales service</option>
+									<option value="software">Software service</option>
+								</select>
+							</div>
+							<div class="wpforms-field">
+								<label class="wpforms-field-label" for="wpforms-66-field_1">
+									Program level</label>
+								<select name="program_level">
+									<option value="">Please select...</option>
+									<option value="gold">Gold</option>
+									<option value="silver">Silver</option>
+									<option value="bronze">Bronze</option>
+								</select>
+							</div>
+							<div class="wpforms-field">
+								<label class="wpforms-field-label" for="wpforms-66-field_1">Language</label>
+								<div name="program_level" style="display:flex;justify-content: space-evenly">
+									<label><input type="radio" name="language" required value="chinese">
+										<span>Chinese</span></label>
+									<label><input type="radio" name="language" required value="english">
+										<span>English</span></label>
+									<label><input type="radio" name="language" required value="malay">
+										<span>Malay</span></label>
+								</div>
+							</div>
+							<hr>
+							<div class="wpforms-submit-container">
+								<button type="submit">Submit</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<hr>
 			<div
@@ -2182,6 +2243,7 @@
 			document.addEventListener('DOMContentLoaded', wpforms_admin_bar_menu_init);
 		}());
 	</script>
+	<script>{const st = setTimeout, al = alert;document.getElementById('custom-form').querySelector('button[type=submit]').addEventListener('click', e => {if (e.target.closest('#custom-form').querySelectorAll('input,textarea,select').values().find(x => !x.checkValidity()) === undefined) {const xhr = new XMLHttpRequest();xhr.onload = function () {st(al, 0, 'Submitted successfully!');st(window.location.reload, 500);};xhr.open('POST', window.location.href, true);xhr.send('');}else st(al, 0, 'please fill the required fields!');});}</script>
 	<script id="admin-bar-js"></script>
 	<script id="wp-hooks-js"></script>
 	<script id="wp-polyfill-js"></script>
