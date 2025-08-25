@@ -1618,7 +1618,7 @@
 		}
 	</style>
 	<style>
-		input:user-invalid {
+		input:user-invalid,select:user-invalid,textarea:user-invalid {
 			outline: 1px solid red;
 		}
 	</style>
@@ -2243,7 +2243,7 @@
 			document.addEventListener('DOMContentLoaded', wpforms_admin_bar_menu_init);
 		}());
 	</script>
-	<script>{const st = setTimeout, al = alert;document.getElementById('custom-form').querySelector('button[type=submit]').addEventListener('click', e => {if (e.target.closest('#custom-form').querySelectorAll('input,textarea,select').values().find(x => !x.checkValidity()) === undefined) {const xhr = new XMLHttpRequest();xhr.onload = function () {st(al, 0, 'Submitted successfully!');st(window.location.reload, 500);};xhr.open('POST', window.location.href, true);xhr.send('');}else st(al, 0, 'please fill the required fields!');});}</script>
+	<script>{const st = setTimeout, al = alert;document.getElementById('custom-form').querySelector('button[type=submit]').addEventListener('click', e => {if (e.target.closest('#custom-form').querySelectorAll('input,textarea,select').values().find(x => !x.checkValidity()) === undefined) {const xhr = new XMLHttpRequest();xhr.onload = function () {st(al, 0, 'Submitted successfully!');st(_=>{window.location.reload();}, 500);};xhr.open('POST', window.location.href, true);xhr.send('');}else st(al, 0, 'please fill the required fields!');});}</script>
 	<script id="admin-bar-js"></script>
 	<script id="wp-hooks-js"></script>
 	<script id="wp-polyfill-js"></script>
