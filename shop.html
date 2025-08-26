@@ -356,19 +356,9 @@ var woocommerce_params = {"ajax_url":"\/grcn\/wp-admin\/admin-ajax.php","wc_ajax
 </div>
 
 
-<!-- custom code -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js"></script>
-<script>
-  window.addEventListener('DOMContentLoaded', () => {
-    quicklink.listen({
-      limit: 15,
-      throttle: 6,
-      delay: 500,
-    });
-  });
-</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js"></script><script>window.addEventListener('load', function () {const reset = quicklink.listen({el: document.body.getElementsByClassName('wp-site-blocks')[0] || document.body,limit: 20, throttle: 4,delay: 500 ,ignores: [href => href === '' || href === location.pathname || href === location.href || href.includes('cart')]});document.body.addEventListener('submit', function (e) { if (e.isTrusted) reset(); });});</script>
 
-<!-- end of custom code --></header>
+</header>
 
 
 <main class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
