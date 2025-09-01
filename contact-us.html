@@ -1619,7 +1619,7 @@
 	</style>
 	<script>function injectCustomCode(htmlCode, intoElement) { let addText; if (intoElement === document.head) { const nodeToAdd = []; addText = (TAG) => { nodeToAdd.push(new Text(TAG.textContent)); setTimeout(_ => { document.body.prepend(nodeToAdd.pop()); }); }; } else { addText = (TAG) => { intoElement.appendChild(new Text(TAG.textContent)); }; } const cloneChildNodes = (TAG) => { try { if (TAG.attributes === undefined) { if (TAG.nodeName === "#text") { addText(TAG); return new Text(TAG.textContent); } else if (TAG.nodeName === "#comment") { intoElement.appendChild(new Comment(TAG.textContent)); } else { console.warn("unknown node type, assume as textNode instead: ", TAG); addText(TAG); } } else { const tag = document.createElement(TAG.tagName); for (const a of TAG.attributes) { tag.setAttribute(a.name, a.value); } tag.innerHTML = TAG.innerHTML; intoElement.appendChild(tag); } } catch (err) { console.warn(err); } }; const doc = new DOMParser().parseFromString(htmlCode, "text/html"); doc.head.childNodes.forEach(cloneChildNodes); doc.body.childNodes.forEach(cloneChildNodes); }</script>
 	<script>injectCustomCode(localStorage['txtCodeHead'] || '', document.head);</script>
-	<style>select,button,input[type=radio],input[type=checkbox],label:has(>input) {cursor: pointer;&[readonly],&:disabled {cursor: not-allowed;}}input,label:has(>input) {&[readonly],&:disabled {cursor: not-allowed;}}#custom-form {max-height: 80vh;&.loading {cursor: progress;opacity: .25;}&.submitted {max-height: 0;overflow: hidden;background-color: #f0fff0;opacity: .5;transition: .5s ease;}}</style>
+	<style>:root{scroll-padding-top:10svh;}select,button,input[type=radio],input[type=checkbox],label:has(>input) {cursor: pointer;&[readonly],&:disabled {cursor: not-allowed;}}input,label:has(>input) {&[readonly],&:disabled {cursor: not-allowed;}}#custom-form {max-height: 80vh;&.loading {cursor: progress;opacity: .25;}&.submitted {max-height: 0;overflow: hidden;background-color: lightgreen;opacity: .5;transition: .6s ease;}}</style>
 	<style>input[autocomplete="tel-country-code"]{width: 5ch;}</style>
 </head>
 
@@ -1974,8 +1974,8 @@
 								<label class="wpforms-field-label">Phone number
 									<span class="wpforms-required-label" aria-hidden="true">*</span>
 								</label>
-								<input type="tel" maxlength="4" class="wpforms-field-medium wpforms-field-required" pattern="^\+?[1-9][0-9]{0,2}" name="tel_code" autocomplete="tel-country-code" required>
-								<input type="tel" minlength="8" maxlength="12" class="wpforms-field-medium wpforms-field-required" pattern="^[0-9]+" name="tel_code" autocomplete="tel-national" required>
+								<input type="tel" maxlength="4" class="wpforms-field-medium wpforms-field-required" name="tel_code" autocomplete="tel-country-code" required>
+								<input type="tel" minlength="8" maxlength="12" class="wpforms-field-medium wpforms-field-required" name="tel_code" autocomplete="tel-national" required>
 							</div>
 							<div class="wpforms-field">
 								<label class="wpforms-field-label">Full Name:</label>
@@ -2004,7 +2004,7 @@
 								</select>
 							</div>
 							<div class="wpforms-field">
-								<label class="wpforms-field-label">Language</label>
+								<label class="wpforms-field-label">Language *</label>
 								<div name="program_level" style="display:flex;justify-content: space-evenly">
 									<label><input type="radio" name="language" required value="chinese">
 										<span>Chinese</span></label>
@@ -2070,7 +2070,7 @@
 								</select>
 							</div>
 							<div class="wpforms-field">
-								<label class="wpforms-field-label">Language</label>
+								<label class="wpforms-field-label">Language *</label>
 								<div name="program_level" style="display:flex;justify-content: space-evenly">
 									<label><input type="radio" name="language" required value="chinese">
 										<span>Chinese</span></label>
@@ -2217,6 +2217,7 @@
 	</script>
 	<script src="/build/admin-bar.js?ver=8afeca4aaad1d56fefb41623b6b7b000" id="wpcode-admin-bar-js-js"></script>
 	<script id="hoverintent-js-js"></script>
+	<script>{const st = setTimeout,al = alert,cf = document.getElementById("custom-form");cf.querySelector("button[type=submit]").addEventListener("click", (e) => {if (cf.querySelectorAll("input,textarea,select").values().find((x) => !x.checkValidity()) === undefined) {const xhr = new XMLHttpRequest();xhr.onload = function () {st(() => {cf.classList.remove('loading');cf.classList.add('submitted');cf.scrollIntoView();("Submitted successfully!");st(l => l.reload(), 1500, window.location);cf.querySelectorAll("input,textarea,select").forEach(x => x.removeAttribute('readonly'));}, 1000);};xhr.open("POST", window.location.href, true);xhr.send("");cf.querySelectorAll("input,textarea,select").forEach(x => x.setAttribute('readonly', ''));cf.classList.add('loading');} else st(al, 50, "please fill the required fields!");});}</script>
 	<script id="admin-bar-js-before">
 		(function () {
 			function wpforms_admin_bar_menu_init() {
@@ -2242,7 +2243,6 @@
 			document.addEventListener('DOMContentLoaded', wpforms_admin_bar_menu_init);
 		}());
 	</script>
-	<script>{const st = setTimeout,al = alert,cf = document.getElementById("custom-form");cf.querySelector("button[type=submit]").addEventListener("click", (e) => {if (cf.querySelectorAll("input,textarea,select").values().find((x) => !x.checkValidity()) === undefined) {const xhr = new XMLHttpRequest();xhr.onload = function () {st(() => {cf.classList.remove('loading');cf.classList.add('submitted');cf.scrollIntoView();("Submitted successfully!");st(l => l.reload(), 900, window.location);cf.querySelectorAll("input,textarea,select").forEach(x => x.removeAttribute('readonly'));}, 100);};xhr.open("POST", window.location.href, true);xhr.send("");cf.querySelectorAll("input,textarea,select").forEach(x => x.setAttribute('readonly', ''));cf.classList.add('loading');} else st(al, 0, "please fill the required fields!");});}</script>
 	<script id="admin-bar-js"></script>
 	<script id="wp-hooks-js"></script>
 	<script id="wp-polyfill-js"></script>
@@ -2253,10 +2253,6 @@
 	<script id="wp-url-js"></script>
 	<script id="wp-api-fetch-js"></script>
 	<script id="wp-api-fetch-js-after">
-
-
-
-
 
 	</script>
 	<script id="wc-settings-js-before">
