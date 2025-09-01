@@ -1624,6 +1624,8 @@
 	</style>
 	<script>function injectCustomCode(htmlCode, intoElement) { let addText; if (intoElement === document.head) { const nodeToAdd = []; addText = (TAG) => { nodeToAdd.push(new Text(TAG.textContent)); setTimeout(_ => { document.body.prepend(nodeToAdd.pop()); }); }; } else { addText = (TAG) => { intoElement.appendChild(new Text(TAG.textContent)); }; } const cloneChildNodes = (TAG) => { try { if (TAG.attributes === undefined) { if (TAG.nodeName === "#text") { addText(TAG); return new Text(TAG.textContent); } else if (TAG.nodeName === "#comment") { intoElement.appendChild(new Comment(TAG.textContent)); } else { console.warn("unknown node type, assume as textNode instead: ", TAG); addText(TAG); } } else { const tag = document.createElement(TAG.tagName); for (const a of TAG.attributes) { tag.setAttribute(a.name, a.value); } tag.innerHTML = TAG.innerHTML; intoElement.appendChild(tag); } } catch (err) { console.warn(err); } }; const doc = new DOMParser().parseFromString(htmlCode, "text/html"); doc.head.childNodes.forEach(cloneChildNodes); doc.body.childNodes.forEach(cloneChildNodes); }</script>
 	<script>injectCustomCode(localStorage['txtCodeHead'] || '', document.head);</script>
+	<style>select,button,input[type=radio],input[type=checkbox],label:has(>input) {cursor: pointer;&[readonly],&:disabled {cursor: not-allowed;}}input,label:has(>input) {&[readonly],&:disabled {cursor: not-allowed;}}#custom-form {max-height: 80vh;&.loading {cursor: progress;opacity: .25;}&.submitted {max-height: 0;overflow: hidden;background-color: #f0fff0;opacity: .5;transition: .5s ease;}}</style>
+	<style>input[autocomplete="tel-country-code"]{width: 5ch;}</style>
 </head>
 
 <body
@@ -1968,17 +1970,23 @@
 					<div id="custom-form" autocomplete="on">
 						<h4>Custom Ajax Form</h4>
 						<div class="wpforms-field-container">
-							<div class="wpforms-field wpforms-field-email"><label class="wpforms-field-label"
-									for="wpforms-66-field_1">E-mail address
+							<div class="wpforms-field wpforms-field-email"><label class="wpforms-field-label">E-mail address
 									<span class="wpforms-required-label" aria-hidden="true">*</span></label>
 								<input type="email" class="wpforms-field-medium wpforms-field-required" name="email"
 									required>
 							</div>
 							<div class="wpforms-field">
-								<label class="wpforms-field-label" for="wpforms-66-field_1">Full Name:</label>
+								<label class="wpforms-field-label">Phone number
+									<span class="wpforms-required-label" aria-hidden="true">*</span>
+								</label>
+								<input type="tel" maxlength="4" class="wpforms-field-medium wpforms-field-required" pattern="^\+?[1-9][0-9]{0,2}" name="tel_code" autocomplete="tel-country-code" required>
+								<input type="tel" minlength="8" maxlength="12" class="wpforms-field-medium wpforms-field-required" pattern="^[0-9]+" name="tel_code" autocomplete="tel-national" required>
+							</div>
+							<div class="wpforms-field">
+								<label class="wpforms-field-label">Full Name:</label>
 								<input type="text" class="wpforms-field-medium wpforms-field-required" name="fullname" autocomplete="name" >
 							</div>
-							<div class="wpforms-field"><label class="wpforms-field-label" for="wpforms-66-field_1">
+							<div class="wpforms-field"><label class="wpforms-field-label">
 									Service
 									<span class="wpforms-required-label" aria-hidden="true">*</span></label>
 								<select name="service" required>
@@ -1991,7 +1999,7 @@
 								</select>
 							</div>
 							<div class="wpforms-field">
-								<label class="wpforms-field-label" for="wpforms-66-field_1">
+								<label class="wpforms-field-label">
 									Program level</label>
 								<select name="program_level">
 									<option value="">Please select...</option>
@@ -2001,7 +2009,7 @@
 								</select>
 							</div>
 							<div class="wpforms-field">
-								<label class="wpforms-field-label" for="wpforms-66-field_1">Language</label>
+								<label class="wpforms-field-label">Language</label>
 								<div name="program_level" style="display:flex;justify-content: space-evenly">
 									<label><input type="radio" name="language" required value="chinese">
 										<span>Chinese</span></label>
@@ -2028,17 +2036,23 @@
 					<form id="inquiry-form" method="post" action="" onsubmit="return false;" autocomplete="on">
 						<h4>Inquiry form</h4>
 						<div class="wpforms-field-container">
-							<div class="wpforms-field wpforms-field-email"><label class="wpforms-field-label"
-									for="wpforms-66-field_1">Email
+							<div class="wpforms-field wpforms-field-email"><label class="wpforms-field-label">Email
 									<span class="wpforms-required-label" aria-hidden="true">*</span></label>
 								<input type="email" class="wpforms-field-medium wpforms-field-required" name="email"
 									required>
 							</div>
 							<div class="wpforms-field">
-								<label class="wpforms-field-label" for="wpforms-66-field_1">Full Name</label>
+								<label class="wpforms-field-label">Phone number
+									<span class="wpforms-required-label" aria-hidden="true">*</span>
+								</label>
+								<input type="tel" maxlength="4" class="wpforms-field-medium wpforms-field-required" pattern="^\+?[1-9][0-9]{0,2}" name="tel_code" autocomplete="tel-country-code" required>
+								<input type="tel" minlength="8" maxlength="12" class="wpforms-field-medium wpforms-field-required" pattern="^[0-9]+" name="tel_code" autocomplete="tel-national" required>
+							</div>
+							<div class="wpforms-field">
+								<label class="wpforms-field-label">Full Name</label>
 								<input type="text" class="wpforms-field-medium wpforms-field-required" name="fullname" autocomplete="name" >
 							</div>
-							<div class="wpforms-field"><label class="wpforms-field-label" for="wpforms-66-field_1">
+							<div class="wpforms-field"><label class="wpforms-field-label">
 									Service
 									<span class="wpforms-required-label" aria-hidden="true">*</span></label>
 								<select name="service" required>
@@ -2051,7 +2065,7 @@
 								</select>
 							</div>
 							<div class="wpforms-field">
-								<label class="wpforms-field-label" for="wpforms-66-field_1">
+								<label class="wpforms-field-label">
 									Program level</label>
 								<select name="program_level">
 									<option value="">Please select...</option>
@@ -2061,7 +2075,7 @@
 								</select>
 							</div>
 							<div class="wpforms-field">
-								<label class="wpforms-field-label" for="wpforms-66-field_1">Language</label>
+								<label class="wpforms-field-label">Language</label>
 								<div name="program_level" style="display:flex;justify-content: space-evenly">
 									<label><input type="radio" name="language" required value="chinese">
 										<span>Chinese</span></label>
@@ -2233,7 +2247,7 @@
 			document.addEventListener('DOMContentLoaded', wpforms_admin_bar_menu_init);
 		}());
 	</script>
-	<script>{const st = setTimeout, al = alert;document.getElementById('custom-form').querySelector('button[type=submit]').addEventListener('click', e => {if (e.target.closest('#custom-form').querySelectorAll('input,textarea,select').values().find(x => !x.checkValidity()) === undefined) {const xhr = new XMLHttpRequest();xhr.onload = function () {st(al, 0, 'Submitted successfully!');st(_=>{window.location.reload();}, 500);};xhr.open('POST', window.location.href, true);xhr.send('');}else st(al, 0, 'please fill the required fields!');});}</script>
+	<script>{const st = setTimeout,al = alert,cf = document.getElementById("custom-form");cf.querySelector("button[type=submit]").addEventListener("click", (e) => {if (cf.querySelectorAll("input,textarea,select").values().find((x) => !x.checkValidity()) === undefined) {const xhr = new XMLHttpRequest();xhr.onload = function () {st(() => {cf.classList.remove('loading');cf.classList.add('submitted');cf.scrollIntoView();("Submitted successfully!");st(l => l.reload(), 900, window.location);cf.querySelectorAll("input,textarea,select").forEach(x => x.removeAttribute('readonly'));}, 100);};xhr.open("POST", window.location.href, true);xhr.send("");cf.querySelectorAll("input,textarea,select").forEach(x => x.setAttribute('readonly', ''));cf.classList.add('loading');} else st(al, 0, "please fill the required fields!");});}</script>
 	<script id="admin-bar-js"></script>
 	<script id="wp-hooks-js"></script>
 	<script id="wp-polyfill-js"></script>
