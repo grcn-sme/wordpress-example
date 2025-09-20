@@ -1,0 +1,545 @@
+<module>
+	<style>
+		/* main {
+			display: grid;
+			place-items: center;
+		} */
+
+		form {
+			max-height: 80vh;
+			scale: 1;
+
+			&.loading {
+				opacity: .25;
+				& *{
+					cursor: progress;
+				}
+			}
+
+			&.submitted {
+				max-height: 0;
+				scale: .12;
+				overflow: hidden;
+				background-color: lightgreen;
+				opacity: .5;
+				transition: .6s ease;
+			}
+		}
+	</style>
+	<script type="module" src="/src/page/contact-us.js"></script>
+</module>
+
+
+<div class="wp-site-blocks">
+
+	<main class="wp-block-group is-layout-flow wp-block-group-is-layout-flow" id="wp--skip-link--target">
+		<div class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
+			<h1 class="has-text-align-center wp-block-post-title">Contact Us</h1>
+
+
+			<div style="margin-top:0;margin-bottom:0;height:var(--wp--preset--spacing--30)" aria-hidden="true"
+				class="wp-block-spacer"></div>
+
+
+
+		</div>
+
+
+		<div
+			class="entry-content wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
+
+			<h2 id="cuform-msg" style="display:none">Thank you.</h2>
+			<style id="wpforms-css-vars-root">
+				:root {
+					--wpforms-field-border-radius: 3px;
+					--wpforms-field-border-style: solid;
+					--wpforms-field-border-size: 1px;
+					--wpforms-field-background-color: #ffffff;
+					--wpforms-field-border-color: rgba(0, 0, 0, 0.25);
+					--wpforms-field-border-color-spare: rgba(0, 0, 0, 0.25);
+					--wpforms-field-text-color: rgba(0, 0, 0, 0.7);
+					--wpforms-field-menu-color: #ffffff;
+					--wpforms-label-color: rgba(0, 0, 0, 0.85);
+					--wpforms-label-sublabel-color: rgba(0, 0, 0, 0.55);
+					--wpforms-label-error-color: #d63637;
+					--wpforms-button-border-radius: 3px;
+					--wpforms-button-border-style: none;
+					--wpforms-button-border-size: 1px;
+					--wpforms-button-background-color: #066aab;
+					--wpforms-button-border-color: #066aab;
+					--wpforms-button-text-color: #ffffff;
+					--wpforms-page-break-color: #066aab;
+					--wpforms-background-image: none;
+					--wpforms-background-position: center center;
+					--wpforms-background-repeat: no-repeat;
+					--wpforms-background-size: cover;
+					--wpforms-background-width: 100px;
+					--wpforms-background-height: 100px;
+					--wpforms-background-color: rgba(0, 0, 0, 0);
+					--wpforms-background-url: none;
+					--wpforms-container-padding: 0px;
+					--wpforms-container-border-style: none;
+					--wpforms-container-border-width: 1px;
+					--wpforms-container-border-color: #000000;
+					--wpforms-container-border-radius: 3px;
+					--wpforms-field-size-input-height: 43px;
+					--wpforms-field-size-input-spacing: 15px;
+					--wpforms-field-size-font-size: 16px;
+					--wpforms-field-size-line-height: 19px;
+					--wpforms-field-size-padding-h: 14px;
+					--wpforms-field-size-checkbox-size: 16px;
+					--wpforms-field-size-sublabel-spacing: 5px;
+					--wpforms-field-size-icon-size: 1;
+					--wpforms-label-size-font-size: 16px;
+					--wpforms-label-size-line-height: 19px;
+					--wpforms-label-size-sublabel-font-size: 14px;
+					--wpforms-label-size-sublabel-line-height: 17px;
+					--wpforms-button-size-font-size: 17px;
+					--wpforms-button-size-height: 41px;
+					--wpforms-button-size-padding-h: 15px;
+					--wpforms-button-size-margin-top: 10px;
+					--wpforms-container-shadow-size-box-shadow: none;
+
+				}
+			</style>
+			<div class="wpforms-container wpforms-container-full wpforms-block wpforms-block-a9ba7860-ec19-4451-8f75-bf6abe48d100 wpforms-render-modern"
+				id="wpforms-66">
+				<p><a href="tel:0123456789" target="_blank">Contact number: 012-345
+						6789</a></p>
+				<form id="wpforms-form-66-1" method="post" action="">
+					<div class="wpforms-hidden" id="wpforms-error-noscript">Please enable JavaScript in your browser
+						to complete this form.</div>
+					<div class="wpforms-field-container">
+						<div id="wpforms-66-field_0-container" class="wpforms-field wpforms-field-name"
+							data-field-id="0">
+							<fieldset>
+								<legend class="wpforms-field-label">Name <span class="wpforms-required-label"
+										aria-hidden="true">*</span></legend>
+								<div class="wpforms-field-row wpforms-field-medium">
+									<div class="wpforms-field-row-block wpforms-first wpforms-one-half">
+										<input type="text" id="wpforms-66-field_0"
+											class="wpforms-field-name-first wpforms-field-required"
+											name="wpforms[fields][0][first]" autocomplete="given-name"
+											aria-errormessage="wpforms-66-field_0-error" required>
+										<label for="wpforms-66-field_0"
+											class="wpforms-field-sublabel after">First</label>
+									</div>
+									<div class="wpforms-field-row-block wpforms-one-half">
+										<input type="text" id="wpforms-66-field_0-last"
+											class="wpforms-field-name-last wpforms-field-required"
+											name="wpforms[fields][0][last]" autocomplete="family-name"
+											aria-errormessage="wpforms-66-field_0-last-error" required>
+										<label for="wpforms-66-field_0-last"
+											class="wpforms-field-sublabel after">Last</label>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<div id="wpforms-66-field_1-container" class="wpforms-field wpforms-field-email"
+							data-field-id="1"><label class="wpforms-field-label" for="wpforms-66-field_1">Email
+								<span class="wpforms-required-label" aria-hidden="true">*</span></label>
+							<input type="email" id="wpforms-66-field_1"
+								class="wpforms-field-medium wpforms-field-required" name="wpforms[fields][1]"
+								spellcheck="false" aria-errormessage="wpforms-66-field_1-error" required>
+						</div>
+						<div id="wpforms-66-field_2-container" class="wpforms-field wpforms-field-textarea"
+							data-field-id="2"><label class="wpforms-field-label" for="wpforms-66-field_2">Comment or
+								Message</label><textarea id="wpforms-66-field_2" class="wpforms-field-medium"
+								name="wpforms[fields][2]" aria-errormessage="wpforms-66-field_2-error"></textarea>
+						</div>
+					</div><!-- .wpforms-field-container -->
+					<div class="wpforms-submit-container"><input type="hidden" name="wpforms[id]" value="66"> <input
+							type="hidden" name="wpforms[nonce]" value="5221598ae0">
+
+						<button type="submit">Submit</button>
+
+					</div>
+				</form>
+
+			</div> <!-- .wpforms-container -->
+		</div>
+		<hr>
+		<div
+			class="entry-content wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
+
+			<div style="border: 1px solid #aaa; padding: 2rem;"
+				class="wpforms-container wpforms-container-full wpforms-block wpforms-block-a9ba7860-ec19-4451-8f75-bf6abe48d100 wpforms-render-modern">
+				<div id="custom-form" autocomplete="on">
+					<h4>Custom Ajax Form</h4>
+					<div class="wpforms-field-container">
+						<div class="wpforms-field wpforms-field-email"><label class="wpforms-field-label">E-mail address
+								<span class="wpforms-required-label" aria-hidden="true">*</span></label>
+							<input type="email" class="wpforms-field-medium wpforms-field-required" name="email"
+								required>
+						</div>
+						<div class="wpforms-field">
+							<label class="wpforms-field-label">Phone number
+								<span class="wpforms-required-label" aria-hidden="true">*</span>
+							</label>
+							<input type="tel" maxlength="4" class="wpforms-field-medium wpforms-field-required"
+								name="tel_code" autocomplete="tel-country-code" required>
+							<input type="tel" minlength="8" maxlength="12"
+								class="wpforms-field-medium wpforms-field-required" name="tel_code"
+								autocomplete="tel-national" required>
+						</div>
+						<div class="wpforms-field">
+							<label class="wpforms-field-label">Full Name:</label>
+							<input type="text" class="wpforms-field-medium wpforms-field-required" name="fullname"
+								autocomplete="name">
+						</div>
+						<div class="wpforms-field"><label class="wpforms-field-label">
+								Service
+								<span class="wpforms-required-label" aria-hidden="true">*</span></label>
+							<select name="service" required>
+								<option value="">Please select...</option>
+								<option value="consultation">Consultation</option>
+								<option value="it_service">IT service</option>
+								<option value="marketing">Marketing service</option>
+								<option value="sales">Sales service</option>
+								<option value="software">Software service</option>
+							</select>
+						</div>
+						<div class="wpforms-field">
+							<label class="wpforms-field-label">
+								Program level</label>
+							<select name="program_level">
+								<option value="">Please select...</option>
+								<option value="gold">Gold</option>
+								<option value="silver">Silver</option>
+								<option value="bronze">Bronze</option>
+							</select>
+						</div>
+						<div class="wpforms-field">
+							<label class="wpforms-field-label">Language *</label>
+							<div name="program_level" style="display:flex;justify-content: space-evenly">
+								<label><input type="radio" name="language" required value="chinese">
+									<span>Chinese</span></label>
+								<label><input type="radio" name="language" required value="english">
+									<span>English</span></label>
+								<label><input type="radio" name="language" required value="malay">
+									<span>Malay</span></label>
+							</div>
+						</div>
+						<hr>
+						<div class="wpforms-submit-container">
+							<button type="submit">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div
+			class="entry-content wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
+
+			<div style="border: 1px solid #aaa; padding: 2rem;"
+				class="wpforms-container wpforms-container-full wpforms-block wpforms-block-a9ba7860-ec19-4451-8f75-bf6abe48d100 wpforms-render-modern">
+				<form id="inquiry-form" method="post" action="" onsubmit="return false;" autocomplete="on">
+					<h4>Inquiry form</h4>
+					<div class="wpforms-field-container">
+						<div class="wpforms-field wpforms-field-email"><label class="wpforms-field-label">Email
+								<span class="wpforms-required-label" aria-hidden="true">*</span></label>
+							<input type="email" class="wpforms-field-medium wpforms-field-required" name="email"
+								required>
+						</div>
+						<div class="wpforms-field">
+							<label class="wpforms-field-label">Phone number
+								<span class="wpforms-required-label" aria-hidden="true">*</span>
+							</label>
+							<input type="tel" maxlength="4" class="wpforms-field-medium wpforms-field-required"
+								pattern="^\+?[1-9][0-9]{0,2}" name="tel_code" autocomplete="tel-country-code" required>
+							<input type="tel" minlength="8" maxlength="12"
+								class="wpforms-field-medium wpforms-field-required" pattern="^[0-9]+" name="tel_code"
+								autocomplete="tel-national" required>
+						</div>
+						<div class="wpforms-field">
+							<label class="wpforms-field-label">Full Name</label>
+							<input type="text" class="wpforms-field-medium wpforms-field-required" name="fullname"
+								autocomplete="name">
+						</div>
+						<div class="wpforms-field"><label class="wpforms-field-label">
+								Service
+								<span class="wpforms-required-label" aria-hidden="true">*</span></label>
+							<select name="service" required>
+								<option value="">Please select...</option>
+								<option value="consultation">Consultation</option>
+								<option value="it_service">IT service</option>
+								<option value="marketing">Marketing service</option>
+								<option value="sales">Sales service</option>
+								<option value="software">Software service</option>
+							</select>
+						</div>
+						<div class="wpforms-field">
+							<label class="wpforms-field-label">
+								Program level</label>
+							<select name="program_level">
+								<option value="">Please select...</option>
+								<option value="gold">Gold</option>
+								<option value="silver">Silver</option>
+								<option value="bronze">Bronze</option>
+							</select>
+						</div>
+						<div class="wpforms-field">
+							<label class="wpforms-field-label">Language *</label>
+							<div name="program_level" style="display:flex;justify-content: space-evenly">
+								<label><input type="radio" name="language" required value="chinese">
+									<span>Chinese</span></label>
+								<label><input type="radio" name="language" required value="english">
+									<span>English</span></label>
+								<label><input type="radio" name="language" required value="malay">
+									<span>Malay</span></label>
+							</div>
+						</div>
+						<hr>
+						<div class="wpforms-submit-container">
+							<button type="submit">Request</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</main>
+
+	<footer class="wp-block-template-part">
+		<div class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
+			style="padding-top:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--50)">
+			<div
+				class="wp-block-columns alignwide is-layout-flex wp-container-core-columns-is-layout-1 wp-block-columns-is-layout-flex">
+				<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:30%">
+					<div
+						class="wp-block-group is-vertical is-layout-flex wp-container-core-group-is-layout-8 wp-block-group-is-layout-flex">
+
+						<p class="wp-block-site-title has-medium-font-size"><a href="#/index" target="_self"
+								rel="home">My Blog</a></p>
+
+						<p class="wp-block-site-tagline has-small-font-size">My WordPress Blog</p>
+					</div>
+				</div>
+
+
+
+				<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:20%">
+				</div>
+
+
+
+				<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:50%">
+					<div
+						class="wp-block-group is-content-justification-space-between is-layout-flex wp-container-core-group-is-layout-15 wp-block-group-is-layout-flex">
+						<div
+							class="wp-block-group is-vertical is-content-justification-stretch is-layout-flex wp-container-core-group-is-layout-10 wp-block-group-is-layout-flex">
+							<h2 class="wp-block-heading has-medium-font-size has-body-font-family"
+								style="font-style:normal;font-weight:600">Contact info</h2>
+
+
+
+							<p>Mr TechSol</p>
+
+
+
+							<p><a href="tel:60123456789" data-type="tel" data-id="tel:60123456789">phone: +60
+									12-3456 789</a></p>
+
+
+
+							<p><a href="mailto:contact@io.github.com">contact@io.github.com</a></p>
+
+
+
+							<p><a href="mailto:contact@example.com">contact@example.com</a></p>
+
+
+
+							<div
+								class="wp-block-group is-vertical is-layout-flex wp-container-core-group-is-layout-9 wp-block-group-is-layout-flex">
+								<nav style="font-style:normal;font-weight:400;"
+									class="has-small-font-size  is-vertical wp-block-navigation is-layout-flex wp-container-core-navigation-is-layout-2 wp-block-navigation-is-layout-flex"
+									aria-label=""></nav>
+							</div>
+						</div>
+
+
+
+						<div
+							class="wp-block-group is-vertical is-content-justification-stretch is-layout-flex wp-container-core-group-is-layout-12 wp-block-group-is-layout-flex">
+							<h2 class="wp-block-heading has-medium-font-size has-body-font-family"
+								style="font-style:normal;font-weight:600">Privacy</h2>
+
+
+
+							<div
+								class="wp-block-group is-vertical is-layout-flex wp-container-core-group-is-layout-11 wp-block-group-is-layout-flex">
+								<p><a href="#/privacy-policy" data-type="page" data-id="3">Privacy policy</a></p>
+
+
+								<nav style="font-style:normal;font-weight:400;"
+									class="has-small-font-size  is-vertical wp-block-navigation is-layout-flex wp-container-core-navigation-is-layout-3 wp-block-navigation-is-layout-flex"
+									aria-label=""></nav>
+							</div>
+						</div>
+
+
+
+						<div
+							class="wp-block-group is-vertical is-content-justification-stretch is-layout-flex wp-container-core-group-is-layout-14 wp-block-group-is-layout-flex">
+							<h2 class="wp-block-heading has-medium-font-size has-body-font-family"
+								style="font-style:normal;font-weight:600">Social</h2>
+
+
+
+							<p><a href="https://www.instagram.com">Instagram</a></p>
+
+
+
+							<div
+								class="wp-block-group is-vertical is-layout-flex wp-container-core-group-is-layout-13 wp-block-group-is-layout-flex">
+								<nav style="font-style:normal;font-weight:400;"
+									class="has-small-font-size  is-vertical wp-block-navigation is-layout-flex wp-container-core-navigation-is-layout-4 wp-block-navigation-is-layout-flex"
+									aria-label=""></nav>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="wp-block-group alignwide is-layout-flow wp-block-group-is-layout-flow"
+				style="padding-top:var(--wp--preset--spacing--50);padding-bottom:0">
+				<p
+					class="has-contrast-2-color has-text-color has-link-color has-small-font-size wp-elements-fb1dc8a358d6c5ee50b4614eb09d35bb">
+					Designed with <a href="https://wordpress.org" rel="nofollow">WordPress</a> </p>
+			</div>
+		</div>
+	</footer>
+</div>
+<script>
+	(function () {
+		var c = document.body.className;
+		c = c.replace(/woocommerce-no-js/, 'woocommerce-js');
+		document.body.className = c;
+	})();
+</script>
+<script>
+	var wpcode_admin_bar_info = [];
+	var wpcode_admin_bar_info_count = 0;
+</script>
+<script src="/build/admin-bar.js?ver=8afeca4aaad1d56fefb41623b6b7b000" id="wpcode-admin-bar-js-js"></script>
+<script id="hoverintent-js-js"></script>
+<script id="admin-bar-js-before">
+	(function () {
+		function wpforms_admin_bar_menu_init() {
+			var template = document.getElementById('tmpl-wpforms-admin-menubar-data'),
+				notifications = document.getElementById('wp-admin-bar-wpforms-notifications');
+
+			if (!template) {
+				return;
+			}
+
+			if (!notifications) {
+				var menu = document.getElementById('wp-admin-bar-wpforms-menu-default');
+
+				if (!menu) {
+					return;
+				}
+
+				menu.insertAdjacentHTML('afterBegin', template.innerHTML);
+			} else {
+				notifications.insertAdjacentHTML('afterend', template.innerHTML);
+			}
+		};
+		document.addEventListener('DOMContentLoaded', wpforms_admin_bar_menu_init);
+	}());
+</script>
+<script id="admin-bar-js"></script>
+<script id="wp-hooks-js"></script>
+<script id="wp-polyfill-js"></script>
+<script id="wp-i18n-js"></script>
+<script id="wp-i18n-js-after">
+
+</script>
+<script id="wp-url-js"></script>
+<script id="wp-api-fetch-js"></script>
+<script id="wp-api-fetch-js-after">
+
+</script>
+<script id="wc-settings-js-before">
+	var wcSettings = {};
+</script>
+<script id="wc-settings-js"></script>
+<script id="wc-price-format-js"></script>
+<script id="wc-types-js"></script>
+<script id="wc-mini-cart-block-frontend-js-before">
+</script>
+
+
+<script id="sourcebuster-js-js"></script>
+<script id="wc-order-attribution-js-extra">
+	var wc_order_attribution = { "params": { "lifetime": 1.0e-5, "session": 30, "base64": false, "ajaxurl": "\/wordpress-example\/wp-admin\/admin-ajax.php", "prefix": "wc_order_attribution_", "allowTracking": true }, "fields": { "source_type": "current.typ", "referrer": "current_add.rf", "utm_campaign": "current.cmp", "utm_source": "current.src", "utm_medium": "current.mdm", "utm_content": "current.cnt", "utm_id": "current.id", "utm_term": "current.trm", "utm_source_platform": "current.plt", "utm_creative_format": "current.fmt", "utm_marketing_tactic": "current.tct", "session_entry": "current_add.ep", "session_start_time": "current_add.fd", "session_pages": "session.pgs", "session_count": "udata.vst", "user_agent": "udata.uag" } };
+</script>
+<script id="wc-order-attribution-js"></script>
+<script id="wpforms-mailcheck-js"></script>
+<script id="wpforms-punycode-js"></script>
+<script id="wpforms-generic-utils-js"></script>
+
+<script>
+	(function () {
+		function wpforms_js_error_loading() {
+
+			if (typeof window.wpforms !== 'undefined') {
+				return;
+			}
+
+			const forms = document.querySelectorAll('.wpforms-form');
+
+			if (!forms.length) {
+				return;
+			}
+
+			const error = document.createElement('div');
+
+			error.classList.add('wpforms-error-container');
+			error.setAttribute('role', 'alert');
+			error.innerHTML = 'Heads up! WPForms has detected an issue with JavaScript on this page. JavaScript is required for this form to work properly, so this form may not work as expected. See our <a href="#/https://wpforms.com/docs/getting-support-wpforms" target="_blank" rel="noopener noreferrer">troubleshooting guide</a> to learn more or contact support.<p>This message is only displayed to site administrators.</p>';
+
+			forms.forEach(function (form) {
+				if (form.querySelector('.wpforms-error-container')) {
+					return;
+				}
+
+				const formError = error.cloneNode(true),
+					formErrorId = form.id + '-error';
+
+				formError.setAttribute('id', formErrorId);
+
+				form.insertBefore(formError, form.firstChild);
+				form.setAttribute('aria-invalid', 'true');
+				form.setAttribute('aria-errormessage', formErrorId);
+			});
+		}
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', wpforms_js_error_loading);
+		} else {
+			wpforms_js_error_loading();
+		}
+	}());
+</script>
+<script type="text/javascript">
+	/* <![CDATA[ */
+	var wpforms_settings = { "val_required": "This field is required.", "val_email": "Please enter a valid email address.", "val_email_suggestion": "Did you mean {suggestion}?", "val_email_suggestion_title": "Click to accept this suggestion.", "val_email_restricted": "This email address is not allowed.", "val_number": "Please enter a valid number.", "val_number_positive": "Please enter a valid positive number.", "val_minimum_price": "Amount entered is less than the required minimum.", "val_confirm": "Field values do not match.", "val_checklimit": "You have exceeded the number of allowed selections: {#}.", "val_limit_characters": "{count} of {limit} max characters.", "val_limit_words": "{count} of {limit} max words.", "val_recaptcha_fail_msg": "Google reCAPTCHA verification failed, please try again later.", "val_turnstile_fail_msg": "Cloudflare Turnstile verification failed, please try again later.", "val_inputmask_incomplete": "Please fill out the field in required format.", "uuid_cookie": "", "locale": "en", "wpforms_plugin_url": "\/wordpress-example\/wp-content\/plugins\/wpforms-lite\/", "gdpr": "", "ajaxurl": "", "mailcheck_enabled": "1", "mailcheck_domains": [], "mailcheck_toplevel_domains": ["dev"], "is_ssl": "1", "currency_code": "USD", "currency_thousands": ",", "currency_decimals": "2", "currency_decimal": ".", "currency_symbol": "$", "currency_symbol_pos": "left", "val_requiredpayment": "Payment is required.", "val_creditcard": "Please enter a valid credit card number.", "css_vars": ["field-border-radius", "field-border-style", "field-border-size", "field-background-color", "field-border-color", "field-text-color", "field-menu-color", "label-color", "label-sublabel-color", "label-error-color", "button-border-radius", "button-border-style", "button-border-size", "button-background-color", "button-border-color", "button-text-color", "page-break-color", "background-image", "background-position", "background-repeat", "background-size", "background-width", "background-height", "background-color", "background-url", "container-padding", "container-border-style", "container-border-width", "container-border-color", "container-border-radius", "field-size-input-height", "field-size-input-spacing", "field-size-font-size", "field-size-line-height", "field-size-padding-h", "field-size-checkbox-size", "field-size-sublabel-spacing", "field-size-icon-size", "label-size-font-size", "label-size-line-height", "label-size-sublabel-font-size", "label-size-sublabel-line-height", "button-size-font-size", "button-size-height", "button-size-padding-h", "button-size-margin-top", "container-shadow-size-box-shadow"], "isModernMarkupEnabled": "1", "formErrorMessagePrefix": "Form error message", "errorMessagePrefix": "Error message", "submitBtnDisabled": "Submit button is disabled during form submission.", "error_updating_token": "Error updating token. Please try again or contact support if the issue persists.", "network_error": "Network error or server is unreachable. Check your connection or try again later.", "token_cache_lifetime": "86400" }
+	/* ]]> */
+</script>
+
+<script type="text/html" id="tmpl-wpforms-admin-menubar-data">
+	<li id="wp-admin-bar-wpforms-form-id-66" class="menupop wpforms-menu-form wpforms-menu-form-notifications wpforms-menu-form-last">
+		<div class="ab-item ab-empty-item" aria-haspopup="true"><span class="wp-admin-bar-arrow" aria-hidden="true"></span>Contact Form</div>
+		<div class="ab-sub-wrapper">
+			<ul id="wp-admin-bar-wpforms-form-id-66-default" class="ab-submenu">
+							<li id="wp-admin-bar-wpforms-form-id-66-edit">
+					<a class="ab-item" href="wp-admin/admin.php?page=wpforms-builder&#038;view=fields&#038;form_id=66">Edit Form</a>
+				</li>
+															</ul>
+		</div>
+	</li>
+</script>

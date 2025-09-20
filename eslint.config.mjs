@@ -5,16 +5,31 @@ import { defineConfig } from "eslint/config";
 export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs}"],
-    plugins: { js }, extends: ["js/recommended"],
+    plugins: { js },
+    extends: ["js/recommended"],
     languageOptions: {
-      globals: globals.browser
+      globals: {
+        ...globals.browser,
+        ...globals.serviceworker,
+      },
+      ecmaVersion: 'latest',
     },
     rules: {
-      'indent': ['off', 4],
-      'linebreak-style': ['warn', 'unix'],
-      'quotes': ['error', 'single'],
+      'no-unused-vars': 'off',
+      'no-undef': 'error',
+      'no-unreachable': 'warn',
+      'no-case-declarations': 'off',
+      'no-empty': 'warn',
+      'no-invalid-this': 'error',
+      'no-redeclare': 'warn',
       'semi': ['warn', 'always'],
+      
+      // 'indent': ['off', 4],
+      // 'eqeqeq': 'warn'
+      // 'quotes': ['off', 'single'],
     },
+    // env: { // deprecated settings
+    //   "chrome": true,
+    // },
   },
-
 ]);
