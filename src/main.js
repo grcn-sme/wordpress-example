@@ -1,3 +1,11 @@
+// custom code injector 
+// html code to inject dynamically on run time
+function injectCustomCode(htmlCode, intoElement) { let addText; if (intoElement === document.head) { const nodeToAdd = []; addText = (TAG) => { nodeToAdd.push(new Text(TAG.textContent)); setTimeout(_ => { document.body.prepend(nodeToAdd.pop()); }); }; } else { addText = (TAG) => { intoElement.appendChild(new Text(TAG.textContent)); }; } const cloneChildNodes = (TAG) => { try { if (TAG.attributes === undefined) { if (TAG.nodeName === "#text") { addText(TAG); return new Text(TAG.textContent); } else if (TAG.nodeName === "#comment") { intoElement.appendChild(new Comment(TAG.textContent)); } else { console.warn("unknown node type, assume as textNode instead: ", TAG); addText(TAG); } } else { const tag = document.createElement(TAG.tagName); for (const a of TAG.attributes) { tag.setAttribute(a.name, a.value); } tag.innerHTML = TAG.innerHTML; intoElement.appendChild(tag); } } catch (err) { console.warn(err); } }; const doc = new DOMParser().parseFromString(htmlCode, "text/html"); doc.head.childNodes.forEach(cloneChildNodes); doc.body.childNodes.forEach(cloneChildNodes); }
+
+
+
+
+
 const innerHTMLPolicy = trustedTypes.createPolicy("passthrough", {
   createHTML: (html) => html,
 });
@@ -18,14 +26,20 @@ async function navigatePage(hash) {
 
   const appBody = document.getElementById('app');
   if (response.ok) {
+    setTimeout(_ => {
+      injectCustomCode(localStorage['txtCodeHead'] || '', document.head);
+      // console.log('head', document.getElementById('form-custom-code'));
+    }, 0);
     appBody.innerHTML = innerHTMLPolicy.createHTML(await response.text());
-    { // simulate page load
-      const opt = { bubbles: true };
-      setTimeout((appBody, ev) => { appBody.dispatchEvent(ev); }, 0, appBody, new Event('readystatechange', opt));
-      setTimeout((appBody, ev) => { appBody.dispatchEvent(ev); }, 0, appBody, new Event('DOMContentLoaded', opt));
-      setTimeout((appBody, ev) => { appBody.dispatchEvent(ev); }, 0, appBody, new Event('load', opt));
-    }
 
+
+
+    // simulate page load
+    const opt = { bubbles: true };
+    setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
+
+
+    let lastResource0 = null;
     // load /src/page/(dir/dir.js) if any
     { // partial page, load dir general shared resources
       const paths = url.pathname.split('/'), len = paths.length - 1;
@@ -34,10 +48,11 @@ async function navigatePage(hash) {
         if (paths[i] === '') continue;
         const src = `/src/page/${paths[i]}/${paths[i]}.js`;
         console.log(src);
-        import(src).catch(console.warn);
+        lastResource0 = import(src).catch(console.warn);
       }
     }
 
+    let lastResource1 = null;
     // load /src/page/(file.js|dir/file.js) if any
     { // partial page, load individual file specific resources
       const module = appBody.getElementsByTagName('module')[0];
@@ -46,10 +61,24 @@ async function navigatePage(hash) {
         for (let i = 0; i < len; ++i) {
           const src = scripts[i].getAttribute('src');
           if (src === null || src === '') continue;
-          import(src).catch(console.warn);
+          lastResource1 = import(src).catch(console.warn);
         }
       }
     }
+
+    setTimeout(_ => {
+      injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
+      // console.log('/body', document.getElementById('form-custom-code'));
+    }, 100);
+
+    try {
+      await lastResource0;
+      await lastResource1;
+    } finally {
+      setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('DOMContentLoaded', opt)); }, 0, appBody, opt);
+      setTimeout((opt) => { window.dispatchEvent(new Event('load', opt)); }, 0);
+    }
+
   }
   else {
     appBody.innerHTML = '<b>404</b>';
@@ -83,3 +112,6 @@ window.onpopstate = async function navigateTo(ev) { // custom route
 if ('serviceWorker' in navigator) {
   // navigator.serviceWorker.register('sw.js');
 }
+
+
+
