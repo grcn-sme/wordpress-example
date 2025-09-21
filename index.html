@@ -6,75 +6,16 @@
 	<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Wordpress Example</title>
-	<style>
-		:root {
-			font-size: 16px;
-			line-height: 1.5;
-			background-color: #eee;
-		}
 
-		@media (prefers-color-scheme: dark) {
-			:root {
-				filter: invert(1) hue-rotate(180deg) brightness(1.1);
-				background-color: #ddd;
-				text-shadow: 0 0 0 1px;
-			}
-
-			img,
-			iframe {
-				filter: invert(1) hue-rotate(180deg);
-			}
-		}
-
-		button,
-		select,
-		input[type=radio],
-		input[type=checkbox],
-		input[type=file],
-		label:has(>input) {
-			cursor: pointer;
-
-			&:active {
-				box-shadow: 0 0 4px 0;
-			}
-
-			&[readonly],
-			&:disabled {
-				cursor: not-allowed;
-			}
-		}
-
-		input[type=checkbox] {
-			width: 1rem;
-			height: 1rem;
-			vertical-align: middle;
-			margin: 0;
-			margin-bottom: .1rem;
-		}
-
-		input[autocomplete="tel-country-code"] {
-			width: 5ch;
-		}
-
-		input:user-invalid,
-		select:user-invalid,
-		textarea:user-invalid {
-			outline: 1px solid red;
-		}
-
-		button {
-			padding: .7em 1em;
-		}
-	</style>
 
 	<script>
 		document.addEventListener('readystatechange', console.log);
 		document.addEventListener('DOMContentLoaded', console.log);
 		document.addEventListener('load', console.log);
-		document.addEventListener('DOMContentLoaded', e=>{
+		document.addEventListener('DOMContentLoaded', e => {
 			// alert(e.type);
 		});
-		document.addEventListener('load', e=>{
+		document.addEventListener('load', e => {
 			// alert(e.type);
 		});
 	</script>
@@ -1508,8 +1449,71 @@
 			}
 		}
 	</style>
+	<!-- wordpress stuff -->
 
 
+
+	<style>
+		:root {
+			font-size: 16px;
+			line-height: 1.5;
+			background-color: #eee;
+			scroll-padding-top: 15svh;
+		}
+
+		@media (prefers-color-scheme: dark) {
+			:root {
+				filter: invert(1) hue-rotate(180deg) brightness(1.1);
+				background-color: #ddd;
+				text-shadow: 0 0 0 1px;
+			}
+
+			img,
+			iframe {
+				filter: invert(1) hue-rotate(180deg);
+			}
+		}
+
+		button,
+		select,
+		input[type=radio],
+		input[type=checkbox],
+		input[type=file],
+		label:has(>input) {
+			cursor: pointer;
+
+			&:active {
+				box-shadow: 0 0 4px 0;
+			}
+
+			&[readonly],
+			&:disabled {
+				cursor: not-allowed;
+			}
+		}
+
+		input[type=checkbox] {
+			width: 1rem;
+			height: 1rem;
+			vertical-align: middle;
+			margin: 0;
+			margin-bottom: .1rem;
+		}
+
+		input[autocomplete="tel-country-code"] {
+			width: 5ch;
+		}
+
+		input:user-invalid,
+		select:user-invalid,
+		textarea:user-invalid {
+			outline: 1px solid red;
+		}
+
+		button {
+			padding: .7em 1em;
+		}
+	</style>
 
 </head>
 
@@ -1526,7 +1530,7 @@
 	</nav>
 	<div id="app"></div>
 	<script type="module" src="/src/main.js" async></script>
-	
+
 </body>
 
 </html>

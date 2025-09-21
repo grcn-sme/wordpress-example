@@ -23,7 +23,7 @@ document.getElementById('wpforms-form-66-1').addEventListener('submit', function
                     cf.classList.remove('loading');
                     cf.classList.add('submitted');
                     cf.scrollIntoView();
-                    ("Submitted successfully!");
+                    al("Submitted successfully!");
                     st(l => l.reload(), 1500, window.location);
                     cf.querySelectorAll("input,textarea,select").forEach(x => x.removeAttribute('readonly'));
                 }, 1000);
