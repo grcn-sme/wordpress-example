@@ -1,0 +1,56 @@
+<!-- for testing custom code injector logic -->
+<!-- test the emulated loading sequence of page -->
+<!-- all events should be logged and executed in order -->
+
+<!-- head -->
+<script>
+    console.warn('head code', 0, { 'document.readyState': document.readyState });
+    setTimeout(_ => {
+        console.warn('head code', 2, { 'document.readyState': document.readyState });
+    }, 0);
+    setTimeout(_ => {
+        console.warn('head code', 4, { 'document.readyState': document.readyState });
+    }, 4000);
+
+    window.addEventListener('load', function (ev) {
+        console.warn('head code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+    });
+    window.addEventListener('readystatechange', function (ev) {
+        console.warn('head code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+    });
+    window.addEventListener('DOMContentLoaded', function (ev) {
+        console.warn('head code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+    });
+
+    console.warn('head code', 1, { 'document.readyState': document.readyState });
+    setTimeout(_ => {
+        console.warn('head code', 3, { 'document.readyState': document.readyState });
+    }, 0);
+</script>
+
+
+<!-- /body -->
+<script>
+    console.warn('body code', 0, { 'document.readyState': document.readyState });
+    setTimeout(_ => {
+        console.warn('body code', 2, { 'document.readyState': document.readyState });
+    }, 0);
+    setTimeout(_ => {
+        console.warn('body code', 4, { 'document.readyState': document.readyState });
+    }, 4000);
+
+    window.addEventListener('load', function (ev) {
+        console.warn('body code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+    });
+    window.addEventListener('readystatechange', function (ev) {
+        console.warn('body code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+    });
+    window.addEventListener('DOMContentLoaded', function (ev) {
+        console.warn('body code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+    });
+
+    console.warn('body code', 1, { 'document.readyState': document.readyState });
+    setTimeout(_ => {
+        console.warn('body code', 3, { 'document.readyState': document.readyState });
+    }, 0);
+</script>

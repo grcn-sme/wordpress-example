@@ -2,89 +2,107 @@
 // html code to inject dynamically on run time
 function injectCustomCode(htmlCode, intoElement) { let addText; if (intoElement === document.head) { const nodeToAdd = []; addText = (TAG) => { nodeToAdd.push(new Text(TAG.textContent)); setTimeout(_ => { document.body.prepend(nodeToAdd.pop()); }); }; } else { addText = (TAG) => { intoElement.appendChild(new Text(TAG.textContent)); }; } const cloneChildNodes = (TAG) => { try { if (TAG.attributes === undefined) { if (TAG.nodeName === "#text") { addText(TAG); return new Text(TAG.textContent); } else if (TAG.nodeName === "#comment") { intoElement.appendChild(new Comment(TAG.textContent)); } else { console.warn("unknown node type, assume as textNode instead: ", TAG); addText(TAG); } } else { const tag = document.createElement(TAG.tagName); for (const a of TAG.attributes) { tag.setAttribute(a.name, a.value); } tag.innerHTML = TAG.innerHTML; intoElement.appendChild(tag); } } catch (err) { console.warn(err); } }; const doc = new DOMParser().parseFromString(htmlCode, "text/html"); doc.head.childNodes.forEach(cloneChildNodes); doc.body.childNodes.forEach(cloneChildNodes); }
 
-
-
-
-
 const innerHTMLPolicy = trustedTypes.createPolicy("passthrough", {
   createHTML: (html) => html,
 });
 
 
+/** @type {Object<string, (_: any) => Promise<any>} */
+const modules = import.meta.glob('./page/**/*.js', { eager: false });
+
+/** @type {Object<string, (_: any) => Promise<any>} */
+const pages = import.meta.glob('./page/**/*.html', { eager: false, query: 'raw' });
+console.log('pages', pages);
+
+
+/** @param {string} hash - should begin with '#/xxx' */
 async function navigatePage(hash) {
   // fetch resources
-  // #pathname/xxx/yyy
+  // #/pathname/xxx/yyy
   const href = hash.substring(1);
+  console.assert(href && href.startsWith('/'), `invalid href: ${href}`);
 
   // virtual url for SPA
-  const url = new URL(`${location.origin}/${href}`);
+  const url = new URL(`${location.origin}${href}`);
 
-  const uri = `page${url.pathname}.html`;
-  const response = await fetch(uri, {
-    cache: url.search === '' ? undefined : 'no-store' // cache only if no search param
-  });
 
+  const src = `./page${url.pathname}.html`;
+  const page = pages[src];
+  console.log({ url, src, page });
+
+  if (page === undefined) return;
+  const html = await page();
+  // console.log({ html }, html.default);
   const appBody = document.getElementById('app');
-  if (response.ok) {
-    setTimeout(_ => {
-      injectCustomCode(localStorage['txtCodeHead'] || '', document.head);
-      // console.log('head', document.getElementById('form-custom-code'));
-    }, 0);
-    appBody.innerHTML = innerHTMLPolicy.createHTML(await response.text());
+  appBody.innerHTML = innerHTMLPolicy.createHTML(html.default);
+
+
+  const lastResource0 = _loadSharedResources(url.pathname, modules);
+
+  injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
+
+  const lastResource1 = _loadIndividualResources(url.pathname, modules);
 
 
 
-    // simulate page load
-    const opt = { bubbles: true };
-    setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
+  setTimeout(_ => {
+    injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
+  }, 0);
 
+  // emulate page load event, for 3rd party mpa code to run
+  const opt = { bubbles: true };
+  setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
 
-    let lastResource0 = null;
-    // load /src/page/(dir/dir.js) if any
-    { // partial page, load dir general shared resources
-      const paths = url.pathname.split('/'), len = paths.length - 1;
-      console.log(paths);
-      for (let i = 1; i < len; ++i) {
-        if (paths[i] === '') continue;
-        const src = `/src/page/${paths[i]}/${paths[i]}.js`;
-        console.log(src);
-        lastResource0 = import(src).catch(console.warn);
-      }
-    }
-
-    let lastResource1 = null;
-    // load /src/page/(file.js|dir/file.js) if any
-    { // partial page, load individual file specific resources
-      const module = appBody.getElementsByTagName('module')[0];
-      if (module !== undefined) {
-        const scripts = module.getElementsByTagName('script'), len = scripts.length;
-        for (let i = 0; i < len; ++i) {
-          const src = scripts[i].getAttribute('src');
-          if (src === null || src === '') continue;
-          lastResource1 = import(src).catch(console.warn);
-        }
-      }
-    }
-
-    setTimeout(_ => {
-      injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
-      // console.log('/body', document.getElementById('form-custom-code'));
-    }, 100);
-
-    try {
-      await lastResource0;
-      await lastResource1;
-    } finally {
-      setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('DOMContentLoaded', opt)); }, 0, appBody, opt);
-      setTimeout((opt) => { window.dispatchEvent(new Event('load', opt)); }, 0);
-    }
-
+  try {
+    if (lastResource0 !== null) await lastResource0;
+    if (lastResource1 !== null) await lastResource1;
+  } finally {
+    // emulate page load events,
+    // for 3rd party mpa code to run
+    setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('DOMContentLoaded', opt)); }, 0, appBody, opt);
+    setTimeout((opt) => { window.dispatchEvent(new Event('load', opt)); }, 500);
   }
-  else {
-    appBody.innerHTML = '<b>404</b>';
-    console.error({ response });
+  console.log({ url, src });
+}
+
+/** 
+ * @param {string} pathname - absolute path, e.g. `/abcPage`
+ * @param {Object<string, (_: any) => Promise<any>} modules
+ */
+function _loadSharedResources(pathname, modules) {
+  // partial page, load dir general shared resources
+  // console.assert(pathname && pathname.startsWith('/'), `invalid pathname: ${pathname}`);
+
+  // import _shared.js file of each dir (if any)
+  // from top to bottom (deepest) dir
+  let lastResource0 = null;
+  const paths = pathname.split('/').reverse();
+  for (let path = paths.pop(); paths.length > 0;) {
+    const src = `./page/${path}_shared.js`;
+    path += `${paths.pop()}/`;
+    const module = modules[src];
+    console.log({ src, module });
+    if (!module) continue;
+    lastResource0 = module().catch(console.error);
   }
-  console.log({ url, uri });
+  return lastResource0;
+}
+
+/** 
+ * @param {string} pathname - absolute path, e.g. `/abcPage`
+ * @param {Object<string, (_: any) => Promise<any>} modules
+ * */
+function _loadIndividualResources(pathname, modules) {
+  // partial page, load individual file specific resources
+  // load /src/page/(file.js|/**/file.js) if any
+  // console.assert(pathname && pathname.startsWith('/'), `invalid pathname: ${pathname}`);
+
+  if (pathname === '/') return null;
+  const src = `./page${pathname}.js`; // is to /src/page/**/*.js
+  // console.log({ src, modules });
+  const module = modules[src];
+  if (!module) return null;
+  return module().catch(console.error);
 }
 
 { // init page
@@ -93,25 +111,15 @@ async function navigatePage(hash) {
   }
 }
 
-// document.body.addEventListener('click', async function (e) { // navigation
-//   if (e.target.tagName !== 'A') return;
-//   if (e.ctrlKey) return;
-
-//   const href = e.target.getAttribute('href');
-//   if (href.startsWith('#/') === false) return;
-
-//   await navigatePage(href);
-// });
-
 window.onpopstate = async function navigateTo(ev) { // custom route
   // await navigatePage(location.hash); // spa
   window.stop(); this.location.reload();  // mpa
 };
 
 
-if ('serviceWorker' in navigator) {
-  // navigator.serviceWorker.register('sw.js');
-}
-
+if (location.origin.startsWith('https'))
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
 
 
