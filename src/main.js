@@ -25,7 +25,18 @@ async function navigatePage(hash) {
   // virtual url for SPA
   const url = new URL(`${location.origin}${href}`);
 
+  // load img
+  const pathname = url.pathname;
+  if (pathname.endsWith('.png')
+    || pathname.endsWith('.jpg')
+    || pathname.endsWith('.jpeg')
+    || pathname.endsWith('.gif')
+    || pathname.endsWith('.webp')
+  ) {
+    return loadImageFile(url);
+  }
 
+  // load page
   const src = `./page${url.pathname}.html`;
   const page = pages[src];
   console.log({ url, src, page });
@@ -106,8 +117,11 @@ function _loadIndividualResources(pathname, modules) {
 }
 
 { // init page
-  if (location.hash !== '') {
+  if (location.hash !== '' && location.hash !== '#' && location.hash !== '#/') {
     navigatePage(location.hash);
+  }
+  else {
+    navigatePage('#/index');
   }
 }
 
@@ -116,6 +130,25 @@ window.onpopstate = async function navigateTo(ev) { // custom route
   window.stop(); this.location.reload();  // mpa
 };
 
+
+/** @param {URL} url */
+async function loadImageFile(url) {
+  const img = document.createElement('img');
+
+  // minimum size before loading
+  img.setAttribute('width', '128'),
+    img.setAttribute('height', '128');
+
+  img.onload = function () {
+    img.setAttribute('width', img.naturalWidth);
+    img.setAttribute('height', img.naturalHeight);
+  };
+  img.setAttribute('src', `page${url.pathname}${url.search}`);
+
+  const appBody = document.getElementById('app');
+  appBody.innerHTML = '';
+  appBody.appendChild(img);
+}
 
 if (location.origin.startsWith('https'))
   if ('serviceWorker' in navigator) {
