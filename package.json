@@ -9,6 +9,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "build-n-preview": "vite build && vite preview",
     "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
