@@ -2,14 +2,14 @@
 # see: https://firebase.google.com/docs/studio/customize-workspace
 { pkgs, ... }: {
   # Which nixpkgs channel to use.
-  channel = "stable-24.05"; # or "unstable"
+  channel = "stable-25.05"; # or "unstable"
 
   # Use https://search.nixos.org/packages to find packages
   packages = [
     # pkgs.go
     # pkgs.python311
     # pkgs.python311Packages.pip
-    pkgs.nodejs_22
+    pkgs.nodejs_24
     # pkgs.nodePackages.nodemon
   ];
 
@@ -32,8 +32,8 @@
 
           manager = "web";
           # command = [ "python3" "-m" "http.server" "$PORT" "--bind" "0.0.0.0" ]; # for static pages
-          # command = [ "npm" "run" "dev" "--" "--port" "$PORT" ]; # not working properly
-          command = [ "npm" "run" "build-n-preview" "--" "--port" "$PORT" ];
+          command = [ "npm" "run" "dev" "--" "--port" "$PORT" ]; # required node v22.12 above
+          # command = [ "npm" "run" "build-n-preview" "--" "--port" "$PORT" ];
           env = {
             # Environment variables to set for your server
             # PORT = "$PORT";
