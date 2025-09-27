@@ -2,7 +2,8 @@
 import { Product } from './product/_product.js';
 
 export class Cart {
-    items = [];
+    /** @type {Product[]} */
+    items = []; 
     constructor() {
         if (!localStorage['product-cart']) return;
 
@@ -43,5 +44,13 @@ export class Cart {
 
     static reset() {
         localStorage.removeItem('product-cart');
+    }
+
+    totalPriceText(addon_price = 0.00) {
+        let subtotal = 0.0;
+        for (const x of this.items) {
+            subtotal += x.price * x.quantity;
+        }
+        return `${this.items[0]?.currency} ${subtotal + addon_price}`;
     }
 };

@@ -73,4 +73,18 @@ export class Product {
         }
         throw new Error('undefined product id: ' + id);
     }
+
+    // ui logic
+    priceText() {
+        return Product.formatPrice(this.currency, this.price * this.quantity);
+    }
+
+    subTotalText() {
+        return Product.formatPrice(this.currency, this.price * this.quantity);
+    }
+
+    /** @param {number} value */
+    static formatPrice(currency, value) {
+        return `${currency} ${value.toFixed(2)}`;
+    }
 }
