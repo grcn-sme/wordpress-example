@@ -5,6 +5,7 @@ export class Product {
     price = 0.00;
     currency = 'USD';
     quantity = 1;
+    img_src = '';
 
     constructor(id) {
         this.id = id;
@@ -14,6 +15,7 @@ export class Product {
             this.price = product.price;
             this.currency = product.currency;
             this.quantity = product.quantity;
+            this.img_src = product.img_src;
         }
     }
     getProduct(id) {
@@ -23,7 +25,8 @@ export class Product {
                 name: '3-Speed Bike',
                 price: 115.0,
                 currency: 'USD',
-                quantity: 1
+                quantity: 1,
+                img_src: '/page/product/img/road-sport-vintage-wheel-retro-old.jpg',
             };
         }
         else if (id === '85') {
@@ -32,7 +35,8 @@ export class Product {
                 name: 'Black and White Summer Portrait',
                 price: 115.0,
                 currency: 'USD',
-                quantity: 1
+                quantity: 1,
+                img_src: '/page/product/img/white-black-black-and-white-photograph-monochrome-photography.jpg',
             };
         }
         else if (id === '75') {
@@ -41,7 +45,8 @@ export class Product {
                 name: 'Crayfish',
                 price: 59.0,
                 currency: 'USD',
-                quantity: 1
+                quantity: 1,
+                img_src: '/page/product/img/Procambarus-alleni-Blue-crayfish-1.jpg',
             };
         }
         else if (id === '87') {
@@ -50,7 +55,8 @@ export class Product {
                 name: 'Leather-Clad Leisure Chair',
                 price: 249.0,
                 currency: 'USD',
-                quantity: 1
+                quantity: 1,
+                img_src: '/page/product/img/table-wood-house-chair-floor-window.jpg',
             };
         }
         else if (id === '59') {
@@ -59,7 +65,8 @@ export class Product {
                 name: 'Teddy Bear',
                 price: 13.99,
                 currency: 'USD',
-                quantity: 1
+                quantity: 1,
+                img_src: '/page/product/img/XL_bear_1946x.webp',
             };
         }
         else if (id === '89') {
@@ -68,7 +75,8 @@ export class Product {
                 name: 'Vintage Typewriter',
                 price: 90.00,
                 currency: 'USD',
-                quantity: 1
+                quantity: 1,
+                img_src: '/page/product/img/writing-typing-keyboard-technology-white-vintage.jpg',
             };
         }
         throw new Error('undefined product id: ' + id);

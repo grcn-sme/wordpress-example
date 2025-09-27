@@ -8,9 +8,9 @@ const cart = new Cart();
 console.log({ cart });
 
 // list all products
-for (const x of cart.items) {
+for (const x of cart.allProducts()) {
     if (!x.id) continue; // filter faulty data
-    const html = generateHTML_item('', x);
+    const html = generateHTML_item(x);
     // const f = dom from text
     const f = document.createElement("div");
     f.innerHTML = html;
@@ -30,18 +30,16 @@ shippingFee = parseFloat(shippingFee);
 
 document.body.querySelector('#wp--skip-link--target > div.entry-content.alignwide.wp-block-post-content.is-layout-flow.wp-block-post-content-is-layout-flow > div > div.wc-block-components-sidebar-layout.wc-block-checkout.is-large > div.wc-block-components-sidebar.wc-block-checkout__sidebar.wp-block-woocommerce-checkout-totals-block > div.wp-block-woocommerce-checkout-order-summary-block > div:nth-child(4) > div > div.wc-block-components-totals-item__value > span')
     .textContent = cart.totalPriceText(shippingFee);
-
 /** 
- * @param {string} imgsrc
  * @param {Product} p
  */
-function generateHTML_item(imgsrc, p) {
+function generateHTML_item(p) {
     return `
 <div class="wc-block-components-order-summary-item">
     <div class="wc-block-components-order-summary-item__image">
         <div class="wc-block-components-order-summary-item__quantity">
-            <span aria-hidden="true">1</span><span class="screen-reader-text">1 item</span>
-        </div><img src="${imgsrc}" alt="Black and White Summer Portrait">
+            <span aria-hidden="true">${p.quantity}</span><span class="screen-reader-text">${p.quantity} item</span>
+        </div><img src="${p.img_src}" alt="Black and White Summer Portrait">
     </div>
     <div class="wc-block-components-order-summary-item__description">
         <span class="wc-block-components-product-name">${p.name}</span><span

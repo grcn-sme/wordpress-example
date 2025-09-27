@@ -2,44 +2,53 @@
 import { Product } from './product/_product.js';
 
 export class Cart {
-    /** @type {Product[]} */
-    items = []; 
+    /** @type {string[]} - list of product ids */
+    #items = [];
     constructor() {
         if (!localStorage['product-cart']) return;
 
         const data = localStorage['product-cart'].split(',');
-        const json = JSON.parse((new TextDecoder()).decode(new Uint8Array(data)));
+        const productIds = JSON.parse((new TextDecoder()).decode(new Uint8Array(data)));
 
-        // transform json objects to custom object
-        const products = [], items = json.items, len = json.items.length;
-        for (let i = 0; i < len; ++i) {
-            products[i] = new Product(items[i].id);
-            products[i].name = items[i].name;
-            products[i].price = items[i].price;
-            products[i].quantity = items[i].quantity;
-            products[i].currency = items[i].currency;
+        this.#items = productIds;
+        console.log('init cart: ', this);
+    }
+
+    allProducts() {
+        const list = this.#allProducts();
+        // count quantity, group by id
+
+        /** @type {Map<number, Product>} - { id: product } */
+        const products = new Map();
+        for (const x of list) {
+            const ex = products.get(x.id);
+            if (ex) {
+                ex.quantity += 1;
+                continue;
+            }
+            else {
+                products.set(x.id, x);
+            }
         }
-        this.items = products;
+        return products.values();
+
+    }
+
+    #allProducts() {
+        // recreate products from ids
+        const products = [], items = this.#items, len = items.length;
+        for (let i = 0; i < len; ++i) {
+            products[i] = new Product(items[i]);
+        }
+        return products;
     }
 
     /** @param {Product} item */
     add(product) {
-        console.log({ product });
-        const pid = product.id, items = this.items;
-        const item0 = items.find(x => x.id === pid);
-        if (item0 === undefined) {
-            // if item not exists, push
-            items.push(product);
-        }
-        else {
-            // else increment quantity
-            item0.quantity += 1;
-        }
-
-        console.log({ item0: item0, items: items, cart: this });
-        const cartData = JSON.stringify(this);
+        console.log({ cart: this, items: this.#items, product });
+        this.#items.push(product.id);
+        const cartData = JSON.stringify(this.#items);
         localStorage['product-cart'] = (new TextEncoder()).encode(cartData).join(',');
-        return item0;
     }
 
     static reset() {
@@ -47,10 +56,14 @@ export class Cart {
     }
 
     totalPriceText(addon_price = 0.00) {
-        let subtotal = 0.0;
-        for (const x of this.items) {
+        const products = this.allProducts();
+        let subtotal = 0.0, h = products.next();
+        const currency = h.value?.currency;
+        for (; h.done !== true; h = products.next()) {
+            const x = h.value;
             subtotal += x.price * x.quantity;
         }
-        return `${this.items[0]?.currency} ${subtotal + addon_price}`;
+        const totalPrice = subtotal + addon_price;
+        return Product.formatPrice(currency, totalPrice);
     }
 };
