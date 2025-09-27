@@ -36,7 +36,6 @@ document.body.querySelector('#wp--skip-link--target > div.entry-content.alignwid
  * @param {Product} p
  */
 function generateHTML_item(imgsrc, p) {
-    // format price to 2decimal places
     return `
 <div class="wc-block-components-order-summary-item">
     <div class="wc-block-components-order-summary-item__image">
