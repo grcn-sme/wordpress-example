@@ -32,6 +32,8 @@ async function navigatePage(hash) {
     || pathname.endsWith('.jpeg')
     || pathname.endsWith('.gif')
     || pathname.endsWith('.webp')
+    || pathname.endsWith('.avif')
+    || pathname.endsWith('.apng')
   ) {
     return loadImageFile(url);
   }
@@ -102,6 +104,27 @@ function _loadSharedResources(pathname, modules) {
 /** 
  * @param {string} pathname - absolute path, e.g. `/abcPage`
  * @param {Object<string, (_: any) => Promise<any>} modules
+ */
+function _loadSharedResources2(pathname, modules) {
+  // partial page, load dir general shared resources
+  // console.assert(pathname && pathname.startsWith('/'), `invalid pathname: ${pathname}`);
+
+  // import _onload.js file of each dir (if any)
+  // from bottom to top; deepest | closest to top
+  // for shared cleanup and reactive actions
+  let lastResource2 = null;
+  for (let path = pathname; path !== '';) {
+    const h = path.lastIndexOf('/');
+    path = path.substring(0, h);
+    const src = `./page${path}/_onload.js`;
+    console.log(src);
+  }
+  return lastResource2;
+}
+
+/** 
+ * @param {string} pathname - absolute path, e.g. `/abcPage`
+ * @param {Object<string, (_: any) => Promise<any>} modules
  * */
 function _loadIndividualResources(pathname, modules) {
   // partial page, load individual file specific resources
@@ -152,7 +175,7 @@ async function loadImageFile(url) {
 
 if (location.origin.startsWith('https'))
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
+    // navigator.serviceWorker.register('sw.js');
   }
 
 
