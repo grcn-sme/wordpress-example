@@ -24,4 +24,4 @@ document.body.addEventListener('click', e => {
 import { Product } from './product/_product.js';
 
 
-import { Cart } from './cart.js';
+import { Cart } from './cart.mjs';

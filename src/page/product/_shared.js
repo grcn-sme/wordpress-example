@@ -1,5 +1,5 @@
 import { Product } from './_product.js';
-import { Cart } from '../cart.js';
+import { Cart } from '../cart.mjs';
 
 let cart = null;
 document.body.addEventListener('submit', function (e) {
