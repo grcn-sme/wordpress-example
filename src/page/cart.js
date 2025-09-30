@@ -7,7 +7,7 @@ export class Cart {
     constructor() {
         if (!localStorage['product-cart']) return;
 
-        const data = localStorage['product-cart'].split(',');
+        const data = this.#unHex(localStorage['product-cart']).split(',');
         const productIds = JSON.parse((new TextDecoder()).decode(new Uint8Array(data)));
 
         this.#items = productIds;
@@ -21,6 +21,7 @@ export class Cart {
         /** @type {Map<number, Product>} - { id: product } */
         const products = new Map();
         for (const x of list) {
+            if (x.id === undefined) continue; // filter out faulty data
             const ex = products.get(x.id);
             if (ex) {
                 ex.quantity += 1;
@@ -48,11 +49,23 @@ export class Cart {
         console.log({ cart: this, items: this.#items, product });
         this.#items.push(product.id);
         const cartData = JSON.stringify(this.#items);
-        localStorage['product-cart'] = (new TextEncoder()).encode(cartData).join(',');
+        localStorage['product-cart'] = this.#toHex(new TextEncoder().encode(cartData).join(','));
+    }
+
+    #toHex(text) {
+        return text.split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+    }
+
+    #unHex(hex) {
+        return hex.match(/.{1,2}/g).map(byte => String.fromCharCode(parseInt(byte, 16))).join('');
     }
 
     static reset() {
         localStorage.removeItem('product-cart');
+    }
+
+    reset() {
+        Cart.reset();
     }
 
     totalPriceText(addon_price = 0.00) {

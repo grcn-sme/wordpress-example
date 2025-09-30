@@ -91,8 +91,23 @@ export class Product {
         return Product.formatPrice(this.currency, this.price * this.quantity);
     }
 
-    /** @param {number} value */
+    /** 
+     * @param {string} currency 
+     * @param {number} value 
+     */
     static formatPrice(currency, value) {
         return `${currency} ${value.toFixed(2)}`;
+    }
+
+    /** @param {Object} json */
+    static from(json) {
+        // for each own fields, map from json
+        const product = new Product(json.id);
+        for (const key in product) {
+            console.log('data[key]', json[key], 'key', key);
+            if (!json[key]) throw new Error(`provided data has no field '${key}' defined`);
+            product[key] = json[key];
+        }
+        return product;
     }
 }
