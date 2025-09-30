@@ -1,0 +1,33 @@
+{
+    "configurations": [
+        {
+            "type": "msedge",
+            "name": "debug in browser",
+            "request": "launch",
+            "url": "http://localhost:5173/",
+        },
+        {
+            "name": "npm run dev",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Dev & Debug",
+            "configurations": [
+                "npm run dev",
+                "debug in browser"
+            ]
+        }
+    ]
+}
