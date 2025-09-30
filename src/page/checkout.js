@@ -1,4 +1,4 @@
-import { Cart } from "./cart.js";
+import { Cart } from "./cart.mjs";
 import { Product } from "./product/_product.js";
 import { OrderSummary } from './order-received.mjs';
 
