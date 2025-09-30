@@ -82,14 +82,13 @@ export class Cart {
     changeQuantity(productId, quantity) {
         const len = this.#items.length, items2 = [];
         let qty = quantity;
-
         // decrease quantity; move limited to new array
         for (let i = 0; i < len; ++i) {
             if (this.#items[i] === productId) {
                 if (qty < 1) continue;
                 --qty;
             }
-            items2.push(productId);
+            items2.push(this.#items[i]);
         }
 
         // icrease quantity; add remaining, if any

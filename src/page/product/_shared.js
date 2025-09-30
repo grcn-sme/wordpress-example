@@ -17,12 +17,7 @@ document.body.addEventListener('submit', function (e) {
             cart = new Cart();
         cart.add(product);
 
-        // e.target.style['visibility'] = 'hidden';
         alert('Product added!');
-        setTimeout(l => {
-            // l.reload();
-        }, 200, window.location);
-
     }
     catch (err) {
         console.error(err); console.warn('resetting cart');

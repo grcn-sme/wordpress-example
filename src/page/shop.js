@@ -14,6 +14,7 @@ document.body.addEventListener('click', e => {
         if (cart === null)
             cart = new Cart();
         cart.add(product);
+        alert('product added to cart!');
     }
     catch (err) {
         console.error(err); console.warn('resetting cart');

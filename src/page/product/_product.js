@@ -26,7 +26,7 @@ export class Product {
                 price: 115.0,
                 currency: 'USD',
                 quantity: 1,
-                img_src: '/page/product/img/road-sport-vintage-wheel-retro-old.jpg',
+                img_src: './page/product/img/road-sport-vintage-wheel-retro-old.jpg',
             };
         }
         else if (id === '85') {
@@ -36,7 +36,7 @@ export class Product {
                 price: 115.0,
                 currency: 'USD',
                 quantity: 1,
-                img_src: '/page/product/img/white-black-black-and-white-photograph-monochrome-photography.jpg',
+                img_src: './page/product/img/white-black-black-and-white-photograph-monochrome-photography.jpg',
             };
         }
         else if (id === '75') {
@@ -46,7 +46,7 @@ export class Product {
                 price: 59.0,
                 currency: 'USD',
                 quantity: 1,
-                img_src: '/page/product/img/Procambarus-alleni-Blue-crayfish-1.jpg',
+                img_src: './page/product/img/Procambarus-alleni-Blue-crayfish-1.jpg',
             };
         }
         else if (id === '87') {
@@ -56,7 +56,7 @@ export class Product {
                 price: 249.0,
                 currency: 'USD',
                 quantity: 1,
-                img_src: '/page/product/img/table-wood-house-chair-floor-window.jpg',
+                img_src: './page/product/img/table-wood-house-chair-floor-window.jpg',
             };
         }
         else if (id === '59') {
@@ -66,7 +66,7 @@ export class Product {
                 price: 13.99,
                 currency: 'USD',
                 quantity: 1,
-                img_src: '/page/product/img/XL_bear_1946x.webp',
+                img_src: './page/product/img/XL_bear_1946x.webp',
             };
         }
         else if (id === '89') {
@@ -76,7 +76,7 @@ export class Product {
                 price: 90.00,
                 currency: 'USD',
                 quantity: 1,
-                img_src: '/page/product/img/writing-typing-keyboard-technology-white-vintage.jpg',
+                img_src: './page/product/img/writing-typing-keyboard-technology-white-vintage.jpg',
             };
         }
         throw new Error('undefined product id: ' + id);

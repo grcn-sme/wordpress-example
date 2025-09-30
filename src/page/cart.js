@@ -112,7 +112,6 @@ function listAllProducts() {
                     ;
                 const value0 = txtQuantity.value;
                 txtQuantity.value = parseInt(txtQuantity.value) - 1;
-                console.log({reportValidity: txtQuantity.reportValidity()});
                 if (txtQuantity.reportValidity() === false) {
                     txtQuantity.value = value0;
                     return;
