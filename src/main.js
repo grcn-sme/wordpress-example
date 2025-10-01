@@ -41,12 +41,15 @@ async function navigatePage(hash) {
   // load page
   const src = `./page${url.pathname}.html`;
   const page = pages[src];
-  console.log({ url, src, page });
-
-  if (page === undefined) return;
+  // console.log({ url, src, page });
+  
+  const appBody = document.getElementById('app');
+  if (page === undefined){
+    appBody.innerHTML = innerHTMLPolicy.createHTML('<h1>404 page not found =( </h1>');
+    return;
+  }
   const html = await page();
   // console.log({ html }, html.default);
-  const appBody = document.getElementById('app');
   appBody.innerHTML = innerHTMLPolicy.createHTML(html.default);
 
 
@@ -175,7 +178,7 @@ async function loadImageFile(url) {
 
 if (location.origin.startsWith('https'))
   if ('serviceWorker' in navigator) {
-    // navigator.serviceWorker.register('sw.js');
+    navigator.serviceWorker.register('sw.js', {scope: './'});
   }
 
 

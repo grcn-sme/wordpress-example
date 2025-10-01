@@ -49,11 +49,28 @@ export class Cart {
         return products;
     }
 
-    /** @param {Product} product */
-    add(product) {
-        console.log({ cart: this, items: this.#items, product });
-        this.#items.push(product.id);
+    static get maxQuantityPerItem() { return 69; }
+    /** 
+     * @param {string} productId 
+     * @param {number} quantity
+     * @returns {number} - number of products added; low than the specified quantity if cart size exceeded
+     * */
+    add(productId, quantity = 1) {
+        // console.log({ cart: this, items: this.#items, productId });
+        (new Product(productId)).id === productId; //verify productId
+
+        let currentQuantity = this.#items.filter(id => id === productId).length;
+        const maxQty = Cart.maxQuantityPerItem;
+        console.log({ currentQuantity });
+        let i = 0;
+        const remainingSlot = maxQty - (currentQuantity + quantity);
+        for (; i < quantity; ++i, ++currentQuantity) {
+            if (currentQuantity >= maxQty) break;
+            this.#items.push(productId);
+        }
         this.#save();
+
+        return i;
     }
 
     /** @param {string} productId */
@@ -81,7 +98,8 @@ export class Cart {
      * */
     changeQuantity(productId, quantity) {
         const len = this.#items.length, items2 = [];
-        let qty = quantity;
+        let qty = quantity < 0 ? 1 : Math.min(quantity, Cart.maxQuantityPerItem);
+        // console.log({ qty });
         // decrease quantity; move limited to new array
         for (let i = 0; i < len; ++i) {
             if (this.#items[i] === productId) {

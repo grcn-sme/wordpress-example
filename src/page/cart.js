@@ -2,7 +2,7 @@ import { Cart } from './cart.mjs';
 
 const cart = new Cart();
 console.log({ cart });
-const shippingFee = 6.8;
+const shippingFee = 6.80;
 
 listAllProducts();
 displaySubTotalPrice();
@@ -85,6 +85,7 @@ function listAllProducts() {
         let qid = 0;
         for (let i = 0; i < len; ++i) {
             txtQuantityS[i].addEventListener('change', (e) => {
+                if (e.target.reportValidity() === false) return;
                 clearTimeout(qid);
                 try {
                     const productId = e.target.dataset['productId'];
@@ -97,7 +98,14 @@ function listAllProducts() {
                     cart.reset();
                 }
             });
-         
+            txtQuantityS[i].addEventListener('blur', function (e) {
+                const qty = parseInt(e.target.value);
+                if (qty > Cart.maxQuantityPerItem) {
+                    e.target.value = Cart.maxQuantityPerItem;
+                } else {
+                    e.target.value = 1;
+                }
+            });
         }
     }
     {
@@ -110,12 +118,7 @@ function listAllProducts() {
                 const txtQuantity =
                     e.target.parentElement.querySelector('.wc-block-components-quantity-selector__input')
                     ;
-                const value0 = txtQuantity.value;
                 txtQuantity.value = parseInt(txtQuantity.value) - 1;
-                if (txtQuantity.reportValidity() === false) {
-                    txtQuantity.value = value0;
-                    return;
-                }
                 txtQuantity.dispatchEvent(new Event('change', { bubbles: true }));
             });
         }
@@ -130,12 +133,7 @@ function listAllProducts() {
                 const txtQuantity =
                     e.target.parentElement.querySelector('.wc-block-components-quantity-selector__input')
                     ;
-                const value0 = txtQuantity.value;
                 txtQuantity.value = parseInt(txtQuantity.value) + 1;
-                if (txtQuantity.reportValidity() === false) {
-                    txtQuantity.value = value0;
-                    return;
-                }
                 txtQuantity.dispatchEvent(new Event('change'));
             });
         }

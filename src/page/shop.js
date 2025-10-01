@@ -10,11 +10,16 @@ document.body.addEventListener('click', e => {
     if (btn === null) return;
 
     try {
-        const product = new Product(btn.getAttribute('href').split('=')[1]);
+        const productId = btn.getAttribute('href').split('=')[1];
         if (cart === null)
             cart = new Cart();
-        cart.add(product);
-        alert('product added to cart!');
+        const addedCount = cart.add(productId, 1);
+        if (addedCount === 1) {
+            alert('Product added!');
+        }
+        else {
+            alert(`Maximum products exceeded!`);
+        }
     }
     catch (err) {
         console.error(err); console.warn('resetting cart');

@@ -14,10 +14,3 @@ workbox.routing.registerRoute(
     ({ request }) => request.destination === 'script',
     new workbox.strategies.NetworkFirst()
 );
-
-workbox.routing.registerRoute(
-    ({ request }) => request.destination === 'document' && url.searchParams.has('nocache') === false, // catches HTML pages
-    new StaleWhileRevalidate({
-        cacheName: 'html-cache',
-    })
-);

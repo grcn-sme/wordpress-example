@@ -1,6 +1,7 @@
 import { Product } from './_product.js';
 import { Cart } from '../cart.mjs';
 
+/** @type {Cart} */
 let cart = null;
 document.body.addEventListener('submit', function (e) {
     if (e.target.classList.contains('cart') === false) return;
@@ -12,12 +13,21 @@ document.body.addEventListener('submit', function (e) {
 
     try {
         const product = new Product(proId);
+        const quantity = parseInt(form.querySelector('input[name="quantity"]')?.value) || 1;
         console.log({ product });
         if (cart === null)
             cart = new Cart();
-        cart.add(product);
-
-        alert('Product added!');
+        const addedCount = cart.add(product.id, quantity);
+        // console.log({addedCount});
+        if (addedCount === quantity) {
+            alert('Product added!');
+        }
+        else if (addedCount > 0) {
+            alert(`Maximum products exceeded, only ${addedCount} is added`);
+        }
+        else {
+            alert(`Maximum products exceeded!`);
+        }
     }
     catch (err) {
         console.error(err); console.warn('resetting cart');
@@ -26,20 +36,39 @@ document.body.addEventListener('submit', function (e) {
     return false;
 });
 
-{  // reset img size
+try {  // reset img size
     const pic = document.body.getElementsByTagName('img'),
         len = pic.length;
     for (let i = 0; i < len; ++i) {
-        pic[i].setAttribute('width', pic[i].naturalWidth);
-        pic[i].setAttribute('height', pic[i].naturalHeight);
+        if (pic[i].naturalWidth > 0) {
+            pic[i].setAttribute('width', pic[i].naturalWidth);
+            pic[i].setAttribute('height', pic[i].naturalHeight);
+        } else {
+            // for when somehow width = 0 when devtool is open
+            pic[i].setAttribute('width', pic[i].clientWidth);
+            pic[i].setAttribute('height', pic[i].clientHeight);
+        }
+        pic[i].removeAttribute('sizes');
     }
-}
+} catch (err) { console.error(err); }
 
 
-{
-    console.log(0,
-        // document.querySelectorAll('.cart .wp-block-post-title').length
+setTimeout(_ => { // limit quantity
+    const txtQty = document.body.querySelector('input[name="quantity"]');
+    txtQty.setAttribute('min', 1);
+    txtQty.setAttribute('max', 69);
+    txtQty.addEventListener('change', function (e) {
+        e.target.reportValidity();
+    });
+}, 0);
 
-    );
-}
-
+setTimeout(_ => {
+    document.getElementById('commentform').onsubmit = function (e) {
+        e.preventDefault();
+        if (e.target.reportValidity()) {
+            alert('thanks for reviewing!');
+            location.reload();
+        }
+        return false;
+    };
+}, 0);

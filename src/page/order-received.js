@@ -14,6 +14,10 @@ else {
     displayTotalPrice(order);
 }
 
+function noOrderYet() {
+    alert('no previous order!');
+}
+
 
 /** @param {OrderSummary} o */
 function displayData(o) {
@@ -29,8 +33,7 @@ function displayData(o) {
     <li class="wc-block-order-confirmation-summary-list-item"><span
             class="wc-block-order-confirmation-summary-list-item__key">Total:</span> <span
             class="wc-block-order-confirmation-summary-list-item__value"><span
-                class="woocommerce-Price-amount amount"><span
-                    class="woocommerce-Price-currencySymbol">&#036;</span>${o.totalPriceText()}</span></span></li>
+                class="woocommerce-Price-amount amount">${o.totalPriceText()}</span></span></li>
     <li class="wc-block-order-confirmation-summary-list-item"><span
             class="wc-block-order-confirmation-summary-list-item__key">Email:</span> <span
             class="wc-block-order-confirmation-summary-list-item__value">${o.userEmailAddress}</span></li>

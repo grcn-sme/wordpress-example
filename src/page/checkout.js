@@ -65,7 +65,8 @@ const cart = new Cart();
 console.log({ cart });
 
 
-const summary = new CheckoutSummary(cart, 6.90);
+const shippingFee = 6.80;
+const summary = new CheckoutSummary(cart, shippingFee);
 
 
 summary.listAllProducts();

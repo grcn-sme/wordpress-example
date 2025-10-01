@@ -75,3 +75,8 @@ textarea:user-invalid {
 button {
   padding: .7em 1em;
 }
+
+img[src] {
+  width: 100%;
+  height: auto;
+}
