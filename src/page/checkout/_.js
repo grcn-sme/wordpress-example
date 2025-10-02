@@ -1,6 +1,7 @@
 import { Cart } from "/src/page/cart/cart.mjs";
 import { Product } from "/src/page/product/product.mjs";
 import { OrderSummary } from '/src/page/order-received/order-received.mjs';
+import { alert } from '/src/alert.mjs';
 
 
 class CheckoutSummary {

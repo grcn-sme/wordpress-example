@@ -1,3 +1,4 @@
+import { alert } from '/src/alert.mjs';
 
 let cart = null;
 

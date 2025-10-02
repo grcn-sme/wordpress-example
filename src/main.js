@@ -186,3 +186,5 @@ if (location.origin.startsWith('https'))
   }
 
 
+import { alert } from '/src/alert.mjs';
+

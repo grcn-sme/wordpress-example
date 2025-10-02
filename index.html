@@ -1457,7 +1457,14 @@
 	</nav>
 	<div id="app"></div>
 	<script type="module" src="/src/main.js" async></script>
-
+	<dialog id="_dialog-alert" closedby="any">
+		<form method="dialog">
+			<div id="_dialog-alert__message-body"></div>
+			<div id="_dialog-alert__control">
+				<button type="submit">Ok</button>
+			</div>
+		</form>
+	</dialog>
 </body>
 
 </html>

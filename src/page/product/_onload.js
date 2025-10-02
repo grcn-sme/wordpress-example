@@ -1,5 +1,6 @@
 import { Product } from './product.mjs';
 import { Cart } from '../cart/cart.mjs';
+import { alert } from '/src/alert.mjs';
 
 /** @type {Cart} */
 let cart = null;

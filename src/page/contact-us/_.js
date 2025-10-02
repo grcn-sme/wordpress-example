@@ -1,3 +1,6 @@
+import { alert } from '/src/alert.mjs';
+
+
 document.getElementById('wpforms-form-66-1').addEventListener('submit', function (e) {
     if (e.target.checkValidity() === false) return;
     e.preventDefault();
