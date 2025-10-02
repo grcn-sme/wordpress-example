@@ -1,5 +1,5 @@
 
-import { Product } from './product/_product.js';
+import { Product } from '../product/product.mjs';
 
 export class Cart {
     /** @type {string[]} - list of product ids */

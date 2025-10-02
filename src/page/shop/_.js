@@ -27,7 +27,7 @@ document.body.addEventListener('click', e => {
     }
 });
 
-import { Product } from './product/_product.js';
+import { Product } from '../product/product.mjs';
 
 
-import { Cart } from './cart.mjs';
+import { Cart } from '../cart/cart.mjs';

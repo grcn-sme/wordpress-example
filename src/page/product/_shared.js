@@ -1,5 +1,5 @@
-import { Product } from './_product.js';
-import { Cart } from '../cart.mjs';
+import { Product } from './product.mjs';
+import { Cart } from '../cart/cart.mjs';
 
 /** @type {Cart} */
 let cart = null;

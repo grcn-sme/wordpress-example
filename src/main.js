@@ -19,11 +19,11 @@ console.log('pages', pages);
 async function navigatePage(hash) {
   // fetch resources
   // #/pathname/xxx/yyy
-  const href = hash.substring(1);
-  console.assert(href && href.startsWith('/'), `invalid href: ${href}`);
+  const path = hash.substring(1);
+  console.assert(path && path.startsWith('/'), `invalid path: ${path}`);
 
   // virtual url for SPA
-  const url = new URL(`${location.origin}${href}`);
+  const url = new URL(`${location.origin}${path}`);
 
   // load img
   const pathname = url.pathname;
@@ -39,12 +39,12 @@ async function navigatePage(hash) {
   }
 
   // load page
-  const src = `./page${url.pathname}.html`;
+  const src = `./page${url.pathname === '/' ? '' : url.pathname}/_.html`;
   const page = pages[src];
-  // console.log({ url, src, page });
-  
+  console.log({ url, src, page });
+
   const appBody = document.getElementById('app');
-  if (page === undefined){
+  if (page === undefined) {
     appBody.innerHTML = innerHTMLPolicy.createHTML('<h1>404 page not found =( </h1>');
     return;
   }
@@ -135,7 +135,7 @@ function _loadIndividualResources(pathname, modules) {
   // console.assert(pathname && pathname.startsWith('/'), `invalid pathname: ${pathname}`);
 
   if (pathname === '/') return null;
-  const src = `./page${pathname}.js`; // is to /src/page/**/*.js
+  const src = `./page${pathname}/_.js`; // is to /src/page/**/_.js
   // console.log({ src, modules });
   const module = modules[src];
   if (!module) return null;
@@ -143,11 +143,11 @@ function _loadIndividualResources(pathname, modules) {
 }
 
 { // init page
-  if (location.hash !== '' && location.hash !== '#' && location.hash !== '#/') {
+  if (location.hash !== '' && location.hash !== '#') {
     navigatePage(location.hash);
   }
   else {
-    navigatePage('#/index');
+    navigatePage('#/');
   }
 }
 
@@ -178,7 +178,7 @@ async function loadImageFile(url) {
 
 if (location.origin.startsWith('https'))
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js', {scope: './'});
+    navigator.serviceWorker.register('sw.js', { scope: './' });
   }
 
 

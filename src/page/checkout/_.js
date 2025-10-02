@@ -1,6 +1,6 @@
-import { Cart } from "./cart.mjs";
-import { Product } from "./product/_product.js";
-import { OrderSummary } from './order-received.mjs';
+import { Cart } from "/src/page/cart/cart.mjs";
+import { Product } from "/src/page/product/product.mjs";
+import { OrderSummary } from '/src/page/order-received/order-received.mjs';
 
 
 class CheckoutSummary {

@@ -1,4 +1,4 @@
-import { Product } from './product/_product.js';
+import { Product } from '../product/product.mjs';
 import { OrderSummary } from './order-received.mjs';
 
 const order = OrderSummary.getLastOrder();
