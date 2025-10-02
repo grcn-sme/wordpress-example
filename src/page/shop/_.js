@@ -1,31 +1,30 @@
 
 let cart = null;
 
-document.body.addEventListener('click', e => {
-    // const all = document.elementsFromPoint(e.clientX, e.clientY);
-    // console.log(all);
-    // console.log('=====================');
-
-    const btn = e.target.closest('button[href^="?add-to-cart="]');
-    if (btn === null) return;
-
-    try {
-        const productId = btn.getAttribute('href').split('=')[1];
-        if (cart === null)
-            cart = new Cart();
-        const addedCount = cart.add(productId, 1);
-        if (addedCount === 1) {
-            alert('Product added!');
+setTimeout(_ => {
+    function addToCart(e) {
+        const btn = e.currentTarget;
+        try {
+            const productId = btn.getAttribute('href').split('=')[1];
+            if (cart === null)
+                cart = new Cart();
+            const addedCount = cart.add(productId, 1);
+            if (addedCount === 1) {
+                alert('Product added!');
+            }
+            else {
+                alert(`Maximum products exceeded!`);
+            }
         }
-        else {
-            alert(`Maximum products exceeded!`);
+        catch (err) {
+            console.error(err); console.warn('resetting cart');
+            Cart.reset();
         }
     }
-    catch (err) {
-        console.error(err); console.warn('resetting cart');
-        Cart.reset();
-    }
-});
+    document.body.querySelectorAll('button[href^="?add-to-cart="]').forEach(function (x) {
+        x.addEventListener('click', addToCart);
+    });
+}, 0);
 
 import { Product } from '../product/product.mjs';
 

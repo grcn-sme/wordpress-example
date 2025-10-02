@@ -21,10 +21,10 @@ function listAllProducts() {
         console.log({ p });
         const html = `
         <tr class="wc-block-cart-items__row" tabindex="-1">
-            <td class="wc-block-cart-item__image" aria-hidden="true"><a href="${p.url}" tabindex="-1"><img src="${p.img_src}"
+            <td class="wc-block-cart-item__image" aria-hidden="true"><a href="#${p.url}" tabindex="-1"><img src="${p.img_src}"
                         alt="${p.name}"></a></td>
             <td class="wc-block-cart-item__product">
-                <div class="wc-block-cart-item__wrap"><a class="wc-block-components-product-name" href="${p.url}">${p.name}</a>
+                <div class="wc-block-cart-item__wrap"><a class="wc-block-components-product-name" href="#${p.url}">${p.name}</a>
                     <div class="wc-block-cart-item__prices"><span class="price wc-block-components-product-price"><span
                                 class="wc-block-formatted-money-amount wc-block-components-formatted-money-amount wc-block-components-product-price__value">${p.priceText()}</span></span>
                     </div>

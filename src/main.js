@@ -58,7 +58,7 @@ async function navigatePage(hash) {
   injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
 
   const lastResource1 = _loadIndividualResources(url.pathname, modules);
-
+  const lastResource2 = _loadSharedResources2(url.pathname, modules);
 
 
   setTimeout(_ => {
@@ -72,6 +72,7 @@ async function navigatePage(hash) {
   try {
     if (lastResource0 !== null) await lastResource0;
     if (lastResource1 !== null) await lastResource1;
+    if (lastResource2 !== null) await lastResource2;
   } finally {
     // emulate page load events,
     // for 3rd party mpa code to run
@@ -120,7 +121,10 @@ function _loadSharedResources2(pathname, modules) {
     const h = path.lastIndexOf('/');
     path = path.substring(0, h);
     const src = `./page${path}/_onload.js`;
-    console.log(src);
+    const module = modules[src];
+    console.log({ src, module });
+    if (!module) continue;
+    lastResource2 = module().catch(console.error);
   }
   return lastResource2;
 }

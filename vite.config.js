@@ -8,4 +8,7 @@ export default defineConfig({
             // https://rollupjs.org/configuration-options/
         },
     },
+    esbuild: {
+        drop: ['console', 'debugger']
+    }
 });

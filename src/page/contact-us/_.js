@@ -37,6 +37,13 @@ document.getElementById('wpforms-form-66-1').addEventListener('submit', function
 }
 
 document.getElementById('inquiry-form').addEventListener('submit', function (e) {
-    console.log('inquiry form: ', Object.fromEntries(new FormData(e.target)));
+    console.log('inquiry form: ', Object.fromEntries(new FormData(e.currentTarget)));
+    setTimeout(form => {
+        alert('submitted!');
+        form.classList.add('submitted');
 
+        setTimeout(l => {
+            l.reload();
+        }, 1000, window.location);
+    }, 500, e.currentTarget);
 });

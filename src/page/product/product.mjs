@@ -3,9 +3,13 @@ export class Product {
     id;
     name = null;
     price = 0.00;
+
+    /** @type {string} - ISO currency code */
     currency = 'USD';
+
     quantity = 1;
     img_src = '';
+    url = '';
 
     constructor(id) {
         this.id = id;
@@ -16,6 +20,7 @@ export class Product {
             this.currency = product.currency;
             this.quantity = product.quantity;
             this.img_src = product.img_src;
+            this.url = product.url;
         }
     }
     getProduct(id) {
@@ -27,6 +32,7 @@ export class Product {
                 currency: 'USD',
                 quantity: 1,
                 img_src: './page/product/img/road-sport-vintage-wheel-retro-old.jpg',
+                url: '/product/3-speed-bike',
             };
         }
         else if (id === '85') {
@@ -37,6 +43,8 @@ export class Product {
                 currency: 'USD',
                 quantity: 1,
                 img_src: './page/product/img/white-black-black-and-white-photograph-monochrome-photography.jpg',
+                url: '/product/black-and-white-summer-portrait',
+
             };
         }
         else if (id === '75') {
@@ -47,6 +55,7 @@ export class Product {
                 currency: 'USD',
                 quantity: 1,
                 img_src: './page/product/img/Procambarus-alleni-Blue-crayfish-1.jpg',
+                url: '/product/crayfish',
             };
         }
         else if (id === '87') {
@@ -57,6 +66,7 @@ export class Product {
                 currency: 'USD',
                 quantity: 1,
                 img_src: './page/product/img/table-wood-house-chair-floor-window.jpg',
+                url: '/product/leather-clad-leisure-chair',
             };
         }
         else if (id === '59') {
@@ -67,6 +77,7 @@ export class Product {
                 currency: 'USD',
                 quantity: 1,
                 img_src: './page/product/img/XL_bear_1946x.webp',
+                url: '/product/teddy-bear',
             };
         }
         else if (id === '89') {
@@ -77,6 +88,7 @@ export class Product {
                 currency: 'USD',
                 quantity: 1,
                 img_src: './page/product/img/writing-typing-keyboard-technology-white-vintage.jpg',
+                url: '/product/vintage-typewriter',
             };
         }
         throw new Error('undefined product id: ' + id);
@@ -96,7 +108,7 @@ export class Product {
      * @param {number} value 
      */
     static formatPrice(currency, value) {
-        return `${currency} ${value.toFixed(2)}`;
+        return value.toLocaleString("en-US", { style: "currency", currency: currency });
     }
 
     /** @param {Object} json */
