@@ -77,7 +77,10 @@ async function navigatePage(hash) {
     // emulate page load events,
     // for 3rd party mpa code to run
     setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('DOMContentLoaded', opt)); }, 0, appBody, opt);
-    setTimeout((opt) => { window.dispatchEvent(new Event('load', opt)); }, 500);
+    setTimeout((window, opt) => {
+      window.dispatchEvent(new Event('load', opt));
+      window.dispatchEvent(new PageTransitionEvent('pageshow', opt));
+    }, 100, window, opt);
   }
   console.log({ url, src });
 }

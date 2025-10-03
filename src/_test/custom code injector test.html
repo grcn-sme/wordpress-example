@@ -21,6 +21,9 @@
     window.addEventListener('DOMContentLoaded', function (ev) {
         console.warn('head code', ev.type, { 'document.readyState': document.readyState, ev: ev });
     });
+    window.addEventListener('pageshow', function (ev) {
+        console.warn('head code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+    });
 
     console.warn('head code', 1, { 'document.readyState': document.readyState });
     setTimeout(_ => {
@@ -46,6 +49,9 @@
         console.warn('body code', ev.type, { 'document.readyState': document.readyState, ev: ev });
     });
     window.addEventListener('DOMContentLoaded', function (ev) {
+        console.warn('body code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+    });
+    window.addEventListener('pageshow', function (ev) {
         console.warn('body code', ev.type, { 'document.readyState': document.readyState, ev: ev });
     });
 
