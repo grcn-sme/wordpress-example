@@ -7,6 +7,13 @@ workbox.setConfig({
     debug: false
 });
 
+workbox.routing.registerRoute(
+    ({ request }) => request.mode === 'navigate',
+    new workbox.strategies.CacheFirst({
+        cacheName: 'pages-cache',
+    })
+);
+
 // offline assets loading strategy
 workbox.routing.registerRoute(
     ({ request }) => request.destination === 'image',
