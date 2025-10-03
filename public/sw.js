@@ -16,5 +16,5 @@ workbox.routing.registerRoute(
 // offline assets loading strategy
 workbox.routing.registerRoute(
     ({ request }) => request.destination === 'script',
-    new workbox.strategies.NetworkFirst()
+    new workbox.strategies.StaleWhileRevalidate()
 );

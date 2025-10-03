@@ -159,8 +159,13 @@ function _loadIndividualResources(pathname, modules) {
 }
 
 window.onpopstate = async function navigateTo(ev) { // custom route
-  // await navigatePage(location.hash); // spa
-  window.stop(); this.location.reload();  // mpa
+  if (navigator.onLine === true) {
+    window.stop(), this.location.reload();  // mpa
+  }
+  else { // for offline mode to work
+    await navigatePage(location.hash); // spa
+  }
+
 };
 
 
@@ -183,10 +188,9 @@ async function loadImageFile(url) {
   appBody.appendChild(img);
 }
 
-if (location.origin.startsWith('https'))
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js', { scope: './' });
-  }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js', { scope: './' });
+}
 
 
 import { alert } from '/src/alert.mjs';
