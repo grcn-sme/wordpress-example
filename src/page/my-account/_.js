@@ -1,4 +1,4 @@
-{
+export default function main(){
     const txtCodeHead = document.getElementById('txtCodeHead');
     const txtCodeBody = document.getElementById('txtCodeBody');
 
@@ -23,5 +23,4 @@
             document.getElementById('form-custom-code').requestSubmit();
         }
     });
-
 }

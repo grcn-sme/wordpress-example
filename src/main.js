@@ -103,7 +103,7 @@ function _loadSharedResources(pathname, modules) {
     const module = modules[src];
     console.log({ src, module });
     if (!module) continue;
-    lastResource0 = module().catch(console.error);
+    lastResource0 = module().then(m => m.default()).catch(console.error);
   }
   return lastResource0;
 }
@@ -127,7 +127,7 @@ function _loadSharedResources2(pathname, modules) {
     const module = modules[src];
     console.log({ src, module });
     if (!module) continue;
-    lastResource2 = module().catch(console.error);
+    lastResource2 = module().then(m => m.default()).catch(console.error);
   }
   return lastResource2;
 }
@@ -146,7 +146,7 @@ function _loadIndividualResources(pathname, modules) {
   // console.log({ src, modules });
   const module = modules[src];
   if (!module) return null;
-  return module().catch(console.error);
+  return module().then(m => m.default()).catch(console.error);
 }
 
 { // init page
@@ -159,13 +159,8 @@ function _loadIndividualResources(pathname, modules) {
 }
 
 window.onpopstate = async function navigateTo(ev) { // custom route
-  if (navigator.onLine === true) {
-    window.stop(), this.location.reload();  // mpa
-  }
-  else { // for offline mode to work
-    await navigatePage(location.hash); // spa
-  }
-
+  await navigatePage(location.hash); // spa
+  // window.stop(), this.location.reload();  // mpa
 };
 
 

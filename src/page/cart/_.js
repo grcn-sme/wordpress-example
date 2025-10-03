@@ -1,19 +1,17 @@
 import { Cart } from './cart.mjs';
 
-const cart = new Cart();
-console.log({ cart });
-const shippingFee = 6.80;
+export default function () {
+    const cart = new Cart();
+    const shippingFee = 6.80;
 
-listAllProducts();
-displaySubTotalPrice();
-displayShippingFee();
-displayTotalPrice();
-
-
-
+    listAllProducts(cart);
+    displaySubTotalPrice(cart);
+    displayShippingFee(shippingFee);
+    displayTotalPrice(cart, shippingFee);
+}
 
 
-function listAllProducts() {
+function listAllProducts(cart) {
     const divProducts =
         document.body.querySelector("#wp--skip-link--target > div.entry-content.alignwide.wp-block-post-content.is-layout-flow.wp-block-post-content-is-layout-flow > div > div:nth-child(4) > div > div > div.wc-block-components-main.wc-block-cart__main.wp-block-woocommerce-cart-items-block > table > tbody")
         ;
@@ -140,12 +138,12 @@ function listAllProducts() {
     }
 }
 
-function displaySubTotalPrice() {
+function displaySubTotalPrice(cart) {
     document.body.querySelector("#wp--skip-link--target > div.entry-content.alignwide.wp-block-post-content.is-layout-flow.wp-block-post-content-is-layout-flow > div > div:nth-child(4) > div > div > div.wc-block-components-sidebar.wc-block-cart__sidebar.wp-block-woocommerce-cart-totals-block > div.wp-block-woocommerce-cart-order-summary-block > div.wp-block-woocommerce-cart-order-summary-totals-block > div.wp-block-woocommerce-cart-order-summary-subtotal-block.wc-block-components-totals-wrapper > div > span.wc-block-formatted-money-amount.wc-block-components-formatted-money-amount.wc-block-components-totals-item__value")
         .textContent = cart.totalPriceText();
 }
 
-function displayShippingFee() {
+function displayShippingFee(shippingFee) {
     document.body.querySelector("#wp--skip-link--target > div.entry-content.alignwide.wp-block-post-content.is-layout-flow.wp-block-post-content-is-layout-flow > div > div:nth-child(4) > div > div > div.wc-block-components-sidebar.wc-block-cart__sidebar.wp-block-woocommerce-cart-totals-block > div.wp-block-woocommerce-cart-order-summary-block > div.wp-block-woocommerce-cart-order-summary-totals-block > div.wp-block-woocommerce-cart-order-summary-shipping-block.wc-block-components-totals-wrapper > div > div > span.wc-block-formatted-money-amount.wc-block-components-formatted-money-amount.wc-block-components-totals-item__value")
         .textContent = shippingFee;
 
@@ -154,7 +152,7 @@ function displayShippingFee() {
         .textContent = shippingFee;
 }
 
-function displayTotalPrice() {
+function displayTotalPrice(cart, shippingFee) {
     document.body.querySelector("#wp--skip-link--target > div.entry-content.alignwide.wp-block-post-content.is-layout-flow.wp-block-post-content-is-layout-flow > div > div:nth-child(4) > div > div > div.wc-block-components-sidebar.wc-block-cart__sidebar.wp-block-woocommerce-cart-totals-block > div.wp-block-woocommerce-cart-order-summary-block > div:nth-child(4) > div > div.wc-block-components-totals-item__value > span")
         .textContent = cart.totalPriceText(shippingFee);
 

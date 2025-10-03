@@ -1,17 +1,19 @@
 import { Product } from '../product/product.mjs';
 import { OrderSummary } from './order-received.mjs';
 
-const order = OrderSummary.getLastOrder();
-console.log({ order });
+export default function () {
+    const order = OrderSummary.getLastOrder();
+    console.log({ order });
 
-if (order === null) {
-    noOrderYet();
-}
-else {
-    displayData(order);
-    displayProducts(order);
-    displayShippingFee(order);
-    displayTotalPrice(order);
+    if (order === null) {
+        noOrderYet();
+    }
+    else {
+        displayData(order);
+        displayProducts(order);
+        displayShippingFee(order);
+        displayTotalPrice(order);
+    }
 }
 
 function noOrderYet() {
