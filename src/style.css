@@ -4,19 +4,13 @@
   background-color: #eee;
   scroll-padding-top: 15svh;
 
-  --background-color: #eee;
-  --text-color: #000;
-
-  @media (prefers-color-scheme: dark) {
-    --background-color: #333;
-    --text-color: #fff;
-  }
 }
 
 
-
 @media (prefers-color-scheme: dark) {
-  :root {
+
+  :root,
+  dialog {
     filter: invert(1) hue-rotate(180deg) brightness(1.1);
     background-color: #ddd;
     text-shadow: 0 0 0 1px;
@@ -28,9 +22,19 @@
   }
 }
 
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* mobile view */
 @media screen and (max-width: 600px) {
-  body {
-    padding-top: 5svh;
+  html {
+    padding-top: 4svh;
   }
 }
 
@@ -46,7 +50,6 @@ nav {
     flex-wrap: wrap;
 
 
-
     &>li {
       display: inline-block;
       padding: 0 1rem;
@@ -55,7 +58,11 @@ nav {
 }
 
 
-
+button:active,
+input[type=radio]:active {
+  background-color: #ccc;
+  box-shadow: 0 0 2px 0;
+}
 
 button,
 select,
@@ -65,9 +72,6 @@ input[type=file],
 label:has(>input) {
   cursor: pointer;
 
-  &:active {
-    box-shadow: 0 0 4px 0;
-  }
 
   &[readonly],
   &:disabled {
@@ -105,8 +109,6 @@ img[src] {
 
 
 dialog#_dialog-alert {
-  background-color: var(--background-color);
-  color: var(--text-color);
   border: 1px solid var(--text-color);
   box-shadow: 0 0 8px 0px;
   transition: 25ms ease-in;
@@ -118,11 +120,10 @@ dialog#_dialog-alert {
   padding: 0;
 
   &>* {
-  /* dont use margin; prevent clicking the actual dialog element */
-    margin: 0; 
+    /* dont use margin; prevent clicking the actual dialog element */
+    margin: 0;
     padding: 1rem;
   }
-
 
   @starting-style {
     scale: 2;
