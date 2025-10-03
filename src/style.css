@@ -110,10 +110,19 @@ dialog#_dialog-alert {
   border: 1px solid var(--text-color);
   box-shadow: 0 0 8px 0px;
   transition: 25ms ease-in;
-
-  padding: 1rem;
   font-size: 1rem;
   min-width: 25vw;
+
+  /* prevent clicking the actual dialog element */
+  /* for manually reimplementing light dismiss on clicking dialog element */
+  padding: 0;
+
+  &>* {
+  /* dont use margin; prevent clicking the actual dialog element */
+    margin: 0; 
+    padding: 1rem;
+  }
+
 
   @starting-style {
     scale: 2;
@@ -129,6 +138,8 @@ dialog#_dialog-alert {
         green); */
     background-color: #000;
     opacity: .25;
+    width: 100vw;
+    height: 100vh;
   }
 
   #_dialog-alert__message-body {
