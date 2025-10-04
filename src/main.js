@@ -163,6 +163,18 @@ window.onpopstate = async function navigateTo(ev) { // custom route
   // window.stop(), this.location.reload();  // mpa
 };
 
+// reset scroll on navigation
+document.body.addEventListener('click', function (e) {
+  if (e.target.tagName === 'A')
+    if (e.target.getAttribute('href').startsWith('/#') === true)
+      window.scroll(0, 0), console.log('scroll top');
+
+  if (e.target.tagName === 'IMG')
+    if (e.target.getAttribute('src'))
+            window.scroll(0, 0), console.log('scroll top');
+
+});
+
 
 /** @param {URL} url */
 async function loadImageFile(url) {
