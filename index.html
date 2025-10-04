@@ -1444,6 +1444,16 @@
 	</style>
 	<!-- wordpress stuff -->
 	<link rel="stylesheet" href="/src/style.css">
+	<style>
+		#btnInstallApp {
+			display: block;
+			font-weight: bold;
+			position: absolute;
+			right: 0;
+			/* margin: auto;
+			margin-right: 0; */
+		}
+	</style>
 </head>
 
 <body>
@@ -1458,8 +1468,12 @@
 			<li><a href="#/shop">Shop</a></li>
 		</ul>
 	</nav>
+	<div>
+		<button id="btnInstallApp" style="display: none;">Install</button>
+	</div>
 	<div id="app"></div>
 	<script type="module" src="/src/main.js" async></script>
+
 	<dialog id="_dialog-alert" closedby="closerequest" role="dialog">
 		<form method="dialog">
 			<div id="_dialog-alert__message-body"></div>

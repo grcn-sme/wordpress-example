@@ -185,6 +185,23 @@ async function loadImageFile(url) {
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js', { scope: './' });
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    setTimeout(showInstallAppButton, 1000, e);
+  }, { once: true });
+
+  /** @param {BeforeInstallPromptEvent} deferredPrompt */
+  function showInstallAppButton(deferredPrompt) {
+    const btnInstallApp = document.getElementById('btnInstallApp');
+    btnInstallApp.addEventListener('click', function (e) {
+      if (e.isTrusted === false) return;
+      deferredPrompt.prompt();
+      btnInstallApp.style['display'] = 'none';
+    });
+    btnInstallApp.style['display'] = '';
+  }
+
 }
 
 
