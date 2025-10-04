@@ -218,3 +218,20 @@ import { alert } from '/src/alert.mjs';
     }, 1500);
   };
 }
+
+window.addEventListener('load', function (ev) {
+  if (ev.isTrusted === false) return;
+  setTimeout(async function preLoadModule() {
+    for (const key of Object.keys(pages)) {
+      await pages[key]().catch(_ => { });
+    }
+    for (const key of Object.keys(modules)) {
+      await modules[key]().catch(_ => { });
+    }
+
+    console.log('all modules are loaded, offline experience is ready');
+  }, 2000);
+});
+
+
+
