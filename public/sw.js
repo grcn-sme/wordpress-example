@@ -10,7 +10,7 @@ workbox.setConfig({ debug: false });
 // html pages
 workbox.routing.registerRoute(
     ({ request }) => request.mode === 'navigate',
-    new workbox.strategies.CacheFirst({
+    new workbox.strategies.NetworkFirst({
         cacheName: 'pages-cache',
     })
 );
@@ -18,17 +18,17 @@ workbox.routing.registerRoute(
 // javascript
 workbox.routing.registerRoute(
     ({ request }) => request.destination === 'script',
-    new workbox.strategies.StaleWhileRevalidate()
+    new workbox.strategies.NetworkFirst()
 );
 
 // css
 workbox.routing.registerRoute(
     ({ request }) => request.destination === 'style',
-    new workbox.strategies.StaleWhileRevalidate()
+    new workbox.strategies.NetworkFirst()
 );
 
 
 workbox.routing.registerRoute(
     ({ request }) => request.destination === 'image',
-    new workbox.strategies.CacheFirst()
+    new workbox.strategies.StaleWhileRevalidate()
 );
