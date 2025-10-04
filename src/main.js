@@ -204,6 +204,17 @@ if ('serviceWorker' in navigator) {
 
 }
 
-
 import { alert } from '/src/alert.mjs';
 
+
+{ // error alert
+  let qid = 0, d = false;
+  window.onerror = function (e) {
+    if (d) return;
+    clearTimeout(qid);
+    qid = setTimeout(_ => {
+      alert('Ops... app got some unknown error');
+      d = true;
+    }, 1500);
+  };
+}

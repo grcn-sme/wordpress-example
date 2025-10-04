@@ -47,7 +47,7 @@ class CheckoutSummary {
 
     displaySubTotalPrice() {
         document.body.querySelector("#wp--skip-link--target > div.entry-content.alignwide.wp-block-post-content.is-layout-flow.wp-block-post-content-is-layout-flow > div > div.wc-block-components-sidebar-layout.wc-block-checkout.is-large > div.wc-block-components-sidebar.wc-block-checkout__sidebar.wp-block-woocommerce-checkout-totals-block > div.wp-block-woocommerce-checkout-order-summary-block > div.wp-block-woocommerce-checkout-order-summary-totals-block > div.wp-block-woocommerce-checkout-order-summary-subtotal-block.wc-block-components-totals-wrapper > div > span.wc-block-formatted-money-amount.wc-block-components-formatted-money-amount.wc-block-components-totals-item__value")
-            .textContent = cart.totalPriceText();
+            .textContent = this.cart.totalPriceText();
     }
 
     displayShippingFeed() {
@@ -57,7 +57,7 @@ class CheckoutSummary {
 
     displayTotalPrice() {
         document.body.querySelector('#wp--skip-link--target > div.entry-content.alignwide.wp-block-post-content.is-layout-flow.wp-block-post-content-is-layout-flow > div > div.wc-block-components-sidebar-layout.wc-block-checkout.is-large > div.wc-block-components-sidebar.wc-block-checkout__sidebar.wp-block-woocommerce-checkout-totals-block > div.wp-block-woocommerce-checkout-order-summary-block > div:nth-child(4) > div > div.wc-block-components-totals-item__value > span')
-            .textContent = cart.totalPriceText(this.orderSummary.shippingFee);
+            .textContent = this.cart.totalPriceText(this.orderSummary.shippingFee);
     }
 }
 
