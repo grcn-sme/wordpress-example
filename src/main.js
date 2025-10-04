@@ -48,6 +48,8 @@ async function navigatePage(hash) {
     appBody.innerHTML = innerHTMLPolicy.createHTML('<h1>404 page not found =( </h1>');
     return;
   }
+
+  appBody.innerHTML = ''; // reset scroll position to top
   const html = await page();
   // console.log({ html }, html.default);
   appBody.innerHTML = innerHTMLPolicy.createHTML(html.default);
@@ -163,17 +165,6 @@ window.onpopstate = async function navigateTo(ev) { // custom route
   // window.stop(), this.location.reload();  // mpa
 };
 
-// reset scroll on navigation
-document.body.addEventListener('click', function (e) {
-  if (e.target.tagName === 'A')
-    if (e.target.getAttribute('href').startsWith('/#') === true)
-      window.scroll(0, 0), console.log('scroll top');
-
-  if (e.target.tagName === 'IMG')
-    if (e.target.getAttribute('src'))
-            window.scroll(0, 0), console.log('scroll top');
-
-});
 
 
 /** @param {URL} url */
@@ -235,10 +226,10 @@ window.addEventListener('load', function (ev) {
   if (ev.isTrusted === false) return;
   setTimeout(async function preLoadModule() {
     for (const key of Object.keys(pages)) {
-      await pages[key]().catch(_ => { });
+      await pages[key]().catch(console.error);
     }
     for (const key of Object.keys(modules)) {
-      await modules[key]().catch(_ => { });
+      await modules[key]().catch(console.error);
     }
 
     console.log('all modules are loaded, offline experience is ready');

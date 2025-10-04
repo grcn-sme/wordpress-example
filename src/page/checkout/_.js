@@ -84,7 +84,6 @@ export default function () {
             e.preventDefault();
             e.target.style["opacity"] = "0.25";
             e.target.inert = true;
-            document.body.style["cursor"] = "wait";
 
             // console.log('ee', e.target);
             summary.addUserEmailAddress(e.target.querySelector('input#email').value);

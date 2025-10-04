@@ -6,7 +6,7 @@ export default function () {
 
     /** @type {Cart} */
     let cart = null;
-    document.body.addEventListener('submit', function (e) {
+    document.body.querySelector('form.cart').addEventListener('submit', function (e) {
         if (e.target.classList.contains('cart') === false) return;
         e.preventDefault();
 
