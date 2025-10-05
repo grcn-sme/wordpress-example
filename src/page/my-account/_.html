@@ -29,7 +29,7 @@
 
 	<form method="post" id="form-custom-code">
 		<button>Save All</button> <i>(code only save and apply on current local device)</i>
-		<h3>HTML code</h3>
+		<h3>HTML code (only apply to local device)</h3>
 		<div class="code-section">
 			<h4>Head code </h4>
 			<textarea class="txtCode" id="txtCodeHead" rows="50" spellcheck="false"></textarea>
@@ -47,59 +47,23 @@
 		<div class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
 
 			<div style="height:var(--wp--preset--spacing--50)" aria-hidden="true" class="wp-block-spacer"></div>
-
-
-			<h1 class="has-text-align-center wp-block-post-title">My account</h1>
-
-
+			<h1 class="has-text-align-center wp-block-post-title">Server configuration</h1>
 			<div style="margin-top:0;margin-bottom:0;height:var(--wp--preset--spacing--30)" aria-hidden="true"
 				class="wp-block-spacer"></div>
 
-
-
 		</div>
-
 
 		<div
 			class="entry-content wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
 			<div class="woocommerce">
 				<div class="woocommerce-notices-wrapper"></div>
 
-				<h2>Login</h2>
-
-				<form class="woocommerce-form woocommerce-form-login login" method="post">
-
-
-					<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-						<label for="username">Username or email address&nbsp;<span class="required">*</span></label>
-						<input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="username"
-							id="username" autocomplete="username" value="" />
-					</p>
-					<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-						<label for="password">Password&nbsp;<span class="required">*</span></label>
-						<input class="woocommerce-Input woocommerce-Input--text input-text" type="password"
-							name="password" id="password" autocomplete="current-password" />
-					</p>
-
-
-					<p class="form-row">
-						<label
-							class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
-							<input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme"
-								type="checkbox" id="rememberme" value="forever" /> <span>Remember
-								me</span>
-						</label>
-						<input type="hidden" id="woocommerce-login-nonce" name="woocommerce-login-nonce"
-							value="bf649339ee" /><input type="hidden" name="_wp_http_referer"
-							value="/grcn/my-account/" /> <button type="submit"
-							class="woocommerce-button button woocommerce-form-login__submit wp-element-button"
-							name="login" value="Log in">Log in</button>
-					</p>
-					<p class="woocommerce-LostPassword lost_password">
-						<a href="#/my-account/lost-password">Lost your password?</a>
-					</p>
-
-
+				<h2>Server Url</h2>
+				<p>*please do not change if unsure</p>
+				<form id="form__server-url" autocomplete="off" method="post">
+					<!-- https://docs.google.com/document/d/xxxxxxxxxxxxxxxxxxxxxxxxxxxx/edit?tab=t.0 -->
+					<input type="url" name="server-url" placeholder="serverUrl" title="serverUrl" pattern="^https:\/\/docs\.google\.com\/document\/d\/[^\/]+\/.*">
+					<button type="submit">Save</button>
 				</form>
 
 

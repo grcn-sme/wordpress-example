@@ -1449,9 +1449,23 @@
 			display: block;
 			font-weight: bold;
 			position: absolute;
+			top: 2vh;
 			right: 0;
 			/* margin: auto;
 			margin-right: 0; */
+		}
+
+		#remote-setting__status{
+			background-color: green;
+			color: white;
+			padding:  0 1rem;
+			position: sticky;
+			top: 0;
+			
+			&.error{
+				background-color: pink;
+				color: black;
+			}
 		}
 	</style>
 </head>
@@ -1471,6 +1485,7 @@
 	<div>
 		<button id="btnInstallApp" style="display: none;">Install</button>
 	</div>
+	<div id="remote-setting__status"></div>
 	<div id="app"></div>
 	<script type="module" src="/src/main.js" async></script>
 

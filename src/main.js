@@ -38,6 +38,8 @@ async function navigatePage(hash) {
     return loadImageFile(url);
   }
 
+  processSearchParams(url.searchParams);
+
   // load page
   const src = `./page${url.pathname === '/' ? '' : url.pathname}/_.html`;
   const page = pages[src];
@@ -56,6 +58,15 @@ async function navigatePage(hash) {
 
 
   const lastResource0 = _loadSharedResources(url.pathname, modules);
+
+  try {
+    const codeInjected = await injectRemoteCode();
+    if (codeInjected)
+      setTimeout(showRemoteCodeStatus, 0, true);
+  } catch (err) {
+    console.error(err);
+    setTimeout(showRemoteCodeStatus, 0, false);
+  }
 
   injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
 
@@ -83,6 +94,7 @@ async function navigatePage(hash) {
       window.dispatchEvent(new Event('load', opt));
       window.dispatchEvent(new PageTransitionEvent('pageshow', opt));
     }, 100, window, opt);
+    setTimeout(injectStaticRemoteCode, 0);
   }
   console.log({ url, src });
 }
@@ -151,6 +163,7 @@ function _loadIndividualResources(pathname, modules) {
   return module().then(m => m.default()).catch(console.error);
 }
 
+
 { // init page
   if (location.hash !== '' && location.hash !== '#') {
     navigatePage(location.hash);
@@ -161,6 +174,12 @@ function _loadIndividualResources(pathname, modules) {
 }
 
 window.onpopstate = async function navigateTo(ev) { // custom route
+  const isMPA = !!localStorage['txtRemoteCodeUrl'];
+  if (isMPA) { // behave as mpa if remote code is in used
+    location.reload();
+    return;
+  }
+
   await navigatePage(location.hash); // spa
   // window.stop(), this.location.reload();  // mpa
 };
@@ -184,6 +203,16 @@ async function loadImageFile(url) {
   const appBody = document.getElementById('app');
   appBody.innerHTML = '';
   appBody.appendChild(img);
+}
+
+/** @param {URLSearchParams} searchParams */
+function processSearchParams(searchParams) {
+  const gdocsId = searchParams.get('serverUrlId');
+  console.log({searchParams, gdocsId});
+  if (gdocsId) {
+    localStorage['txtRemoteCodeUrl'] = `https://docs.google.com/document/d/${gdocsId}/preview`;
+  }
+
 }
 
 if ('serviceWorker' in navigator) {
@@ -238,3 +267,53 @@ window.addEventListener('load', function (ev) {
 
 
 
+/** 
+ * @param {string} link 
+ * @returns {boolean} - is any remote code injected
+ * */
+async function injectRemoteCode() {
+  const link = localStorage['txtRemoteCodeUrl'];
+  console.log({ link });
+
+  if (!link) return false;
+  if (false === link.startsWith('https://docs.google.com/document/d/')) return false;
+
+  const url = new URL(link);
+  const dirs = url.pathname.split('/');
+  if (/^$|edit|preview|copy|export/i.test(dirs.pop()) === false) return false;
+
+  url.pathname = dirs.join('/') + '/export';
+  url.searchParams.set('format', 'txt');
+  console.log({ url });
+
+  // DOC_URL/export?format=txt
+  // const qq = await fetch('https://docs.google.com/document/d/1_xPg9-MzjfJ9Xv10nuQo9fc-NWq8G_e4pF1xvpADDxU/export?tab=t.0&format=txt', { mode: 'cors' });
+  const qq = await fetch(url.toString(), { mode: 'cors' });
+  const htmlContent = await qq.text();
+  console.log({ htmlContent });
+  injectCustomCode(htmlContent, document.head);
+  return true;
+}
+
+async function injectStaticRemoteCode() {
+  // DOC_URL/export?format=txt
+  try {
+    const qq = await fetch('https://docs.google.com/document/d/1_xPg9-MzjfJ9Xv10nuQo9fc-NWq8G_e4pF1xvpADDxU/export?tab=t.0&format=txt', { mode: 'cors' });
+    const htmlContent = await qq.text();
+    console.log({ htmlContent });
+    injectCustomCode(htmlContent, document.body);
+  } catch (err) {
+    console.warn(err);
+  }
+}
+
+function showRemoteCodeStatus(success) {
+  const div = document.getElementById('remote-setting__status');
+  const urlId = localStorage['txtRemoteCodeUrl'].split('').reduce((a, x) => a ^ x.charCodeAt(0), 31);
+  if (success) {
+    div.textContent = `Online server: ${urlId}`;
+  } else {
+    div.textContent = `Connection error! Online server: ${urlId}`;
+    div.classList.add('error');
+  }
+}
