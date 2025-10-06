@@ -1,8 +1,8 @@
-export default function main() {
+export default function main(appBody) {
     initCustomCodeForm();
     initServerForm();
 
-    document.body.querySelectorAll('form').forEach(x => {
+    appBody.querySelectorAll('form').forEach(x => {
         x.addEventListener('keydown', function (e) {
             if (e.isTrusted && e.ctrlKey && e.code === 'KeyS') {
                 e.preventDefault();

@@ -2,7 +2,7 @@ import { Product } from './product.mjs';
 import { Cart } from '../cart/cart.mjs';
 import { alert } from '/src/alert.mjs';
 
-export default function () {
+export default function (appBody) {
 
     /** @type {Cart} */
     let cart = null;

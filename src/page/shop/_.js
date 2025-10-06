@@ -2,7 +2,7 @@ import { alert } from '/src/alert.mjs';
 import { Product } from '../product/product.mjs';
 import { Cart } from '../cart/cart.mjs';
 
-export default function () {
+export default function (appBody) {
     let cart = null;
     setTimeout(_ => {
         function addToCart(e) {

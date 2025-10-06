@@ -1,6 +1,6 @@
 import { Cart } from './cart.mjs';
 
-export default function () {
+export default function (appBody) {
     const cart = new Cart();
     const shippingFee = 6.80;
 

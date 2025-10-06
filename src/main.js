@@ -24,14 +24,14 @@ function injectCustomCode(htmlCode, intoElement) {
       continue;
     }
     intoElement.appendChild(x);
-      nodes[i] = x;
+    nodes[i] = x;
   }
   window.addEventListener('popstate', function cleanup() {
     const len = nodes.length;
     for (let i = 0; i < len; ++i) {
       nodes[i].remove();
     }
-  }, { once: true, capture: true});
+  }, { once: true, capture: true });
   return nodes;
 }
 
@@ -79,19 +79,18 @@ async function navigatePage(hash) {
   const page = pages[src];
   console.log({ url, src, page });
 
-  const appBody = document.getElementById('app');
+  const appBody = _resetAppBody();
   if (page === undefined) {
     appBody.innerHTML = innerHTMLPolicy.createHTML('<h1>404 page not found =( </h1>');
     return;
   }
 
-  appBody.innerHTML = ''; // reset scroll position to top
   const html = await page();
   // console.log({ html }, html.default);
   appBody.innerHTML = innerHTMLPolicy.createHTML(html.default);
 
 
-  const lastResource0 = _loadSharedResources(url.pathname, modules);
+  const lastResource0 = _loadSharedResources(url.pathname, modules, appBody);
 
   try {
     const codeInjected = await injectRemoteCode();
@@ -104,8 +103,8 @@ async function navigatePage(hash) {
 
   injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
 
-  const lastResource1 = _loadIndividualResources(url.pathname, modules);
-  const lastResource2 = _loadSharedResources2(url.pathname, modules);
+  const lastResource1 = _loadIndividualResources(url.pathname, modules, appBody);
+  const lastResource2 = _loadSharedResources2(url.pathname, modules, appBody);
 
 
   setTimeout(_ => {
@@ -136,8 +135,9 @@ async function navigatePage(hash) {
 /** 
  * @param {string} pathname - absolute path, e.g. `/abcPage`
  * @param {Object<string, (_: any) => Promise<any>} modules
+ * @param {HTMLElement} appBody - the main body of app
  */
-function _loadSharedResources(pathname, modules) {
+function _loadSharedResources(pathname, modules, appBody) {
   // partial page, load dir general shared resources
   // console.assert(pathname && pathname.startsWith('/'), `invalid pathname: ${pathname}`);
 
@@ -151,7 +151,7 @@ function _loadSharedResources(pathname, modules) {
     const module = modules[src];
     console.log({ src, module });
     if (!module) continue;
-    lastResource0 = module().then(m => m.default()).catch(console.error);
+    lastResource0 = module().then(m => m.default(appBody)).catch(console.error);
   }
   return lastResource0;
 }
@@ -159,8 +159,9 @@ function _loadSharedResources(pathname, modules) {
 /** 
  * @param {string} pathname - absolute path, e.g. `/abcPage`
  * @param {Object<string, (_: any) => Promise<any>} modules
+ * @param {HTMLElement} appBody - the main body of app
  */
-function _loadSharedResources2(pathname, modules) {
+function _loadSharedResources2(pathname, modules, appBody) {
   // partial page, load dir general shared resources
   // console.assert(pathname && pathname.startsWith('/'), `invalid pathname: ${pathname}`);
 
@@ -175,7 +176,7 @@ function _loadSharedResources2(pathname, modules) {
     const module = modules[src];
     console.log({ src, module });
     if (!module) continue;
-    lastResource2 = module().then(m => m.default()).catch(console.error);
+    lastResource2 = module().then(m => m.default(appBody)).catch(console.error);
   }
   return lastResource2;
 }
@@ -183,8 +184,9 @@ function _loadSharedResources2(pathname, modules) {
 /** 
  * @param {string} pathname - absolute path, e.g. `/abcPage`
  * @param {Object<string, (_: any) => Promise<any>} modules
+ * @param {HTMLElement} appBody - the main body of app
  * */
-function _loadIndividualResources(pathname, modules) {
+function _loadIndividualResources(pathname, modules, appBody) {
   // partial page, load individual file specific resources
   // load /src/page/(file.js|/**/file.js) if any
   // console.assert(pathname && pathname.startsWith('/'), `invalid pathname: ${pathname}`);
@@ -194,7 +196,18 @@ function _loadIndividualResources(pathname, modules) {
   // console.log({ src, modules });
   const module = modules[src];
   if (!module) return null;
-  return module().then(m => m.default()).catch(console.error);
+  return module().then(m => m.default(appBody)).catch(console.error);
+}
+
+function _resetAppBody() {
+  // this reset and remove all eventListeners on app body too
+  const div2 = document.createElement('div');
+
+  const div = document.getElementById('app');
+  div2.setAttribute('id', 'app'),
+    div.textContent = '',
+    document.body.replaceChild(div2, div);
+  return div2;
 }
 
 
@@ -234,8 +247,7 @@ async function loadImageFile(url) {
   };
   img.setAttribute('src', `page${url.pathname}${url.search}`);
 
-  const appBody = document.getElementById('app');
-  appBody.innerHTML = '';
+  const appBody = _resetAppBody();
   appBody.appendChild(img);
 }
 
@@ -329,12 +341,12 @@ async function injectRemoteCode() {
   return true;
 }
 
+
+import { getRemoteStaticCode } from '/src/remote.mjs';
 async function injectStaticRemoteCode() {
   // DOC_URL/export?format=txt
   try {
-    const qq = await fetch('https://docs.google.com/document/d/1_xPg9-MzjfJ9Xv10nuQo9fc-NWq8G_e4pF1xvpADDxU/export?tab=t.0&format=txt', { mode: 'cors' });
-    const htmlContent = await qq.text();
-    console.log({ htmlContent });
+    const htmlContent = await getRemoteStaticCode();
     injectCustomCode(htmlContent, document.body);
   } catch (err) {
     console.warn(err);
