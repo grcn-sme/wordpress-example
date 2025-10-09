@@ -23,6 +23,13 @@ function injectCustomCode(htmlCode, intoElement) {
       nodes[i] = sc;
       continue;
     }
+    else if (x.nodeName === '#text') {
+      if (intoElement === document.head) {
+        document.body.prepend(x);
+        nodes[i] = x;
+        continue;
+      }
+    }
     intoElement.appendChild(x);
     nodes[i] = x;
   }
@@ -107,26 +114,27 @@ async function navigatePage(hash) {
   const lastResource2 = _loadSharedResources2(url.pathname, modules, appBody);
 
 
-  setTimeout(_ => {
-    injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
-  }, 0);
-
   // emulate page load event, for 3rd party mpa code to run
   const opt = { bubbles: true };
-  setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
 
   try {
     if (lastResource0 !== null) await lastResource0;
     if (lastResource1 !== null) await lastResource1;
     if (lastResource2 !== null) await lastResource2;
-  } finally {
+
+    setTimeout(_ => {
+      injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
+    }, 0);
+    setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
+  }
+  finally {
     // emulate page load events,
     // for 3rd party mpa code to run
     setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('DOMContentLoaded', opt)); }, 0, appBody, opt);
     setTimeout((window, opt) => {
       window.dispatchEvent(new Event('load', opt));
       window.dispatchEvent(new PageTransitionEvent('pageshow', opt));
-    }, 100, window, opt);
+    }, 0, window, opt);
     setTimeout(injectStaticRemoteCode, 0);
   }
   console.log({ url, src });
@@ -221,8 +229,9 @@ function _resetAppBody() {
 }
 
 window.onpopstate = async function navigateTo(ev) { // custom route
-  const isMPA = !!localStorage['txtRemoteCodeUrl'];
+  const isMPA = !!localStorage['txtRemoteCodeUrl'] || !!localStorage['txtCodeHead'] || !!localStorage['txtCodeBody'];
   if (isMPA) { // behave as mpa if remote code is in used
+    // reload on pages change can reset and avoid many global variables, listeners, and state bugs
     location.reload();
     return;
   }
