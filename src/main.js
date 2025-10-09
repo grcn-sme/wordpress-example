@@ -96,7 +96,6 @@ async function navigatePage(hash) {
   // console.log({ html }, html.default);
   appBody.innerHTML = innerHTMLPolicy.createHTML(html.default);
 
-
   const lastResource0 = _loadSharedResources(url.pathname, modules, appBody);
 
   try {
@@ -108,33 +107,41 @@ async function navigatePage(hash) {
     setTimeout(showRemoteCodeStatus, 0, false);
   }
 
-  injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
+  // injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
 
   const lastResource1 = _loadIndividualResources(url.pathname, modules, appBody);
   const lastResource2 = _loadSharedResources2(url.pathname, modules, appBody);
 
 
+  setTimeout(_ => {
+    injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
+  }, 0);
+
   // emulate page load event, for 3rd party mpa code to run
   const opt = { bubbles: true };
+  setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
 
   try {
     if (lastResource0 !== null) await lastResource0;
     if (lastResource1 !== null) await lastResource1;
     if (lastResource2 !== null) await lastResource2;
 
-    setTimeout(_ => {
-      injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
-    }, 0);
-    setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
+    // setTimeout(_ => {
+    //   injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
+    // }, 0);
+
+    // emulate page load event, for 3rd party mpa code to run
+    // setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
   }
   finally {
     // emulate page load events,
     // for 3rd party mpa code to run
-    setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('DOMContentLoaded', opt)); }, 0, appBody, opt);
-    setTimeout((window, opt) => {
-      window.dispatchEvent(new Event('load', opt));
-      window.dispatchEvent(new PageTransitionEvent('pageshow', opt));
-    }, 0, window, opt);
+    // setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('DOMContentLoaded', opt)); }, 0, appBody, opt);
+    // setTimeout((window, opt) => {
+    //   window.dispatchEvent(new Event('load', opt));
+    //   window.dispatchEvent(new PageTransitionEvent('pageshow', opt));
+    // }, 0, window, opt);
+    setTimeout((appBody, opt) => { appBody.dispatchEvent(new CustomEvent('page_ready', opt)); }, 0, appBody, opt);
     setTimeout(injectStaticRemoteCode, 0);
   }
   console.log({ url, src });

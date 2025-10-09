@@ -14,7 +14,7 @@
 		// window.addEventListener('pageshow', console.log);
 	</script>
 	<meta name="description" content="Example of ecommerce app with a custom built SPA logic with zero framework">
-
+	<script>const _injectCustomCode = function _injectCustomCode(e,t){const n=document.createElement("template");n.innerHTML=e;const o=[...n.content.cloneNode(!0).childNodes],c=[],d=o.length;for(let e=0;e<d;++e){const n=o[e];if("SCRIPT"===n.nodeName){const c=document.createElement("script");if(n.attributes)for(const e of n.attributes)c.setAttribute(e.name,e.value);c.textContent=n.textContent,t.appendChild(c),o[e]=c;continue}"#text"!==n.nodeName||t!==document.head?(t.appendChild(n),o[e]=n):c.push(n)}return document.addEventListener("readystatechange",function(){if("interactive"!==document.readyState)return;const e=c.length,t=document.body;for(let n=0;n<e;++n)t.prepend(c[n])},{once:!0,capture:!0}),o}</script>
 
 	<!-- wordpress stuff -->
 	<style id='global-styles-inline-css'>
@@ -1455,19 +1455,21 @@
 			margin-right: 0; */
 		}
 
-		#remote-setting__status{
+		#remote-setting__status {
 			background-color: green;
 			color: white;
-			padding:  0 1rem;
+			padding: 0 1rem;
 			position: sticky;
 			top: 0;
-			
-			&.error{
+
+			&.error {
 				background-color: pink;
 				color: black;
 			}
 		}
 	</style>
+	<script>_injectCustomCode(localStorage['txtCodeHead'] || '', document.head);</script>
+	<script>document.addEventListener('page_ready', function(){_injectCustomCode(localStorage['txtCodeBody'] || '', document.body);});</script>
 </head>
 
 <body>
