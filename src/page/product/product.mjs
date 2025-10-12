@@ -10,6 +10,7 @@ export class Product {
     quantity = 1;
     img_src = '';
     url = '';
+    description = '';
 
     constructor(id) {
         this.id = id;
@@ -21,6 +22,7 @@ export class Product {
             this.quantity = product.quantity;
             this.img_src = product.img_src;
             this.url = product.url;
+            // this.description = product.description;
         }
     }
     getProduct(id) {
@@ -96,7 +98,7 @@ export class Product {
 
     // ui logic
     priceText() {
-        return Product.formatPrice(this.currency, this.price * this.quantity);
+        return Product.formatPrice(this.currency, this.price);
     }
 
     subTotalText() {
