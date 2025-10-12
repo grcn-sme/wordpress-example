@@ -228,9 +228,12 @@ function _resetAppBody() {
   }
 }
 
+function isMPA() {
+  return !!localStorage['txtRemoteCodeUrl'] || !!localStorage['txtCodeHead'] || !!localStorage['txtCodeBody'];
+}
+
 window.onpopstate = async function navigateTo(ev) { // custom route
-  const isMPA = !!localStorage['txtRemoteCodeUrl'] || !!localStorage['txtCodeHead'] || !!localStorage['txtCodeBody'];
-  if (isMPA) { // behave as mpa if remote code is in used
+  if (isMPA()) { // behave as mpa if remote code is in used
     // reload on pages change can reset and avoid many global variables, listeners, and state bugs
     location.reload();
     return;
@@ -308,6 +311,7 @@ import { alert } from '/src/alert.mjs';
 
 window.addEventListener('load', function (ev) {
   if (ev.isTrusted === false) return;
+  if (isMPA() === false) return;
   setTimeout(async function preLoadModule() {
     for (const key of Object.keys(pages)) {
       await pages[key]().catch(console.error);

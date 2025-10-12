@@ -43,8 +43,9 @@ export class OrderSummary {
     static getLastOrder() {
         if (!localStorage['last order']) return null;
         let data;
-        data = localStorage['last order'].split(',');
-        data = JSON.parse((new TextDecoder()).decode(new Uint8Array(data)));
+        data = localStorage['last order'].match(/.{1,2}/g).map(hex => parseInt(hex, 16));
+        data = (new TextDecoder()).decode(new Uint8Array(data));
+        data = JSON.parse(data);
 
         // map all json attribute to this
         const summary = new OrderSummary();
@@ -65,7 +66,7 @@ export class OrderSummary {
 
     save_checkout() {
         const data = JSON.stringify(this);
-        localStorage['last order'] = (new TextEncoder()).encode(data).join(',');
+        localStorage['last order'] = [...(new TextEncoder()).encode(data)].map(x => x.toString(16)).join('');
     }
 
     // #toHex(text) {
