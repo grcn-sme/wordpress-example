@@ -53,7 +53,7 @@ const modules = import.meta.glob('./page/**/*.js', { eager: false });
 
 /** @type {Object<string, (_: any) => Promise<any>} */
 const pages = import.meta.glob('./page/**/*.html', { eager: false, query: 'raw' });
-console.log('pages', pages);
+// console.log('pages', pages);
 
 
 /** @param {string} hash - should begin with '#/xxx' */
@@ -84,7 +84,7 @@ async function navigatePage(hash) {
   // load page
   const src = `./page${url.pathname === '/' ? '' : url.pathname}/_.html`;
   const page = pages[src];
-  console.log({ url, src, page });
+  // console.log({ url, src, page });
 
   const appBody = _resetAppBody();
   if (page === undefined) {
@@ -93,7 +93,7 @@ async function navigatePage(hash) {
   }
 
   const html = await page();
-  // console.log({ html }, html.default);
+  // // console.log({ html }, html.default);
   appBody.innerHTML = innerHTMLPolicy.createHTML(html.default);
 
 
@@ -137,7 +137,7 @@ async function navigatePage(hash) {
     }, 0, window, opt);
     setTimeout(injectStaticRemoteCode, 0);
   }
-  console.log({ url, src });
+  // console.log({ url, src });
 }
 
 /** 
@@ -157,7 +157,7 @@ function _loadSharedResources(pathname, modules, appBody) {
     const src = `./page/${path}_shared.js`;
     path += `${paths.pop()}/`;
     const module = modules[src];
-    console.log({ src, module });
+    // console.log({ src, module });
     if (!module) continue;
     lastResource0 = module().then(m => m.default(appBody)).catch(console.error);
   }
@@ -182,7 +182,7 @@ function _loadSharedResources2(pathname, modules, appBody) {
     path = path.substring(0, h);
     const src = `./page${path}/_onload.js`;
     const module = modules[src];
-    console.log({ src, module });
+    // console.log({ src, module });
     if (!module) continue;
     lastResource2 = module().then(m => m.default(appBody)).catch(console.error);
   }
@@ -201,7 +201,7 @@ function _loadIndividualResources(pathname, modules, appBody) {
 
   if (pathname === '/') return null;
   const src = `./page${pathname}/_.js`; // is to /src/page/**/_.js
-  // console.log({ src, modules });
+  // // console.log({ src, modules });
   const module = modules[src];
   if (!module) return null;
   return module().then(m => m.default(appBody)).catch(console.error);
@@ -266,7 +266,7 @@ async function loadImageFile(url) {
 /** @param {URLSearchParams} searchParams */
 function processSearchParams(searchParams) {
   const gdocsId = searchParams.get('serverUrlId');
-  console.log({ searchParams, gdocsId });
+  // console.log({ searchParams, gdocsId });
   if (gdocsId) {
     localStorage['txtRemoteCodeUrl'] = `https://docs.google.com/document/d/${gdocsId}/preview`;
   }
@@ -320,7 +320,7 @@ window.addEventListener('load', function (ev) {
       await modules[key]().catch(console.error);
     }
 
-    console.log('all modules are loaded, offline experience is ready');
+    // console.log('all modules are loaded, offline experience is ready');
   }, 2000);
 });
 
@@ -332,7 +332,7 @@ window.addEventListener('load', function (ev) {
  * */
 async function injectRemoteCode() {
   const link = localStorage['txtRemoteCodeUrl'];
-  console.log({ link });
+  // console.log({ link });
 
   if (!link) return false;
   if (false === link.startsWith('https://docs.google.com/document/d/')) return false;
@@ -343,13 +343,13 @@ async function injectRemoteCode() {
 
   url.pathname = dirs.join('/') + '/export';
   url.searchParams.set('format', 'txt');
-  console.log({ url });
+  // console.log({ url });
 
   // DOC_URL/export?format=txt
   // const qq = await fetch('https://docs.google.com/document/d/1_xPg9-MzjfJ9Xv10nuQo9fc-NWq8G_e4pF1xvpADDxU/export?tab=t.0&format=txt', { mode: 'cors' });
   const qq = await fetch(url.toString(), { mode: 'cors' });
   const htmlContent = await qq.text();
-  console.log({ htmlContent });
+  // console.log({ htmlContent });
   injectCustomCode(htmlContent, document.head);
   return true;
 }
