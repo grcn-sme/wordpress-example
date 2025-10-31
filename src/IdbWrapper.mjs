@@ -16,6 +16,7 @@ export class IdbWrapper {
     /** @type {IDBDatabase} */
     #db;
 
+    /** @param {IDBDatabase} db */
     constructor(db) {
         this.#db = db;
     }
@@ -53,7 +54,6 @@ export class IdbWrapper {
             request.onblocked = function (ev) {
                 /** @type {IDBDatabase} */
                 const db = ev.target.result;
-
                 fail(ev);
                 alert('please close other tabs to allow upgrade');
             };
@@ -72,7 +72,7 @@ export class IdbWrapper {
     }
 
     close() {
-        // close the database. This allows the other page to upgrade the database.
+        // close the database connection. This allows the other page to upgrade the database.
         this.#db.close();
         console.log("A new version of this page is ready. Please reload or close this tab!");
     }
@@ -140,7 +140,7 @@ export class IdbWrapper {
     /** 
      * manually set key and values: object
      * @param {string} objectStoreName
-     * @param {[key: (string | number | object), value: any]} kvPairs
+     * @param {[key: (string | number | object), value: any][]} kvPairs
     */
     setKeyValues(objectStoreName, kvPairs) {
         return new Promise((resolve, fail) => {
@@ -162,7 +162,7 @@ export class IdbWrapper {
 
     /** 
      * @param {string} objectStoreName
-     * @param {string | number} id
+     * @param {string | number | object} id
     */
     read(objectStoreName, id) {
         return new Promise((resolve, fail) => {
@@ -179,7 +179,7 @@ export class IdbWrapper {
 
     /** 
      * @param {string} objectStoreName
-     * @param {(string | number)[]} rowIDs
+     * @param {(string | number | object)[]} rowIDs
     */
     delete(objectStoreName, rowIDs) {
         return new Promise((resolve, fail) => {
