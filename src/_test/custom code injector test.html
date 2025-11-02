@@ -4,59 +4,59 @@
 
 <!-- head -->
 <script>
-    console.warn('head code', 0, { 'document.readyState': document.readyState });
+    console.warn('head code', '0 inline', { 'expected load sequence': 0, 'document.readyState': document.readyState });
     setTimeout(_ => {
-        console.warn('head code', 2, { 'document.readyState': document.readyState });
+        console.warn('head code', '2 : setTimeout 0s', { 'expected load sequence': 2, 'document.readyState': document.readyState });
     }, 0);
     setTimeout(_ => {
-        console.warn('head code', 4, { 'document.readyState': document.readyState });
+        console.warn('head code', 'setTimeout 4s', { 'expected load sequence': 'last +4sec', 'document.readyState': document.readyState });
     }, 4000);
 
     window.addEventListener('load', function (ev) {
-        console.warn('head code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+        console.warn('head code', ev.type, { 'expected load sequence': 6, 'document.readyState': document.readyState, ev: ev });
     });
     window.addEventListener('readystatechange', function (ev) {
-        console.warn('head code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+        console.warn('head code', ev.type, { 'expected load sequence': 4, 'document.readyState': document.readyState, ev: ev });
     });
     window.addEventListener('DOMContentLoaded', function (ev) {
-        console.warn('head code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+        console.warn('head code', ev.type, { 'expected load sequence': 5, 'document.readyState': document.readyState, ev: ev });
     });
     window.addEventListener('pageshow', function (ev) {
-        console.warn('head code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+        console.warn('head code', ev.type, { 'expected load sequence': 'last', 'document.readyState': document.readyState, ev: ev });
     });
 
-    console.warn('head code', 1, { 'document.readyState': document.readyState });
+    console.warn('head code', '1 inline', { 'expected load sequence': 1, 'document.readyState': document.readyState });
     setTimeout(_ => {
-        console.warn('head code', 3, { 'document.readyState': document.readyState });
+        console.warn('head code', '3 : setTimeout 0s', { 'expected load sequence': 3, 'document.readyState': document.readyState });
     }, 0);
 </script>
 
 
 <!-- /body -->
 <script>
-    console.warn('body code', 0, { 'document.readyState': document.readyState });
+    console.log('body code', '0 inline', { 'expected load sequence': 0, 'document.readyState': document.readyState });
     setTimeout(_ => {
-        console.warn('body code', 2, { 'document.readyState': document.readyState });
+        console.log('body code', '2 : setTimeout 0s', { 'expected load sequence': 2, 'document.readyState': document.readyState });
     }, 0);
     setTimeout(_ => {
-        console.warn('body code', 4, { 'document.readyState': document.readyState });
+        console.log('body code', 'setTimeout 4s', { 'expected load sequence': 'last +4sec', 'document.readyState': document.readyState });
     }, 4000);
 
     window.addEventListener('load', function (ev) {
-        console.warn('body code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+        console.log('body code', ev.type, { 'expected load sequence': 6, 'document.readyState': document.readyState, ev: ev });
     });
     window.addEventListener('readystatechange', function (ev) {
-        console.warn('body code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+        console.log('body code', ev.type, { 'expected load sequence': 4, 'document.readyState': document.readyState, ev: ev });
     });
     window.addEventListener('DOMContentLoaded', function (ev) {
-        console.warn('body code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+        console.log('body code', ev.type, { 'expected load sequence': 5, 'document.readyState': document.readyState, ev: ev });
     });
     window.addEventListener('pageshow', function (ev) {
-        console.warn('body code', ev.type, { 'document.readyState': document.readyState, ev: ev });
+        console.log('body code', ev.type, { 'expected load sequence': 'last', 'document.readyState': document.readyState, ev: ev });
     });
 
-    console.warn('body code', 1, { 'document.readyState': document.readyState });
+    console.log('body code', '1 inline', { 'expected load sequence': 1, 'document.readyState': document.readyState });
     setTimeout(_ => {
-        console.warn('body code', 3, { 'document.readyState': document.readyState });
+        console.log('body code', '3 : setTimeout 0s', { 'expected load sequence': 3, 'document.readyState': document.readyState });
     }, 0);
 </script>
