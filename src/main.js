@@ -94,29 +94,29 @@ async function navigatePage(hash) {
 
   const html = await page();
   // // console.log({ html }, html.default);
-  appBody.innerHTML = innerHTMLPolicy.createHTML(html.default);
 
+  try { // 1. inject dynamic head code 1st
+    try {
+      const codeInjected = await injectRemoteCode();
+      if (codeInjected)
+        setTimeout(showRemoteCodeStatus, 0, true);
+    } catch (err) {
+      console.error(err);
+      setTimeout(showRemoteCodeStatus, 0, false);
+    }
+
+    injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
+  } catch (err) { console.error(err); }
+
+  appBody.innerHTML = innerHTMLPolicy.createHTML(html.default); // 2. then load html body
 
   const lastResource0 = _loadSharedResources(url.pathname, modules, appBody);
-
-  try {
-    const codeInjected = await injectRemoteCode();
-    if (codeInjected)
-      setTimeout(showRemoteCodeStatus, 0, true);
-  } catch (err) {
-    console.error(err);
-    setTimeout(showRemoteCodeStatus, 0, false);
-  }
-
-  injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
-
   const lastResource1 = _loadIndividualResources(url.pathname, modules, appBody);
   const lastResource2 = _loadSharedResources2(url.pathname, modules, appBody);
 
 
   // emulate page load event, for 3rd party mpa code to run
   const opt = { bubbles: true };
-
   try {
     if (lastResource0 !== null) await lastResource0;
     if (lastResource1 !== null) await lastResource1;
