@@ -6,13 +6,13 @@ export class OrderSummary {
     shippingFee = 0.00;
 
     /** @type Product[] - must a list to allow JSON.stringify for storing properly */
-    products;
+    products = null;
 
     /** @type Date */
-    date;
+    date = null;
 
     /** @type string */
-    id;
+    id = null;
 
     userEmailAddress = '';
 
@@ -42,17 +42,18 @@ export class OrderSummary {
 
     static getLastOrder() {
         if (!localStorage['last order']) return null;
-        let data;
-        data = localStorage['last order'].match(/.{1,2}/g).map(hex => parseInt(hex, 16));
-        data = (new TextDecoder()).decode(new Uint8Array(data));
-        data = JSON.parse(data);
+        /** @type {OrderSummary} */
+        let _orderSummary;
+        _orderSummary = localStorage['last order'].match(/.{1,2}/g).map(hex => parseInt(hex, 16));
+        _orderSummary = (new TextDecoder()).decode(new Uint8Array(_orderSummary));
+        _orderSummary = JSON.parse(_orderSummary);
 
         // map all json attribute to this
         const summary = new OrderSummary();
         for (const key in summary) {
-            console.log('data[key]', data[key], 'key', key);
-            if (!data[key]) throw new Error(`provided data has no field '${key}' defined`);
-            summary[key] = data[key];
+            console.log('data[key]', _orderSummary[key], 'key', key);
+            if (Object.hasOwn(_orderSummary, key) === false) throw new Error(`provided data has no field '${key}' defined`);
+            summary[key] = _orderSummary[key];
         }
 
         // map to custom object

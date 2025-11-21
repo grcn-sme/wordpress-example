@@ -1,6 +1,6 @@
 
 export class Product {
-    id;
+    id = null;
     name = null;
     price = 0.00;
 
@@ -118,8 +118,7 @@ export class Product {
         // for each own fields, map from json
         const product = new Product(json.id);
         for (const key in product) {
-            console.log('data[key]', json[key], 'key', key);
-            if (!json[key]) throw new Error(`provided data has no field '${key}' defined`);
+            if (Object.hasOwn(json, key) === false) throw new Error(`provided data has no field '${key}' defined`);
             product[key] = json[key];
         }
         return product;
