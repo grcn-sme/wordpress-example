@@ -1,13 +1,12 @@
 :root {
   font-size: 16px;
   line-height: 1.5;
-  background-color: #eee;
+  background-color: #fff;
   scroll-padding-top: 15svh;
-
 }
 
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
 
   :root,
   dialog {
@@ -20,7 +19,7 @@
   iframe {
     filter: invert(1) hue-rotate(180deg);
   }
-}
+} */
 
 
 @media (prefers-reduced-motion: reduce) {
