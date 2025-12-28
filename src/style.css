@@ -90,7 +90,7 @@ input[autocomplete="tel-country-code"] {
   width: 5ch;
 }
 
-input[type=url]{
+input[type=url] {
   width: 42rem;
 }
 
@@ -103,6 +103,25 @@ textarea:user-invalid {
 button {
   padding: .7em 1em;
 }
+
+
+select {
+  appearance: base-select;
+  border-radius: .25rem;
+  border-color: rgb(118, 118, 118);
+  font-size: .8rem;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 1px .5rem;
+}
+
+select::picker(select) {
+  appearance: base-select;
+  box-shadow: 0 0 8px 0;
+  padding: .25rem;
+  border-radius: .25rem;
+  background-color: #eee;
+}
+
 
 img[src] {
   width: 100%;
