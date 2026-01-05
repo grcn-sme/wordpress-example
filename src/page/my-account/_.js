@@ -46,13 +46,7 @@ function initServerForm() {
         // example: https://docs.google.com/document/d/1pWxxxxxxxxxxxxxxxx/preview
         const gdocId = serverUrl.substring(35).split('/')[0];
         console.log({gdocId});
-        if(!gdocId){
-            e.target.reportValidity();
-            return false;
-        }
 
-        localStorage['txtRemoteCodeUrl'] = serverUrl;
-        alert("server configured to use:\n" + localStorage['txtRemoteCodeUrl']);
         setTimeout(_ => {
             window.setSearchParams('serverUrlId', gdocId);
         }, 0);

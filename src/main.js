@@ -275,6 +275,9 @@ function processSearchParams(searchParams) {
   if (gdocsId) {
     localStorage['txtRemoteCodeUrl'] = `https://docs.google.com/document/d/${gdocsId}/preview`;
   }
+  else {
+    localStorage['txtRemoteCodeUrl'] = '';
+  }
 
 }
 
