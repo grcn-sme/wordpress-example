@@ -94,18 +94,21 @@ async function navigatePage(hash) {
 
   const html = await page();
   // // console.log({ html }, html.default);
-
+  let codeInjected = false;
   try { // 1. inject dynamic head code 1st
     try {
-      const codeInjected = await injectRemoteCode();
-      if (codeInjected)
+      codeInjected = await injectRemoteCode();
+      if (codeInjected) {
         setTimeout(showRemoteCodeStatus, 0, true);
+        setTimeout(hideLocaltxtCode, 0);
+      }
     } catch (err) {
       console.error(err);
       setTimeout(showRemoteCodeStatus, 0, false);
     }
 
-    injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
+    if (codeInjected === false)
+      injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
   } catch (err) { console.error(err); }
 
   appBody.innerHTML = innerHTMLPolicy.createHTML(html.default); // 2. then load html body
@@ -122,9 +125,11 @@ async function navigatePage(hash) {
     if (lastResource1 !== null) await lastResource1;
     if (lastResource2 !== null) await lastResource2;
 
-    setTimeout(_ => {
-      injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
-    }, 0);
+
+    if (codeInjected === false)
+      setTimeout(_ => {
+        injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
+      }, 0);
     setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
   }
   finally {
@@ -325,6 +330,44 @@ window.addEventListener('load', function (ev) {
 });
 
 
+function getVirtualUrl() {
+  const virtualUrl = location.protocol + '//' + location.host + location.hash.substring(1);
+  console.log({ virtualUrl });
+  const vurl = new URL(virtualUrl);
+  return vurl;
+}
+
+function setPathname(pathname) {
+  const vurl = getVirtualUrl();
+  vurl.pathname = pathname;
+  location.hash = '#' + vurl.pathname + vurl.search;
+}
+
+/**
+ * @param {string} key
+ * @param {string} value
+ */
+function setSearchParams(key, value) {
+  const vurl = getVirtualUrl();
+  vurl.searchParams.set(key, value);
+
+  // console.log(
+  //   vurl,
+  //   vurl.toString(),
+  //   '#' + vurl.pathname + vurl.search
+  // );
+  // console.log(
+  //   vurl.search,
+  //   vurl.searchParams.toString(),
+  // );
+
+  location.hash = '#' + vurl.pathname + vurl.search;
+}
+
+window.getVirtualUrl = getVirtualUrl;
+window.setPathname = setPathname;
+window.setSearchParams = setSearchParams;
+
 
 /** 
  * @param {string} link 
@@ -375,4 +418,17 @@ function showRemoteCodeStatus(success) {
     div.textContent = `Connection error! Online server: ${urlId}`;
     div.classList.add('error');
   }
+}
+
+function hideLocaltxtCode() {
+  const txtCodeHead = document.getElementById('txtCodeHead');
+  if (txtCodeHead === null) return;
+  const txtCodeBody = document.getElementById('txtCodeBody');
+
+  txtCodeHead.setAttribute('readonly', 'readonly');
+  txtCodeBody.setAttribute('readonly', 'readonly');
+
+  txtCodeHead.setAttribute('title', 'disabled, using server code');
+  txtCodeBody.setAttribute('title', 'disabled, using server code');
+
 }

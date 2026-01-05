@@ -41,10 +41,20 @@ function initServerForm() {
     form.onsubmit = function (e) {
         if (e.isTrusted === false) return;
         e.preventDefault();
-        localStorage['txtRemoteCodeUrl'] = form.querySelector('input[name=server-url]').value.trim();
+        const serverUrl = form.querySelector('input[name=server-url]').value.trim();
+
+        // example: https://docs.google.com/document/d/1pWxxxxxxxxxxxxxxxx/preview
+        const gdocId = serverUrl.substring(35).split('/')[0];
+        console.log({gdocId});
+        if(!gdocId){
+            e.target.reportValidity();
+            return false;
+        }
+
+        localStorage['txtRemoteCodeUrl'] = serverUrl;
         alert("server configured to use:\n" + localStorage['txtRemoteCodeUrl']);
         setTimeout(_ => {
-            location.reload();
+            window.setSearchParams('serverUrlId', gdocId);
         }, 0);
         return false;
     };
