@@ -416,9 +416,9 @@ function showRemoteCodeStatus(success) {
   const div = document.getElementById('remote-setting__status');
   const urlId = localStorage['txtRemoteCodeUrl'].split('').reduce((a, x) => a ^ x.charCodeAt(0), 31);
   if (success) {
-    div.textContent = `Online server: ${urlId}`;
+    div.textContent = `Online server channel: ${urlId}`;
   } else {
-    div.textContent = `Connection error! Online server: ${urlId}`;
+    div.textContent = `Connection error! Online server channel: ${urlId}`;
     div.classList.add('error');
   }
 }
