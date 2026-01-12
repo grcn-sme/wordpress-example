@@ -115,7 +115,7 @@ async function navigatePage(hash) {
   let codeInjected = false;
   try { // 1. inject dynamic head code 1st
     try {
-      codeInjected = await injectRemoteCode().catch(console.error);
+      codeInjected = await injectRemoteCode();
       if (codeInjected) {
         setTimeout(showRemoteCodeStatus, 0, true);
         setTimeout(hideLocaltxtCode, 0);
@@ -391,8 +391,8 @@ window.setSearchParams = setSearchParams;
 
 
 /** 
- * @param {string} link 
- * @returns {boolean} - is any remote code injected
+ * @returns {boolean} is any remote code injected
+ * @throw new Error();  if code injection failed or remote code http error
  * */
 async function injectRemoteCode() {
   const link = localStorage['txtRemoteCodeUrl'];
@@ -412,6 +412,7 @@ async function injectRemoteCode() {
   // DOC_URL/export?format=txt
   // const qq = await fetch('https://docs.google.com/document/d/1_xPg9-MzjfJ9Xv10nuQo9fc-NWq8G_e4pF1xvpADDxU/export?tab=t.0&format=txt', { mode: 'cors' });
   const qq = await fetch(url.toString(), { mode: 'cors' });
+  if (qq.ok === false) throw `netstate error: http ${qq.status} ${qq.statusText}`;
   const htmlContent = await qq.text();
   // console.log({ htmlContent });
   await injectCustomCode(htmlContent, document.head);
