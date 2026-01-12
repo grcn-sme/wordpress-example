@@ -10,6 +10,27 @@ class IdbObjectStoreWrapper {
     }
 }
 
+async function example() {
+    /** @type {IdbWrapper} */
+    const idbWrapper = await IdbWrapper.open('db name', Date.now(), (db, existingStores) => {
+
+        // create xxx 'store' if not exists yet
+        if (db.objectStoreNames.contains('exampleStore') === false) {
+            const exampleStore = db.createObjectStore('exampleStore', { keyPath: 'uname' });
+            exampleStore.createIndex('userEmail', 'email', { unique: true });
+        }
+        if (existingStores.contains('exampleStore2') === false) {
+            const exampleStore = db.createObjectStore('exampleStore', { keyPath: 'id', autoIncrement: true });
+            exampleStore.createIndex('guid', 'guid', { unique: true });
+        }
+
+        // always create xxx 'store' regardless, crash if one exists
+        const ost = IdbWrapper.createObjectStore(db, 'store name (table)', { keyPath: 'indexed key' });
+        ost?.createIndex('indexName1', 'keyedName1', { unique: true });
+    });
+    window.idbWrapper = idbWrapper;
+}
+
 
 export class IdbWrapper {
 

@@ -1,0 +1,36 @@
+{
+    "imports": {
+        "/src/": "./src/"
+    },
+    "compilerOptions": {
+        "allowJs": true,
+        "lib": [
+            "deno.window",
+            "deno.ns",
+            "dom",
+            "es2024"
+        ],
+        "strict": true
+    },
+    "lint": {
+        "include": [
+            "src/"
+        ],
+        "exclude": [
+            "src/testdata/"
+        ],
+        "rules": {
+            "tags": [
+                "recommended"
+            ],
+            "include": [
+                "no-debugger"
+            ],
+            "exclude": [
+                "no-unused-vars",
+                "no-inner-declarations",
+                "no-undef"
+            ]
+        }
+    }
+}
