@@ -18,10 +18,15 @@ async function injectCustomCode(htmlCode, intoElement) {
       if (x.attributes) for (const a of x.attributes) {
         sc.setAttribute(a.name, a.value);
       };
-      if (sc.getAttribute('async') === null) { // non async script
+      if (
+        // external script and is non-async
+        !!sc.getAttribute('src')
+        && sc.getAttribute('async') === null
+      ) {
         const scriptProcess = new Promise((r, f) => {
           sc.addEventListener('load', r);
           sc.addEventListener('error', f);
+          setTimeout(f, 5000, 'script load timed out: ' + sc.getAttribute('src')); // just in case
           sc.textContent = x.textContent;
           intoElement.appendChild(sc);
           nodes[i] = sc;
