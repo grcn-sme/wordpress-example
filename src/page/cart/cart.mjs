@@ -129,7 +129,10 @@ export class Cart {
     totalPriceText(addon_price = 0.00) {
         const products = this.allProducts();
         let subtotal = 0.0, h = products.next();
-        const currency = h.value?.currency;
+        if (h.value === undefined) {
+            return '?.??';
+        }
+        const currency = h.value.currency;
         for (; h.done !== true; h = products.next()) {
             const x = h.value;
             subtotal += x.price * x.quantity;
