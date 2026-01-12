@@ -6,7 +6,7 @@
  * @param {string} htmlCode
  * @param {HTMLElement} intoElement
  */
-function injectCustomCode(htmlCode, intoElement) {
+async function injectCustomCode(htmlCode, intoElement) {
   const b = document.createElement('template');
   b.innerHTML = htmlCode;
   const nodes = [...(b.content.cloneNode(true).childNodes)];
@@ -18,9 +18,22 @@ function injectCustomCode(htmlCode, intoElement) {
       if (x.attributes) for (const a of x.attributes) {
         sc.setAttribute(a.name, a.value);
       };
-      sc.textContent = x.textContent;
-      intoElement.appendChild(sc);
-      nodes[i] = sc;
+      if (sc.getAttribute('async') === null) { // non async script
+        const scriptProcess = new Promise((r, f) => {
+          sc.addEventListener('load', r);
+          sc.addEventListener('error', f);
+          sc.textContent = x.textContent;
+          intoElement.appendChild(sc);
+          nodes[i] = sc;
+        });
+        await scriptProcess.catch(console.error);
+      }
+      else {
+        sc.textContent = x.textContent;
+        intoElement.appendChild(sc);
+        nodes[i] = sc;
+        await new Promise(r => setTimeout(r, 0)); // allow injected script to execute first
+      }
       continue;
     }
     else if (x.nodeName === '#text') {
@@ -97,7 +110,7 @@ async function navigatePage(hash) {
   let codeInjected = false;
   try { // 1. inject dynamic head code 1st
     try {
-      codeInjected = await injectRemoteCode();
+      codeInjected = await injectRemoteCode().catch(console.error);
       if (codeInjected) {
         setTimeout(showRemoteCodeStatus, 0, true);
         setTimeout(hideLocaltxtCode, 0);
@@ -107,8 +120,8 @@ async function navigatePage(hash) {
       setTimeout(showRemoteCodeStatus, 0, false);
     }
 
-    if (codeInjected === false)
-      injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
+    if (codeInjected === false) // only use local custom code if remote code is not used
+      await injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
   } catch (err) { console.error(err); }
 
   appBody.innerHTML = innerHTMLPolicy.createHTML(html.default); // 2. then load html body
@@ -127,8 +140,8 @@ async function navigatePage(hash) {
 
 
     if (codeInjected === false)
-      setTimeout(_ => {
-        injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
+      setTimeout(async _ => {
+        await injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
       }, 0);
     setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
   }
@@ -396,7 +409,7 @@ async function injectRemoteCode() {
   const qq = await fetch(url.toString(), { mode: 'cors' });
   const htmlContent = await qq.text();
   // console.log({ htmlContent });
-  injectCustomCode(htmlContent, document.head);
+  await injectCustomCode(htmlContent, document.head);
   return true;
 }
 
