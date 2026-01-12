@@ -112,22 +112,16 @@ async function navigatePage(hash) {
 
   const html = await page();
   // // console.log({ html }, html.default);
-  let codeInjected = false;
-  try { // 1. inject dynamic head code 1st
-    try {
-      codeInjected = await injectRemoteCode();
-      if (codeInjected) {
-        setTimeout(showRemoteCodeStatus, 0, true);
-        setTimeout(hideLocaltxtCode, 0);
-      }
-    } catch (err) {
-      console.error(err);
-      setTimeout(showRemoteCodeStatus, 0, false);
-    }
-
-    if (codeInjected === false) // only use local custom code if remote code is not used
+  const dynamicServerCode = new RemoteCodeInjector();
+  const hasRemoteCode = dynamicServerCode.remoteCodeUrl !== '';
+  if (hasRemoteCode === false) {// only use local custom code if remote code is not used
+    try { // 1. inject dynamic head code 1st
       await injectCustomCode(localStorage['txtCodeHead'] || '', document.head); // for 3rd party code in <head> section
-  } catch (err) { console.error(err); }
+    } catch (err) { console.error(err); }
+  }
+  else {
+    setTimeout(hideLocaltxtCode, 0);
+  }
 
   appBody.innerHTML = innerHTMLPolicy.createHTML(html.default); // 2. then load html body
 
@@ -143,22 +137,34 @@ async function navigatePage(hash) {
     if (lastResource1 !== null) await lastResource1;
     if (lastResource2 !== null) await lastResource2;
 
-
-    if (codeInjected === false)
-      setTimeout(async _ => {
+    if (hasRemoteCode === false) {
+      try {
         await injectCustomCode(localStorage['txtCodeBody'] || '', document.body);
-      }, 0);
-    setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
+      } catch (err) { console.error(err); }
+    }
   }
   finally {
     // emulate page load events,
     // for 3rd party mpa code to run
+    setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('readystatechange', opt)); }, 0, appBody, opt);
     setTimeout((appBody, opt) => { appBody.dispatchEvent(new Event('DOMContentLoaded', opt)); }, 0, appBody, opt);
     setTimeout((window, opt) => {
       window.dispatchEvent(new Event('load', opt));
       window.dispatchEvent(new PageTransitionEvent('pageshow', opt));
     }, 0, window, opt);
+
     setTimeout(injectStaticRemoteCode, 0);
+
+    const remoteStatus = new RemoteCodeStatus();
+    try { // dynamic remote server code
+      remoteStatus.showLoading();
+      const result = await dynamicServerCode.injectRemoteCode();
+      setTimeout(remoteStatus.showSuccess, 0, true);
+    } catch (err) {
+      console.error(err);
+      setTimeout(remoteStatus.showError, 0, false);
+    }
+
   }
   // console.log({ url, src });
 }
@@ -390,33 +396,35 @@ window.setPathname = setPathname;
 window.setSearchParams = setSearchParams;
 
 
-/** 
- * @returns {boolean} is any remote code injected
- * @throw new Error();  if code injection failed or remote code http error
- * */
-async function injectRemoteCode() {
-  const link = localStorage['txtRemoteCodeUrl'];
-  // console.log({ link });
+class RemoteCodeInjector {
+  constructor() { };
 
-  if (!link) return false;
-  if (false === link.startsWith('https://docs.google.com/document/d/')) return false;
+  get remoteCodeUrl() { return localStorage['txtRemoteCodeUrl']; };
 
-  const url = new URL(link);
-  const dirs = url.pathname.split('/');
-  if (/^$|edit|preview|copy|export/i.test(dirs.pop()) === false) return false;
+  async injectRemoteCode() {
+    const link = this.remoteCodeUrl;
+    if (!link) return false;
+    if (false === link.startsWith('https://docs.google.com/document/d/')) return false;
 
-  url.pathname = dirs.join('/') + '/export';
-  url.searchParams.set('format', 'txt');
-  // console.log({ url });
+    const url = new URL(link);
+    const dirs = url.pathname.split('/');
+    if (/^$|edit|preview|copy|export/i.test(dirs.pop()) === false) return false;
 
-  // DOC_URL/export?format=txt
-  // const qq = await fetch('https://docs.google.com/document/d/1_xPg9-MzjfJ9Xv10nuQo9fc-NWq8G_e4pF1xvpADDxU/export?tab=t.0&format=txt', { mode: 'cors' });
-  const qq = await fetch(url.toString(), { mode: 'cors' });
-  if (qq.ok === false) throw `netstate error: http ${qq.status} ${qq.statusText}`;
-  const htmlContent = await qq.text();
-  // console.log({ htmlContent });
-  await injectCustomCode(htmlContent, document.head);
-  return true;
+    url.pathname = dirs.join('/') + '/export';
+    url.searchParams.set('format', 'txt');
+    // console.log({ url });
+
+    // DOC_URL/export?format=txt
+    // const qq = await fetch('https://docs.google.com/document/d/1_xPg9-MzjfJ9Xv10nuQo9fc-NWq8G_e4pF1xvpADDxU/export?tab=t.0&format=txt', { mode: 'cors' });
+    const qq = await fetch(url.toString(), { mode: 'cors' });
+    // await new Promise(r => setTimeout(r, 10000));
+    if (qq.ok === false) throw `remote code http error: code ${qq.status} ${qq.statusText}`;
+    const htmlContent = await qq.text();
+    // console.log({ htmlContent });
+
+    // inject remote code to end of body only, allow GTM to have proper dom loading triggeration sequence
+    return injectCustomCode(htmlContent, document.body);
+  }
 }
 
 
@@ -431,14 +439,26 @@ async function injectStaticRemoteCode() {
   }
 }
 
-function showRemoteCodeStatus(success) {
-  const div = document.getElementById('remote-setting__status');
-  const urlId = localStorage['txtRemoteCodeUrl'].split('').reduce((a, x) => a ^ x.charCodeAt(0), 31);
-  if (success) {
+class RemoteCodeStatus {
+
+  showLoading() {
+    const div = document.getElementById('remote-setting__status');
+    const urlId = localStorage['txtRemoteCodeUrl'].split('').reduce((a, x) => a ^ x.charCodeAt(0), 31);
+    div.textContent = `Loading... Online server channel: ${urlId}`;
+    div.dataset['status'] = 'loading';
+  }
+
+  showSuccess() {
+    const div = document.getElementById('remote-setting__status');
+    const urlId = localStorage['txtRemoteCodeUrl'].split('').reduce((a, x) => a ^ x.charCodeAt(0), 31);
     div.textContent = `Online server channel: ${urlId}`;
-  } else {
+    div.dataset['status'] = 'success';
+  }
+  showError() {
+    const div = document.getElementById('remote-setting__status');
+    const urlId = localStorage['txtRemoteCodeUrl'].split('').reduce((a, x) => a ^ x.charCodeAt(0), 31);
     div.textContent = `Connection error! Online server channel: ${urlId}`;
-    div.classList.add('error');
+    div.dataset['status'] = 'error';
   }
 }
 

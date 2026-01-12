@@ -55,13 +55,24 @@
 		}
 
 		#remote-setting__status {
-			background-color: green;
-			color: white;
+			background-color: red;
 			padding: 0 1rem;
 			position: sticky;
 			top: 0;
+			z-index: 2;
 
-			&.error {
+			&[data-status="success"] {
+				background-color: green;
+				color: white;
+			}
+
+			&[data-status="loading"] {
+				background-color: goldenrod;
+				color: white;
+				cursor: progress;
+			}
+
+			&[data-status="error"] {
 				background-color: pink;
 				color: black;
 			}
