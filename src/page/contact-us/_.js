@@ -1,6 +1,7 @@
 import { alert } from '/src/alert.mjs';
 
 export default function () {
+    // Contact Form
     document.getElementById('wpforms-form-66-1').addEventListener('submit', function (e) {
         if (e.target.checkValidity() === false) return;
         e.preventDefault();
@@ -16,7 +17,7 @@ export default function () {
         }, 500);
     });
 
-    {
+    { // Custom Ajax Form
         const st = setTimeout, al = alert, cf = document.getElementById("custom-form");
         cf.querySelector("button[type=submit]").addEventListener("click", (e) => {
             if (cf.querySelectorAll("input,textarea,select").values().find((x) => !x.checkValidity()) === undefined) {
@@ -39,16 +40,38 @@ export default function () {
         });
     }
 
-    document.getElementById('inquiry-form').addEventListener('submit', function (e) {
-        console.log('inquiry form: ', Object.fromEntries(new FormData(e.currentTarget)));
-        setTimeout(form => {
-            alert('submitted!');
-            form.classList.add('submitted');
 
-            setTimeout(l => {
-                l.reload();
-            }, 1000, window.location);
-        }, 500, e.currentTarget);
-    });
+    { // Inquiry Form
+        let isSubmitting = false;
+        document.getElementById('inquiry-form').addEventListener('submit', function (e) {
+            console.log('inquiry form: ', Object.fromEntries(new FormData(e.currentTarget)));
+            e.preventDefault();
+
+            if (isSubmitting) return;
+            isSubmitting = true;
+
+            /** @type {HTMLFormElement} */
+            const form = e.currentTarget;
+            form.classList.add('loading');
+
+            setTimeout(form => {
+                // alert('submitted!');
+                form.classList.add('submitted');
+                isSubmitting = false;
+
+                setTimeout(l => {
+                    const previousPage = l.hash;
+                    setTimeout(_ => {
+                        requestAnimationFrame(_ => {
+                            l.hash = previousPage;
+                        });
+                    }, 5000);
+
+                    l.hash += '/inquiry-submitted';
+
+                }, 0, window.location);
+            }, 500, e.currentTarget);
+        });
+    }
 
 }
