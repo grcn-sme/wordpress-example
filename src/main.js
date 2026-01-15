@@ -158,11 +158,15 @@ async function navigatePage(hash) {
     const remoteStatus = new RemoteCodeStatus();
     try { // dynamic remote server code
       remoteStatus.showLoading();
-      const result = await dynamicServerCode.injectRemoteCode();
-      setTimeout(remoteStatus.showSuccess, 0, true);
+      const hasRemoteCode = await dynamicServerCode.injectRemoteCode();
+      if (hasRemoteCode) {
+        setTimeout(remoteStatus.showSuccess, 0);
+      } else {
+        setTimeout(remoteStatus.showOffline, 0);
+      }
     } catch (err) {
       console.error(err);
-      setTimeout(remoteStatus.showError, 0, false);
+      setTimeout(remoteStatus.showError, 0);
     }
 
   }
@@ -423,7 +427,8 @@ class RemoteCodeInjector {
     // console.log({ htmlContent });
 
     // inject remote code to end of body only, allow GTM to have proper dom loading triggeration sequence
-    return injectCustomCode(htmlContent, document.body);
+    injectCustomCode(htmlContent, document.body);
+    return true;
   }
 }
 
@@ -447,7 +452,11 @@ class RemoteCodeStatus {
     div.textContent = `Loading... Online server channel: ${urlId}`;
     div.dataset['status'] = 'loading';
   }
-
+  showOffline() {
+    const div = document.getElementById('remote-setting__status');
+    div.textContent = `Offline now, no remote code.`;
+    div.dataset['status'] = 'offline';
+  }
   showSuccess() {
     const div = document.getElementById('remote-setting__status');
     const urlId = localStorage['txtRemoteCodeUrl'].split('').reduce((a, x) => a ^ x.charCodeAt(0), 31);
