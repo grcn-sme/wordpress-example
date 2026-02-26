@@ -324,6 +324,7 @@ if ('serviceWorker' in navigator) {
       if (e.isTrusted === false) return;
       deferredPrompt.prompt();
       btnInstallApp.style['display'] = 'none';
+      setTimeout(preLoadModule, 0);
     });
     btnInstallApp.style['display'] = '';
   }
@@ -345,20 +346,16 @@ import { alert } from '/src/alert.mjs';
   };
 }
 
-window.addEventListener('load', function (ev) {
-  if (ev.isTrusted === false) return;
+async function preLoadModule() {
   if (isMPA() === false) return;
-  setTimeout(async function preLoadModule() {
-    for (const key of Object.keys(pages)) {
-      await pages[key]().catch(console.error);
-    }
-    for (const key of Object.keys(modules)) {
-      await modules[key]().catch(console.error);
-    }
-
-    // console.log('all modules are loaded, offline experience is ready');
-  }, 2000);
-});
+  for (const key of Object.keys(pages)) {
+    await pages[key]().catch(console.error);
+  }
+  for (const key of Object.keys(modules)) {
+    await modules[key]().catch(console.error);
+  }
+  // console.log('all modules are loaded, offline experience is ready');
+}
 
 
 function getVirtualUrl() {
