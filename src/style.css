@@ -102,7 +102,7 @@ textarea:user-invalid {
 
 input,
 textarea {
-  &[readonly]{
+  &[readonly] {
     background-color: #eee;
     color: #666;
     cursor: not-allowed;
@@ -148,9 +148,12 @@ img[src] {
 dialog#_dialog-alert {
   border: 1px solid var(--text-color);
   box-shadow: 0 0 8px 0px;
-  transition: 25ms ease-in;
+  transition: 150ms ease-out;
   font-size: 1rem;
   min-width: 25vw;
+  cursor: default;
+
+
 
   /* prevent clicking the actual dialog element */
   /* for manually reimplementing light dismiss on clicking dialog element */
@@ -163,9 +166,10 @@ dialog#_dialog-alert {
   }
 
   @starting-style {
-    scale: 2;
-    font-size: 4rem;
-    opacity: .25;
+    scale: .25;
+    /* font-size: .4rem; */
+    opacity: .0;
+    transform: translateY(50vh);
   }
 
   &::backdrop {
@@ -178,6 +182,7 @@ dialog#_dialog-alert {
     opacity: .25;
     width: 100vw;
     height: 100vh;
+    transition-delay: 1s;
   }
 
   #_dialog-alert__message-body {
