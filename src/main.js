@@ -153,8 +153,6 @@ async function navigatePage(hash) {
       window.dispatchEvent(new PageTransitionEvent('pageshow', opt));
     }, 0, window, opt);
 
-    setTimeout(injectStaticRemoteCode, 0);
-
     const remoteStatus = new RemoteCodeStatus();
     try { // dynamic remote server code
       remoteStatus.showLoading();
@@ -168,6 +166,8 @@ async function navigatePage(hash) {
       console.error(err);
       setTimeout(remoteStatus.showError, 0);
     }
+
+    setTimeout(injectStaticRemoteCode, 0);
 
   }
   // console.log({ url, src });
