@@ -1,12 +1,12 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "my-site-name",
+  "name": "wordpress-example",
   "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-03-01",
   "vars": {
     "NODE_VERSION": "24.11"
   },
-  "assets": {
-    "directory": "./dist"
+  "observability": {
+    "enabled": true
   }
 }

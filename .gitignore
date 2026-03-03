@@ -11,7 +11,7 @@ dist-ssr/
 build/
 out/
 *.local
-
+.wrangler
 
 # Log files
 *.log

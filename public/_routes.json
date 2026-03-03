@@ -1,0 +1,10 @@
+{
+    "version": 1,
+    "include": [
+        "/gtg/*"
+    ],
+    "exclude": [
+        "/assets/*",
+        "/favicon.ico"
+    ]
+}
