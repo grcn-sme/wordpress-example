@@ -20,20 +20,38 @@ export async function onRequest(context) {
             headers: { "Content-Type": "text/plain" }
         });
     }
+    const requestHeader = new Headers(request.headers);
+
+    // 4. Override the Host header
+    requestHeader.set('Host', targetUrl.host);
+    requestHeader.set('User-Agent', request.headers.get("User-Agent") || "");
+    requestHeader.set('Accept', request.headers.get("Accept") || "");
+    requestHeader.set('Accept-Language', request.headers.get("Accept-Language") || "");
+
+    if (request.cf) {
+        const country = request.cf.country; // ISO 3166-1 alpha-2
+        const region = request.cf.regionCode; // e.g., "CA"
+        if (country) {
+            requestHeader.set('X-Forwarded-Country', country);
+            if (region) {
+                requestHeader.set('X-Forwarded-Region', region);
+                // Optional: Set the combined header US-CA
+                requestHeader.set('X-Forwarded-CountryRegion', `${country}-${region}`);
+            }
+        }
+    }
+
 
     /** re-fetch for original request
      * @type {RequestInit} 
      */
     const requestOptions = {
         method: request.method,
-        headers: {
-            "User-Agent": request.headers.get("User-Agent") || "",
-            "Accept": request.headers.get("Accept") || "",
-            "Accept-Language": request.headers.get("Accept-Language") || "",
-        },
+        headers: requestHeader,
         // Required for POST requests (like GTM event collection)
         body: request.method === "POST" ? await request.blob() : null,
     };
+
 
     try {
         const googleResponse = await fetch(targetUrl.toString(), requestOptions);
@@ -74,14 +92,18 @@ function getTargetUrl(link) {
         let tagId;
         if (queryId) {
             tagId = queryId;
+            url.searchParams.delete('id');
         } else {
             tagId = url.pathname.split("/").pop();
             if (!tagId) return null;
         }
 
         /** @type {string} */
-        const GOOGLE_TAG_CDN = '.fps.goog';
-        return new URL(`https://${tagId}${GOOGLE_TAG_CDN}`);
+        url.host = (`${tagId}.fps.goog`);
+        url.protocol = 'https:';
+        url.pathname = '';
+        // url.search = url.search;
+        return url;
     } catch (err) {
         console.warn(err);
         return null;

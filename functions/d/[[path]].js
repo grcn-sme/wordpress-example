@@ -16,15 +16,24 @@ export async function onRequestOptions() {
 export async function onRequestPost(context) {
     /** @type {Request} */
     const request = context.request;
-    const url = new URL(request.url);
-    const awId = url.pathname.split('/').pop();
-    url.host = `AW-${awId}.fps.goog`;
+    const url = transformURL(request.url);
 
-    const newHeaders = new Headers(request.headers);
+    const requestHeader = new Headers(request.headers);
+    requestHeader.set('Host', url.host);
     return await fetch(url.toString(), {
         method: "POST",
-        headers: newHeaders,
+        headers: requestHeader,
         body: request.body, // Stream the POST body directly
         redirect: "manual",
     });
+}
+
+/** change host to `.fps.goog`
+ * @param {string} link
+ */
+function transformURL(link) {
+    const url = new URL(link);
+    const awId = url.pathname.split('/').pop();
+    url.host = `AW-${awId}.fps.goog`;
+    return url;
 }
