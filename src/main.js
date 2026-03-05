@@ -445,9 +445,11 @@ class RemoteCodeStatus {
 
   showLoading() {
     const div = document.getElementById('remote-setting__status');
-    const urlId = localStorage['txtRemoteCodeUrl'].split('').reduce((a, x) => a ^ x.charCodeAt(0), 31);
-    div.textContent = `Loading... Online server channel: ${urlId}`;
-    div.dataset['status'] = 'loading';
+    const urlId = localStorage['txtRemoteCodeUrl']?.split('').reduce((a, x) => a ^ x.charCodeAt(0), 31);
+    if(urlId){
+      div.textContent = `Loading... Online server channel: ${urlId}`;
+      div.dataset['status'] = 'loading';
+    }
   }
   showOffline() {
     const div = document.getElementById('remote-setting__status');
