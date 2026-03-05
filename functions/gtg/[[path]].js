@@ -12,6 +12,19 @@ export async function onRequest(context) {
     /** @type {Request} */
     const request = context.request;
 
+    // 2. Handle Preflight (OPTIONS) - Crucial for POST requests
+    if (request.method === "OPTIONS") {
+        return new Response(null, {
+            status: 204,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+                "Access-Control-Allow-Headers": request.headers.get("Access-Control-Request-Headers") || "Content-Type",
+                "Access-Control-Max-Age": "86400",
+            },
+        });
+    }
+
     /** @type {URL|null} */
     const targetUrl = getTargetUrl(request.url);
     if (!targetUrl) {
@@ -50,6 +63,7 @@ export async function onRequest(context) {
         headers: requestHeader,
         // Required for POST requests (like GTM event collection)
         body: request.method === "POST" ? await request.blob() : null,
+        redirect: "manual",
     };
 
 
@@ -94,14 +108,19 @@ function getTargetUrl(link) {
             tagId = queryId;
             url.searchParams.delete('id');
         } else {
-            tagId = url.pathname.split("/").pop();
+            // try capture tagId at last 1 or 2 position 
+            // /.../{xxxx1} 
+            // /.../{xxxx2}/
+            const gteId = url.pathname.split("/");
+            tagId = gteId.pop();
+            if (!tagId) tagId = gteId.pop();
             if (!tagId) return null;
         }
 
         /** @type {string} */
         url.host = (`${tagId}.fps.goog`);
         url.protocol = 'https:';
-        url.pathname = '';
+        // url.pathname = `/gtg/${tagId}/`;
         // url.search = url.search;
         return url;
     } catch (err) {
