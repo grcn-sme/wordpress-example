@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
 export default defineConfig({
-    base: './',
+    base: '/',
     // use `mpa` to return 404 on non-existing page, url, resources
-    appType: 'mpa',  // ( spa, mpa ) mpa behave more like the Github Page; no relation to actual app type (spa/mpa logic)
+    appType: 'spa',  // ( spa, mpa ) set to 'mpa' allow dev server behave more like the Github Page; no relation to actual production app type (spa/mpa logic)
     build: {
         rollupOptions: {
             // https://rollupjs.org/configuration-options/

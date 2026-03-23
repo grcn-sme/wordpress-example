@@ -45,10 +45,12 @@ function initServerForm() {
 
         // example: https://docs.google.com/document/d/1pWxxxxxxxxxxxxxxxx/preview
         const gdocId = serverUrl.substring(35).split('/')[0];
-        console.log({gdocId});
+        console.log({ gdocId });
 
         setTimeout(_ => {
-            window.setSearchParams('serverUrlId', gdocId);
+            const searchParam = new URLSearchParams(window.location.search);
+            searchParam.set('serverUrlId', gdocId);
+            window.location.search = searchParam.toString();
         }, 0);
         return false;
     };

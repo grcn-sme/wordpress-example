@@ -32,7 +32,7 @@ export default function () {
                         cf.querySelectorAll("input,textarea,select").forEach(x => x.removeAttribute('readonly'));
                     }, 1000);
                 };
-                xhr.open("POST", window.location.href, true);
+                xhr.open("POST", '/gtg/example/', true);
                 xhr.send("");
                 cf.querySelectorAll("input,textarea,select").forEach(x => x.setAttribute('readonly', ''));
                 cf.classList.add('loading');
@@ -60,14 +60,14 @@ export default function () {
                 isSubmitting = false;
 
                 setTimeout(l => {
-                    const previousPage = l.hash;
+                    const previousPage = l.pathname;
                     setTimeout(_ => {
                         requestAnimationFrame(_ => {
-                            l.hash = previousPage;
+                            l.pathname = previousPage;
                         });
                     }, 5000);
 
-                    l.hash += '/inquiry-submitted';
+                    l.pathname += '/inquiry-submitted';
 
                 }, 0, window.location);
             }, 500, e.currentTarget);

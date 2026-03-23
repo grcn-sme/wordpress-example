@@ -91,7 +91,7 @@ export default function () {
 
             setTimeout((_) => {
                 alert("payment success =)");
-                location.hash = "#/order-received";
+                location.pathname = "/order-received";
             }, 500);
             return false;
         });
