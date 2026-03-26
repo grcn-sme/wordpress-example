@@ -8,7 +8,7 @@
 		<div data-block-name="woocommerce/order-confirmation-summary"
 			class="wc-block-order-confirmation-summary alignwide"></div>
 
-		<div data-block-name="woocommerce/order-confirmation-totals-wrapper"
+		<div id="order-details-wrapper" data-block-name="woocommerce/order-confirmation-totals-wrapper"
 			class="wc-block-order-confirmation-totals-wrapper alignwide" style="">
 			<h3 class="wp-block-heading" style="font-size:clamp(15.747px, 0.984rem + ((1vw - 3.2px) * 0.86), 24px);">
 				Order details</h3>
@@ -27,10 +27,10 @@
 						<tr>
 							<th class="wc-block-order-confirmation-totals__label" scope="row">Shipping:</th>
 							<td class="wc-block-order-confirmation-totals__total">
-								<span class="woocommerce-Price-amount amount">??.??</span>
+								<span id="shipping-amount" class="woocommerce-Price-amount amount">??.??</span>
 							</td>
 						</tr>
-						<tr>
+						<tr id="order-total">
 							<th class="wc-block-order-confirmation-totals__label" scope="row">Total:</th>
 							<td class="wc-block-order-confirmation-totals__total">
 								<span class="woocommerce-Price-amount amount">??.??</span>
@@ -40,8 +40,6 @@
 				</table>
 			</div>
 		</div>
-
-
 
 
 		<div

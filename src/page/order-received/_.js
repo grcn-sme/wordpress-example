@@ -23,22 +23,23 @@ function noOrderYet() {
 
 /** @param {OrderSummary} o */
 function displayData(o) {
+    const currency = o.getPaymentCurrency();
     const html = `
     <h1>Summary</h1>
-<ul class="wc-block-order-confirmation-summary-list">
+<ul class="wc-block-order-confirmation-summary-list" id="order-summary" data-payment-currency="${currency}" title="${currency}">
     <li class="wc-block-order-confirmation-summary-list-item"><span
             class="wc-block-order-confirmation-summary-list-item__key">Order number:</span> <span
             class="wc-block-order-confirmation-summary-list-item__value">${o.id}</span></li>
     <li class="wc-block-order-confirmation-summary-list-item"><span
-            class="wc-block-order-confirmation-summary-list-item__key">Date:</span> <span
+            class="wc-block-order-confirmation-summary-list-item__key">Payment date:</span> <span
             class="wc-block-order-confirmation-summary-list-item__value">${o.getDate().toLocaleDateString()}</span></li>
-    <li class="wc-block-order-confirmation-summary-list-item"><span
-            class="wc-block-order-confirmation-summary-list-item__key">Total:</span> <span
-            class="wc-block-order-confirmation-summary-list-item__value"><span
-                class="woocommerce-Price-amount amount">${o.totalPriceText()}</span></span></li>
-    <li class="wc-block-order-confirmation-summary-list-item"><span
-            class="wc-block-order-confirmation-summary-list-item__key">Email:</span> <span
-            class="wc-block-order-confirmation-summary-list-item__value">${o.userEmailAddress}</span></li>
+    <li class="wc-block-order-confirmation-summary-list-item price amount"><span  
+            class="wc-block-order-confirmation-summary-list-item__key">Total payment:</span> <span
+            class="wc-block-order-confirmation-summary-list-item__value"><span title="${currency}"
+        data-currency="${currency}" class="woocommerce-Price-amount amount">${o.totalPriceText()}</span></span></li>
+    <li class="wc-block-order-confirmation-summary-list-item purchaser-email-address"><span
+            class="wc-block-order-confirmation-summary-list-item__key">Email address:</span> <span
+            class="wc-block-order-confirmation-summary-list-item__value"><i>${o.userEmailAddress}</i></span></li>
     <li class="wc-block-order-confirmation-summary-list-item"><span
             class="wc-block-order-confirmation-summary-list-item__key">Payment method:</span> <span
             class="wc-block-order-confirmation-summary-list-item__value">Cash on delivery</span></li>
@@ -57,9 +58,9 @@ function displayProducts(o) {
 <tr class="woocommerce-table__line-item order_item">
     <td class="wc-block-order-confirmation-totals__product">
         <a href="${p.url}">${p.name}</a>&nbsp;
-        <strong class="product-quantity">&times;&nbsp;${p.quantity}</strong>
+        <strong class="product-quantity">&times;&nbsp;${p.quantity} &nbsp;</strong>
     </td>
-    <td class="wc-block-order-confirmation-totals__total">
+    <td class="wc-block-order-confirmation-totals__total" data-currency="${p.currency}" title="${p.currency}">
         <span class="woocommerce-Price-amount amount">${p.subTotalText()}</span>
     </td>
 </tr>

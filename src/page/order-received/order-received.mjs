@@ -28,12 +28,18 @@ export class OrderSummary {
         for (let i = 0; i < len; i++) {
             subtotal += products[i].price * products[i].quantity;
         }
-        const currency = products[0]?.currency;
+
+        const totalPrice = subtotal + this.shippingFee;
+        const currency = this.getPaymentCurrency();
+        return Product.formatPrice(currency, totalPrice);
+    }
+
+    getPaymentCurrency() {
+        const currency = this.products[0]?.currency;
         if (!currency) {
             throw new Error('invalid order summary data');
         }
-        const totalPrice = subtotal + this.shippingFee;
-        return Product.formatPrice(currency, totalPrice);
+        return currency;
     }
 
     getDate() {

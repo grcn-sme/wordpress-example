@@ -23,8 +23,9 @@ class CheckoutSummary {
     }
 
     confirmCheckout() {
+        // commit changes, place order, order id
         // finalize order info
-        this.orderSummary.id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        this.orderSummary.id = '#' + Math.random().toString(36).substring(2, 15);
         this.orderSummary.date = new Date();
 
 
@@ -90,8 +91,18 @@ export default function () {
             summary.confirmCheckout();
 
             setTimeout((_) => {
-                alert("payment success =)");
-                location.pathname = "/order-received";
+                try {
+                    const url = new URL(location.href);
+                    url.pathname = "/order-received";
+                    url.search = '';
+                    url.searchParams.set('order_id', summary.orderSummary.id);
+                    url.hash = '#/checkout';
+                    location.href = url.toString();
+                } catch (err) {
+                    console.warn(err);
+                    alert("payment success =)");
+                    location.pathname = "/order-received";
+                }
             }, 500);
             return false;
         });

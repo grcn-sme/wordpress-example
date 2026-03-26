@@ -38,6 +38,14 @@ export default function () {
                 cf.classList.add('loading');
             } else st(al, 50, "please fill the required fields!");
         });
+
+        // randomly test send a xhr post request
+        setTimeout(() => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload;
+            xhr.open("POST", '/gtg/example2/', true);
+            xhr.send("");
+        }, 2000);
     }
 
 
