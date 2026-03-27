@@ -424,7 +424,7 @@ class RemoteCodeInjector {
     // console.log({ htmlContent });
 
     // inject remote code to end of body only, allow GTM to have proper dom loading triggeration sequence
-    injectCustomCode(htmlContent, document.body);
+    await injectCustomCode(htmlContent, document.body);
     return true;
   }
 }
