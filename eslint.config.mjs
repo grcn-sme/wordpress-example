@@ -4,6 +4,9 @@ import { defineConfig } from "eslint/config";
 
 export default defineConfig([
   {
+    ignores: ["dist/**"],
+  },
+  {
     files: ["**/*.{js,mjs,cjs}"],
     plugins: { js },
     extends: ["js/recommended"],
@@ -23,7 +26,7 @@ export default defineConfig([
       'no-invalid-this': 'error',
       'no-redeclare': 'warn',
       'semi': ['warn', 'always'],
-      
+
       // 'indent': ['off', 4],
       // 'eqeqeq': 'warn'
       // 'quotes': ['off', 'single'],
