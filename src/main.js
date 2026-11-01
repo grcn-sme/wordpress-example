@@ -400,7 +400,7 @@ window.setSearchParams = setSearchParams;
 class RemoteCodeInjector {
   constructor() { };
 
-  get remoteCodeUrl() { return localStorage['txtRemoteCodeUrl']; };
+  get remoteCodeUrl() { return localStorage['txtRemoteCodeUrl'] || ''; };
 
   async injectRemoteCode() {
     const link = this.remoteCodeUrl;

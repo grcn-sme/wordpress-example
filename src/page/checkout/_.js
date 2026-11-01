@@ -126,7 +126,7 @@ function generateHTML_item(p) {
     <div class="wc-block-components-order-summary-item__image">
         <div class="wc-block-components-order-summary-item__quantity">
             <span aria-hidden="true">${p.quantity}</span><span class="screen-reader-text">${p.quantity} item</span>
-        </div><img src="${p.img_src}" alt="Black and White Summer Portrait">
+        </div><img src="${p.img_src}" alt="${p.name}">
     </div>
     <div class="wc-block-components-order-summary-item__description">
         <span class="wc-block-components-product-name">${p.name}</span><span
