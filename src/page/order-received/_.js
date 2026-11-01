@@ -1,5 +1,6 @@
 import { Product } from '../product/product.mjs';
 import { OrderSummary } from './order-received.mjs';
+import { alert } from '/src/alert.mjs';
 
 export default function () {
     const order = OrderSummary.getLastOrder();

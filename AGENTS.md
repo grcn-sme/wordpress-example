@@ -30,7 +30,7 @@ This repository is built for **quick live demos and hands-on trainee exercises**
 - **Build & Dev Server**: [Vite](https://vitejs.dev/) (`^7.1.6`, configured with `appType: 'spa'` so all routes resolve to `index.html`).
 - **Edge Hosting**: [Cloudflare Pages](https://pages.cloudflare.com/) + [Wrangler](https://developers.cloudflare.com/workers/wrangler/) (`wrangler.jsonc`, `functions/`).
 - **PWA / Offline**: `public/manifest.json` + Workbox 6.4.1 Service Worker (`public/sw.js`).
-- **Linting & Editor Configs**: ESLint 9 (`eslint.config.mjs`), `jsconfig.json`, `deno.json`.
+- **Linting, Testing & Editor Configs**: ESLint 9 (`eslint.config.mjs`), Vitest (`src/_test/*.test.js`), `jsconfig.json`, `deno.json`.
 
 | Command | Description |
 | :--- | :--- |
@@ -40,6 +40,7 @@ This repository is built for **quick live demos and hands-on trainee exercises**
 | `npm run build-n-preview` | Run `vite build && vite preview` |
 | `npx wrangler pages dev` | Test `./dist` + Cloudflare Pages Functions (`functions/`) locally |
 | `npm run lint` | Run ESLint across the repository (`eslint .`) |
+| `npm test` | Run Vitest test suite (`vitest`) |
 
 ---
 
@@ -72,7 +73,9 @@ This repository is built for **quick live demos and hands-on trainee exercises**
     ├── idb_example.mjs         # Example IndexedDB store ('lsa') CRUD implementation
     ├── style.css               # Global styles (nav, form states, dialog animations)
     ├── _test/
-    │   └── custom code injector test.html # Test fixture documenting expected script & event load order
+    │   ├── custom code injector test.html # Test fixture documenting expected script & event load order
+    │   ├── ecommerce.test.js       # Vitest unit tests for Product, Cart, and OrderSummary models
+    │   └── plan-fixes.test.js      # Vitest tests for bug fixes, controllers, and /gtg/* proxy
     └── page/                   # Route-based HTML templates and JS controllers
         ├── _.html              # Home page (/)
         ├── shop/               # Catalog page (/shop) - _.html, _.js
@@ -206,19 +209,15 @@ Passing an unknown ID to `new Product(id)` throws `Error('undefined product id: 
 
 ---
 
-## Known Codebase Quirks & Candidate Improvements
+## Implementation Notes & Codebase Quirks
 
-When maintaining or fixing bugs in this repository, keep these nuances in mind:
-1. **`RemoteCodeInjector.remoteCodeUrl` When Unset**:
-   - In [`src/main.mpa.js`](file:///home/mingliangc/wordpress-example/src/main.mpa.js#L92), `const hasRemoteCode = dynamicServerCode.remoteCodeUrl !== '';` checks `localStorage['txtRemoteCodeUrl']`. On a fresh browser profile where `localStorage['txtRemoteCodeUrl']` is `undefined`, `undefined !== ''` evaluates to `true`, which skips local `txtCodeHead`/`txtCodeBody` injection and marks the textareas `readonly` until `localStorage['txtRemoteCodeUrl']` is initialized to `''`. Returning `localStorage['txtRemoteCodeUrl'] || ''` from the `remoteCodeUrl` getter resolves this without touching injection timing.
-2. **Legacy SPA / Subpath Links**:
-   - A few links carry over from earlier hash-SPA (`main.js`) or GitHub Pages (`/wordpress-example/`) versions:
-     - `src/page/cart/_.js` uses `href="#${p.url}"` on cart item links instead of `href="${p.url}"`.
-     - `src/page/checkout/_.html` uses `href="/wordpress-example/cart"` on "Return to Cart".
-     - `src/page/my-account/_.html` has a top `<script type="module" src="/src/page/my-account.js"></script>` tag that 404s (since `src/page/my-account/_.js` is loaded by `main.mpa.js`).
+When maintaining or extending this repository, keep these nuances in mind:
+1. **`RemoteCodeInjector.remoteCodeUrl` Default Fallback**:
+   - In [`src/main.mpa.js`](file:///home/mingliangc/wordpress-example/src/main.mpa.js#L322) and [`src/main.js`](file:///home/mingliangc/wordpress-example/src/main.js#L403), `get remoteCodeUrl()` returns `localStorage['txtRemoteCodeUrl'] || ''` so that `hasRemoteCode` evaluates to `false` on fresh browser profiles where `localStorage['txtRemoteCodeUrl']` is `undefined`.
+2. **MPA Links & Route Controllers**:
+   - Product links in [`src/page/cart/_.js`](file:///home/mingliangc/wordpress-example/src/page/cart/_.js) and the "Return to Cart" link in [`src/page/checkout/_.html`](file:///home/mingliangc/wordpress-example/src/page/checkout/_.html) use standard root-relative paths (`/product/<slug>`, `/cart`) for MPA navigation.
+   - [`src/page/contact-us/inquiry-submitted/_.js`](file:///home/mingliangc/wordpress-example/src/page/contact-us/inquiry-submitted/_.js) handles the 5-second redirect back to `/contact-us` in MPA mode after `#inquiry-form` navigates to `/contact-us/inquiry-submitted`.
 3. **Cart Quantity Input `blur` Handler (`src/page/cart/_.js`)**:
-   - The `blur` listener on `.wc-block-components-quantity-selector__input` has an `else { e.target.value = 1; }` branch that resets any valid quantity `<= 69` to `1` on blur unless guarded by `else if (isNaN(qty) || qty < 1)`.
-4. **MPA Redirect on `/contact-us/inquiry-submitted`**:
-   - `src/page/contact-us/_.js` schedules a `5000ms` timer to return to `/contact-us` *before* setting `location.pathname += '/inquiry-submitted'`. Because `main.mpa.js` triggers a full page load when `location.pathname` changes, that timer is destroyed with the old document unless handled by `src/page/contact-us/inquiry-submitted/_.js`.
-5. **Production Build Drops `console` & `debugger`**:
+   - The `blur` listener on `.wc-block-components-quantity-selector__input` clamps values `> 69` to `69` and resets values `< 1` or `NaN` to `1` while preserving valid quantities `1..69`.
+4. **Production Build Drops `console` & `debugger`**:
    - [`vite.config.js`](file:///home/mingliangc/wordpress-example/vite.config.js#L11-L13) sets `esbuild: { drop: ['console', 'debugger'] }`. Note that Vite only strips `console`/`debugger` from bundled project modules, **not** from runtime-injected trainee snippets in `localStorage` or Google Docs.

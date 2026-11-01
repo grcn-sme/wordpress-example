@@ -25,6 +25,12 @@ npm run build
 npm run preview
 ```
 
+### Linting & Unit Tests (Vitest)
+```bash
+npm run lint
+npx vitest run
+```
+
 ### Cloudflare Pages & Functions (`/gtg/*`)
 To test the built `./dist` site together with Cloudflare Pages Functions locally:
 ```bash

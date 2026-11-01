@@ -1,4 +1,5 @@
 import { Cart } from './cart.mjs';
+import { Product } from '../product/product.mjs';
 
 export default function (appBody) {
     const cart = new Cart();
@@ -19,10 +20,10 @@ function listAllProducts(cart) {
         console.log({ p });
         const html = `
         <tr class="wc-block-cart-items__row" tabindex="-1">
-            <td class="wc-block-cart-item__image" aria-hidden="true"><a href="#${p.url}" tabindex="-1"><img src="${p.img_src}"
+            <td class="wc-block-cart-item__image" aria-hidden="true"><a href="${p.url}" tabindex="-1"><img src="${p.img_src}"
                         alt="${p.name}"></a></td>
             <td class="wc-block-cart-item__product">
-                <div class="wc-block-cart-item__wrap"><a class="wc-block-components-product-name" href="#${p.url}">${p.name}</a>
+                <div class="wc-block-cart-item__wrap"><a class="wc-block-components-product-name" href="${p.url}">${p.name}</a>
                     <div class="wc-block-cart-item__prices"><span class="price wc-block-components-product-price"><span
                                 class="wc-block-formatted-money-amount wc-block-components-formatted-money-amount wc-block-components-product-price__value">${p.priceText()}</span></span>
                     </div>
@@ -100,7 +101,7 @@ function listAllProducts(cart) {
                 const qty = parseInt(e.target.value);
                 if (qty > Cart.maxQuantityPerItem) {
                     e.target.value = Cart.maxQuantityPerItem;
-                } else {
+                } else if (isNaN(qty) || qty < 1) {
                     e.target.value = 1;
                 }
             });
@@ -132,7 +133,7 @@ function listAllProducts(cart) {
                     e.target.parentElement.querySelector('.wc-block-components-quantity-selector__input')
                     ;
                 txtQuantity.value = parseInt(txtQuantity.value) + 1;
-                txtQuantity.dispatchEvent(new Event('change'));
+                txtQuantity.dispatchEvent(new Event('change', { bubbles: true }));
             });
         }
     }
@@ -144,12 +145,13 @@ function displaySubTotalPrice(cart) {
 }
 
 function displayShippingFee(shippingFee) {
+    const formattedFee = Product.formatPrice('USD', shippingFee);
     document.body.querySelector("#wp--skip-link--target > div.entry-content.alignwide.wp-block-post-content.is-layout-flow.wp-block-post-content-is-layout-flow > div > div:nth-child(4) > div > div > div.wc-block-components-sidebar.wc-block-cart__sidebar.wp-block-woocommerce-cart-totals-block > div.wp-block-woocommerce-cart-order-summary-block > div.wp-block-woocommerce-cart-order-summary-totals-block > div.wp-block-woocommerce-cart-order-summary-shipping-block.wc-block-components-totals-wrapper > div > div > span.wc-block-formatted-money-amount.wc-block-components-formatted-money-amount.wc-block-components-totals-item__value")
-        .textContent = shippingFee;
+        .textContent = formattedFee;
 
     // shipping fee option
     document.body.querySelector("#radio-control-0-flat_rate\\:3__description > span")
-        .textContent = shippingFee;
+        .textContent = formattedFee;
 }
 
 function displayTotalPrice(cart, shippingFee) {
