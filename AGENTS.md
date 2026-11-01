@@ -1,30 +1,41 @@
 # AGENTS.md
 
-## Project Overview
+## Project Overview & Training Philosophy
 
-`wordpress-example` is a zero-framework, static/client-rendered emulation of a **WordPress + WooCommerce** e-commerce storefront bundled with **Vite** and deployed to **Cloudflare Pages**.
+`wordpress-example` is a zero-framework, client-rendered emulation of a **WordPress 6.7 + WooCommerce 9.1.2** e-commerce storefront bundled with **Vite** and deployed to **Cloudflare Pages**.
 
-Its primary purpose is to serve as a realistic sandbox and testbed for:
-- **Third-party script & tag injection** (e.g., Google Tag Manager, `gtag.js`, analytics, conversion/form tracking) via local `<head>`/`<body>` snippets or remote Google Docs channels.
-- **Google Tag First-Party Mode (FPS)** proxying via a Cloudflare Pages Function (`functions/gtg/[[path]].js`).
-- **E-commerce user flows** (product catalog, product detail pages, cart, checkout, order confirmation, and contact/inquiry forms) backed entirely by `localStorage` and client-side JavaScript.
+### Primary Purpose
+This repository is built for **quick live demos and hands-on trainee exercises** (specifically for web analytics, Google Tag Manager, `gtag.js`, conversion tracking, DOM scraping, and first-party tag proxying):
+1. **Local & Remote Custom Code Injection**: Trainees and instructors can inject arbitrary `<head>` and `<body>` HTML/JS snippets locally via `localStorage` (`/my-account`) or remotely via a Google Docs export channel (`?serverUrlId=<gdocId>`).
+2. **Realistic WordPress/WooCommerce "Camouflage"**: Much of the HTML markup, inline `<script>` blocks (e.g., `wcSettings`, `wc_order_attribution`, `wpforms`), and static CSS files in `public/css/` are copied directly from a real WooCommerce site and are intentionally non-functional ("dead code"). **This dead code serves as camouflage** so trainees must inspect, filter, and navigate a realistic, noisy production-like DOM rather than a sterile toy app.
+3. **Google Tag First-Party Mode (FPS) Proxy**: Includes a Cloudflare Pages Function (`functions/gtg/[[path]].js`) that proxies `/gtg/*` requests to `https://<tagId>.fps.goog`.
+4. **Simulated E-Commerce & Form Flows**: Implements functional catalog browsing, add-to-cart, cart management, checkout, order confirmation, and three distinct contact/inquiry form submission patterns—all backed by `localStorage`.
 
 ---
 
-## Tech Stack & Tooling
+## Strict Guardrails for Agents
 
-- **Runtime / Language**: Vanilla JavaScript (ES2024+ Modules, `.js` / `.mjs`), raw HTML partials, static WordPress 6.7 & WooCommerce 9.1.2 CSS.
-- **Build Tool**: [Vite](https://vitejs.dev/) (`^7.1.6`).
-- **Hosting & Edge Functions**: [Cloudflare Pages](https://pages.cloudflare.com/) + [Wrangler](https://developers.cloudflare.com/workers/wrangler/) (`wrangler.jsonc`, `functions/`).
-- **PWA / Offline**: Web App Manifest (`public/manifest.json`) + Workbox 6.4.1 Service Worker (`public/sw.js`).
-- **Linting & Type Hints**: ESLint 9 flat config (`eslint.config.mjs`), JSDoc annotations, `jsconfig.json`, and `deno.json`.
+1. **DO NOT Alter Code Injection Sequencing (`src/main.mpa.js`)**:
+   - The timing and execution order of `injectCustomCode()`, macrotask yields (`setTimeout(..., 0)`), route module loading, and synthetic DOM lifecycle events (`readystatechange`, `DOMContentLoaded`, `load`, `pageshow`) in [`src/main.mpa.js`](file:///home/mingliangc/wordpress-example/src/main.mpa.js) are carefully tuned so third-party tags (like GTM/`gtag.js`) trigger in the exact sequence expected on a real Multi-Page Application. **Do not reorder, remove awaits, or refactor this sequence.**
+2. **DO NOT Remove "Dead" Camouflage HTML, CSS, or Inline Scripts**:
+   - Do not delete unused WooCommerce classes, unreferenced CSS files in `public/css/`, dummy `<script id="wc-...">` tags, or non-working UI controls (e.g., sorting dropdowns, coupon buttons, footer links) unless explicitly instructed. They are intentional decoys for training.
+3. **DO NOT Redesign or Over-Change the Current UI**:
+   - Keep the existing visual layout, inline styles, and DOM hierarchy intact. Both internal page controllers and trainee tag triggers rely on the existing DOM structure and selectors.
 
-### Key Commands
+---
+
+## Tech Stack & Commands
+
+- **Runtime**: Vanilla JavaScript (ES2024+ Modules, `.js` / `.mjs`), raw HTML partials (`src/page/**/_.html`), static WordPress/WooCommerce CSS (`public/css/`).
+- **Build & Dev Server**: [Vite](https://vitejs.dev/) (`^7.1.6`, configured with `appType: 'spa'` so all routes resolve to `index.html`).
+- **Edge Hosting**: [Cloudflare Pages](https://pages.cloudflare.com/) + [Wrangler](https://developers.cloudflare.com/workers/wrangler/) (`wrangler.jsonc`, `functions/`).
+- **PWA / Offline**: `public/manifest.json` + Workbox 6.4.1 Service Worker (`public/sw.js`).
+- **Linting & Editor Configs**: ESLint 9 (`eslint.config.mjs`), `jsconfig.json`, `deno.json`.
 
 | Command | Description |
 | :--- | :--- |
 | `npm run dev` | Start Vite development server (`http://localhost:5173/`) |
-| `npm run build` | Bundle production assets into `./dist` (drops `console` & `debugger`) |
+| `npm run build` | Bundle production assets into `./dist` (strips `console` & `debugger`) |
 | `npm run preview` | Preview the built `./dist` folder using Vite |
 | `npm run build-n-preview` | Run `vite build && vite preview` |
 | `npx wrangler pages dev` | Test `./dist` + Cloudflare Pages Functions (`functions/`) locally |
@@ -36,127 +47,178 @@ Its primary purpose is to serve as a realistic sandbox and testbed for:
 
 ```text
 .
-├── index.html                  # App shell (<nav>, #app container, #remote-setting__status, #_dialog-alert)
-├── vite.config.js              # Vite configuration (appType: 'spa', drops console/debugger in build)
-├── wrangler.jsonc              # Cloudflare Pages configuration (output dir: ./dist)
+├── index.html                  # App shell (<nav>, #btnInstallApp, #remote-setting__status, #app, #_dialog-alert)
+├── vite.config.js              # Vite config (appType: 'spa', drops console & debugger in prod build)
+├── wrangler.jsonc              # Cloudflare Pages config (pages_build_output_dir: "./dist")
 ├── eslint.config.mjs           # ESLint 9 flat config
-├── jsconfig.json               # IDE path mappings (/src/*, @/* -> ./src/*)
-├── deno.json                   # Deno linter & compiler options
+├── jsconfig.json               # Path aliases (/src/*, @/* -> ./src/*)
+├── deno.json                   # Deno compiler/linter config
 ├── custom-code/                # Sample head.html & body.html snippets for injection testing
 ├── functions/
 │   └── gtg/[[path]].js         # Cloudflare Pages Function: First-Party Mode proxy to <tagId>.fps.goog
-├── public/                     # Static files copied as-is to dist/
-│   ├── _routes.json            # Cloudflare Pages Function routing rules (includes /gtg/*)
-│   ├── manifest.json           # PWA manifest
+├── public/                     # Static assets copied to dist/ root
+│   ├── _routes.json            # Routes /gtg/* to the Cloudflare Pages Function
+│   ├── manifest.json           # PWA manifest ("display": "standalone")
 │   ├── sw.js                   # Workbox 6.4.1 service worker
-│   ├── css/                    # Static WordPress & WooCommerce block stylesheets
+│   ├── css/                    # Static WordPress 6.7 & WooCommerce 9.1.2 stylesheets (camouflage & layout)
 │   └── page/product/img/       # Product catalog images
 └── src/
-    ├── main.mpa.js             # Active entry point: pathname-based router & code injector
-    ├── main.js                 # Alternative hash-based (#/path) SPA router & code injector
+    ├── main.mpa.js             # ACTIVE entry point: pathname-based MPA router & custom code injector
+    ├── main.js                 # Legacy/alternative hash-based (#/path) SPA router & code injector
     ├── alert.mjs               # Modal dialog helper driving <dialog id="_dialog-alert">
-    ├── remote.mjs              # Fetches default remote static code from Google Docs export URL
+    ├── remote.mjs              # Fetches default static remote code from Google Docs export URL
     ├── html.js                 # Trusted Types HTML sanitizer & reactive HtmlFragment helper
     ├── IdbWrapper.mjs          # Promise-based IndexedDB wrapper + Gzip stream helpers
-    ├── idb_example.mjs         # Example IndexedDB CRUD implementation
-    ├── style.css               # Global custom styles (nav, forms, dialog, dark-mode/motion media queries)
-    ├── _test/                  # Manual test fixtures for verifying script load event sequencing
+    ├── idb_example.mjs         # Example IndexedDB store ('lsa') CRUD implementation
+    ├── style.css               # Global styles (nav, form states, dialog animations)
+    ├── _test/
+    │   └── custom code injector test.html # Test fixture documenting expected script & event load order
     └── page/                   # Route-based HTML templates and JS controllers
         ├── _.html              # Home page (/)
         ├── shop/               # Catalog page (/shop) - _.html, _.js
         ├── product/            # Product pages (/product/<slug>)
         │   ├── product.mjs     # Product model & hardcoded catalog of 6 products
         │   ├── _onload.js      # Shared controller executed on all /product/* routes
-        │   └── <slug>/_.html   # Individual product HTML templates (6 products)
+        │   └── <slug>/_.html   # 6 individual product HTML templates
         ├── cart/               # Shopping cart (/cart) - _.html, _.js, cart.mjs
         ├── checkout/           # Checkout flow (/checkout) - _.html, _.js
         ├── order-received/     # Order confirmation (/order-received) - _.html, _.js, order-received.mjs
         ├── contact-us/         # Contact & XHR test forms (/contact-us, /contact-us/inquiry-submitted)
-        ├── my-account/         # Custom/remote code injection settings UI (/my-account) - _.html, _.js
+        ├── my-account/         # Custom local & remote code injection settings UI (/my-account) - _.html, _.js
         ├── privacy-policy/     # Static privacy policy (/privacy-policy) - _.html
         └── indexeddb/          # IndexedDB test UI (/indexeddb) - _.html, _.js
 ```
 
 ---
 
-## Architecture & Core Mechanics
+## Core Architecture: Routing & Code Injection Sequencing
 
-### 1. Client-Side Routing & Lifecycle (`src/main.mpa.js` vs `src/main.js`)
+### 1. How `src/main.mpa.js` Works (Active Entry Point)
+[`index.html`](file:///home/mingliangc/wordpress-example/index.html) loads `<script type="module" src="/src/main.mpa.js" async></script>`.
+Because Vite runs with `appType: 'spa'`, the server returns `index.html` for every route, while standard `<a href="/...">` links perform full browser navigation (MPA behavior). On every page load, [`src/main.mpa.js`](file:///home/mingliangc/wordpress-example/src/main.mpa.js) dynamically imports the matching HTML partial and route scripts using Vite's `import.meta.glob`:
+- `pages`: `import.meta.glob('./page/**/*.html', { eager: false, query: 'raw' })`
+- `modules`: `import.meta.glob('./page/**/*.js', { eager: false })`
 
-Vite is configured with `appType: 'spa'`, serving [`index.html`](file:///home/mingliangc/wordpress-example/index.html) for all routes.
-- **Active Entry (`src/main.mpa.js`)**: Uses `location.pathname` to resolve views on page load. Standard `<a href="/...">` links trigger full browser navigation (MPA behavior).
-- **SPA Variant (`src/main.js`)**: Uses `location.hash` (`#/shop`, `#/cart`) and listens to `window.onpopstate`. Even in `main.js`, if custom or remote code is active (`isMPA()`), `onpopstate` forces `location.reload()` to prevent global state/listener leaks across third-party tags.
+### 2. Exact Execution & Injection Timeline (`navigatePage`)
+Because `index.html` has already begun loading by the time the module router fetches the route template and user scripts, [`src/main.mpa.js`](file:///home/mingliangc/wordpress-example/src/main.mpa.js#L72-L150) carefully emulates the browser's native page-load lifecycle so injected `<head>` and `<body>` scripts behave identically to server-rendered HTML.
 
-#### Page Load Sequence (`navigatePage`)
-When navigating to a route `pathname` (e.g., `/product/3-speed-bike`):
-1. **Reset Container**: `_resetAppBody()` replaces `<div id="app">` with a fresh clone to strip previous event listeners.
-2. **Template Lookup**: Looks up `./page${pathname === '/' ? '' : pathname}/_.html` from `import.meta.glob('./page/**/*.html', { eager: false, query: 'raw' })`. Renders a `404` message if not found.
-3. **Head Code Injection**: If no remote server URL is configured (`localStorage['txtRemoteCodeUrl']`), injects `localStorage['txtCodeHead']` into `document.head` via `injectCustomCode()`.
-4. **Render HTML**: Mounts the raw HTML into `#app` using the `passthrough` Trusted Types policy.
-5. **Execute Route Modules** (from `import.meta.glob('./page/**/*.js', { eager: false })`, each exporting `default function(appBody)`):
-   - `_loadSharedResources`: Runs `./page/.../_shared.js` from **top-level to deepest** directory.
-   - `_loadIndividualResources`: Runs `./page${pathname}/_.js` for the exact route (skipped on `/`).
-   - `_loadSharedResources2`: Runs `./page/.../_onload.js` from **deepest to top-level** directory (e.g., `src/page/product/_onload.js` runs for every `/product/<slug>`).
-6. **Body & Remote Code Injection**:
-   - If local mode: injects `localStorage['txtCodeBody']` into `document.body`.
-   - If remote mode (`RemoteCodeInjector`): fetches plain text from `https://docs.google.com/document/d/<ID>/export?format=txt`, injects it into `document.body`, and updates the sticky `#remote-setting__status` bar (`loading`, `success`, `offline`, `error`).
-   - Dispatches synthetic `readystatechange`, `DOMContentLoaded` (on `appBody`), `load`, and `pageshow` (on `window`) events so injected third-party scripts expecting standard DOM lifecycle hooks execute reliably.
-   - Calls `injectStaticRemoteCode()` (`src/remote.mjs`) to fetch and inject the default remote Google Doc snippet.
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant Router as navigatePage (main.mpa.js)
+    participant Head as document.head
+    participant App as div#app
+    participant Body as document.body
+    participant Window as window
 
-### 2. Custom Code Injection (`injectCustomCode`)
-Both `src/main.mpa.js` and `src/main.js` implement `injectCustomCode(htmlCode, intoElement)`:
-- Parses HTML via `<template>` and iterates over child nodes.
-- Recreates `<script>` elements so the browser executes them.
-- For synchronous external scripts (`src` present and no `async` attribute), awaits script `load`/`error` (with a 5000ms timeout) before continuing sequential injection.
-- For inline or `async` scripts, yields a macrotask (`setTimeout(..., 0)`) so inline scripts execute in order.
-- Text nodes targeted at `document.head` are prepended to `document.body` to avoid invalid head text placement.
+    Browser->>Router: navigatePage(location.pathname)
+    Router->>App: 1. _resetAppBody() & await page() HTML
+    alt Local Custom Code Mode (hasRemoteCode === false)
+        Router->>Head: 2. await injectCustomCode(localStorage['txtCodeHead'], document.head)
+    else Remote Code Mode
+        Router->>Router: setTimeout(hideLocaltxtCode, 0)
+    end
+    Router->>App: 3. Mount page HTML (appBody.innerHTML = ...)
+    Router->>App: 4. Run _shared.js (top-down), _.js (route), _onload.js (bottom-up) and await all
+    alt Local Custom Code Mode (hasRemoteCode === false)
+        Router->>Body: 5. await injectCustomCode(localStorage['txtCodeBody'], document.body)
+    end
+    Note over Router,Window: 6. finally block
+    Router->>Body: 6a. await dynamicServerCode.injectRemoteCode() (if txtRemoteCodeUrl set)
+    Router->>App: 6b. setTimeout -> dispatch 'readystatechange' (bubbles: true)
+    Router->>App: 6c. setTimeout -> dispatch 'DOMContentLoaded' (bubbles: true)
+    Router->>Window: 6d. setTimeout -> dispatch 'load' & 'pageshow' (bubbles: true)
+    Router->>Body: 6e. setTimeout -> injectStaticRemoteCode() (remote.mjs)
+```
 
-### 3. E-Commerce Data Models & `localStorage` State
+#### How `injectCustomCode(htmlCode, intoElement)` Guarantees Execution Order
+Defined in [`src/main.mpa.js`](file:///home/mingliangc/wordpress-example/src/main.mpa.js#L9-L55):
+1. Parses `htmlCode` inside an inert `<template>` element and clones its child nodes.
+2. Iterates over each child node sequentially (`for (let i = 0; i < len; ++i)`):
+   - **`<script>` elements**: Recreates a fresh `<script>` element and copies all attributes so the browser executes it:
+     - **Synchronous external scripts (`src` present, no `async` attribute)**: Appends the script to `intoElement` and **awaits** its `load` or `error` event (with a `5000ms` timeout safeguard) before moving to the next node. This ensures external library scripts (e.g., `gtm.js` or `gtag/js`) finish loading before subsequent inline `<script>` tags run.
+     - **Inline scripts or `async` external scripts**: Appends the script to `intoElement` and **awaits** a macrotask tick (`await new Promise(r => setTimeout(r, 0))`) so synchronous inline code executes before the next node is processed.
+   - **`#text` nodes targeted at `document.head`**: Prepends them to `document.body` instead so stray text in head snippets remains visible without corrupting `<head>`.
+   - **All other HTML elements**: Appended directly to `intoElement`.
 
-All store state is persisted client-side in `localStorage`:
-
-| `localStorage` Key | Format | Managed By | Purpose |
-| :--- | :--- | :--- | :--- |
-| `product-cart` | Hex-encoded comma-separated UTF-8 bytes of JSON `string[]` | `Cart` (`src/page/cart/cart.mjs`) | Stores list of product IDs in cart (max 69 per item). |
-| `last order` | Hex-encoded UTF-8 bytes of JSON `OrderSummary` | `OrderSummary` (`src/page/order-received/order-received.mjs`) | Stores the most recent completed checkout order. |
-| `txtCodeHead` | Raw HTML string | `/my-account` (`src/page/my-account/_.js`) | Custom HTML/scripts injected into `<head>`. |
-| `txtCodeBody` | Raw HTML string | `/my-account` (`src/page/my-account/_.js`) | Custom HTML/scripts injected at the end of `<body>`. |
-| `txtRemoteCodeUrl` | Google Docs URL string | `/my-account` or `?serverUrlId=<id>` query param | Remote Google Doc URL whose plain-text export is injected into `<body>`. When set, local `txtCodeHead`/`txtCodeBody` are disabled. |
-
-#### Hardcoded Product Catalog (`src/page/product/product.mjs`)
-`Product` defines 6 valid string IDs (all priced in `USD`):
-- `'83'`: 3-Speed Bike (`$115.00`, `/product/3-speed-bike`)
-- `'85'`: Black and White Summer Portrait (`$115.00`, `/product/black-and-white-summer-portrait`)
-- `'75'`: Crayfish (`$59.00`, `/product/crayfish`)
-- `'87'`: Leather-Clad Leisure Chair (`$249.00`, `/product/leather-clad-leisure-chair`)
-- `'59'`: Teddy Bear (`$13.99`, `/product/teddy-bear`)
-- `'89'`: Vintage Typewriter (`$90.00`, `/product/vintage-typewriter`)
-
-Passing an unknown ID to `new Product(id)` throws an error (`undefined product id`), which `Cart` uses to validate items and reset corrupted cart state.
-
-### 4. Cloudflare Pages Function (`/gtg/*`)
-- Defined in [`functions/gtg/[[path]].js`](file:///home/mingliangc/wordpress-example/functions/gtg/%5B%5Bpath%5D%5D.js) and routed via [`public/_routes.json`](file:///home/mingliangc/wordpress-example/public/_routes.json).
-- Proxies requests to `https://<tagId>.fps.goog` for Google Tag First-Party Mode:
-  - Extracts `tagId` from `?id=G-xxx` (and strips `id` from search params) or falls back to the last non-empty segment of the URL pathname.
-  - Returns `400` if no `tagId` is found (`Error: Missing Google Tag ID (?id=G-xxx)`).
-  - Handles CORS `OPTIONS` preflight requests (`204`).
-  - Forwards `User-Agent`, `Accept`, `Accept-Language`, and Cloudflare geo headers (`X-Forwarded-Country`, `X-Forwarded-Region`, `X-Forwarded-CountryRegion`).
-  - Supports both `GET` and `POST` bodies and sets `Cache-Control: public, max-age=3600` and `Access-Control-Allow-Origin: *` on responses.
+#### Verified Event Sequencing (`src/_test/custom code injector test.html`)
+As documented in [`src/_test/custom code injector test.html`](file:///home/mingliangc/wordpress-example/src/_test/custom%20code%20injector%20test.html), any script injected into `<head>` or `<body>` will observe events in this exact deterministic order:
+1. `0 inline` (synchronous statements at top of injected `<script>`)
+2. `1 inline` (synchronous statements at bottom of injected `<script>`)
+3. `2 : setTimeout 0s` (first `setTimeout(..., 0)` registered inside the injected `<script>`)
+4. `3 : setTimeout 0s` (second `setTimeout(..., 0)` registered inside the injected `<script>`)
+5. `4 : readystatechange` (synthetic event dispatched on `appBody`, bubbles to `document`/`window`)
+6. `5 : DOMContentLoaded` (synthetic event dispatched on `appBody`, bubbles to `document`/`window`)
+7. `6 : load` (synthetic event dispatched on `window`)
+8. `last : pageshow` (synthetic `PageTransitionEvent` dispatched on `window`)
+9. Delayed timers (e.g., `setTimeout(..., 4000)`)
 
 ---
 
-## Development Conventions & Gotchas
+## E-Commerce Flows, State & Training Touchpoints
 
-1. **Adding or Modifying Pages**:
-   - Create `src/page/<route>/_.html` for the markup and `src/page/<route>/_.js` (exporting `default function(appBody) {}`) for route-specific behavior.
-   - Use `_shared.js` for parent-to-child setup or `_onload.js` for child-to-parent post-render hooks.
-2. **Fragile DOM Selectors**:
-   - Controllers in `src/page/cart/_.js`, `src/page/checkout/_.js`, and `src/page/order-received/_.js` query deeply nested WooCommerce block selectors (e.g., `#wp--skip-link--target > div.entry-content...`). If you modify the HTML hierarchy in `_.html`, update the corresponding `querySelector` paths in `_.js`.
-3. **Production Build Drops Console & Debugger**:
-   - `vite.config.js` sets `esbuild: { drop: ['console', 'debugger'] }`. Never put required side effects inside `console.*()` arguments.
-4. **Trusted Types**:
-   - `main.mpa.js`, `main.js`, and `html.js` create `trustedTypes` policies (`passthrough`, `html-sanatizer`). Keep Trusted Types compatibility in mind when assigning to `innerHTML`.
-5. **Code Style**:
-   - Use ES module imports (root-relative `/src/...` or relative `./...`).
-   - Always include semicolons (`semi: ['warn', 'always']` in `eslint.config.mjs`).
-   - Run `npm run lint` to verify there are no `no-undef` or syntax errors after making changes.
+### 1. Client-Side Storage (`localStorage`)
+
+| `localStorage` Key | Encoding / Format | Managed By | Description |
+| :--- | :--- | :--- | :--- |
+| `product-cart` | Hex-encoded UTF-8 bytes of comma-joined `Uint8Array` of JSON `string[]` | [`Cart`](file:///home/mingliangc/wordpress-example/src/page/cart/cart.mjs#L4-L143) | Array of product IDs currently in the cart (max `69` per product ID). |
+| `last order` | Hex-encoded UTF-8 bytes of JSON [`OrderSummary`](file:///home/mingliangc/wordpress-example/src/page/order-received/order-received.mjs#L3-L86) | [`OrderSummary`](file:///home/mingliangc/wordpress-example/src/page/order-received/order-received.mjs#L49-L77) | Stores the last completed order (`id`, `date`, `shippingFee`, `userEmailAddress`, `products`). |
+| `txtCodeHead` | Raw HTML string | [`/my-account`](file:///home/mingliangc/wordpress-example/src/page/my-account/_.js#L15-L33) | Custom HTML/JS injected into `document.head` before `#app` HTML is mounted. |
+| `txtCodeBody` | Raw HTML string | [`/my-account`](file:///home/mingliangc/wordpress-example/src/page/my-account/_.js#L15-L33) | Custom HTML/JS injected into `document.body` after `#app` HTML and route controllers finish. |
+| `txtRemoteCodeUrl` | Google Docs URL (`https://docs.google.com/document/d/<id>/...`) | [`/my-account`](file:///home/mingliangc/wordpress-example/src/page/my-account/_.js#L35-L57) or `?serverUrlId=<id>` | When non-empty, disables local `txtCodeHead`/`txtCodeBody` and fetches `<doc>/export?format=txt` to inject at the end of `document.body`. |
+
+### 2. Hardcoded Product Catalog (`src/page/product/product.mjs`)
+[`Product`](file:///home/mingliangc/wordpress-example/src/page/product/product.mjs#L2-L125) defines 6 valid string IDs (all priced in `USD`):
+- `'83'`: **3-Speed Bike** — `$115.00` (`/product/3-speed-bike`)
+- `'85'`: **Black and White Summer Portrait** — `$115.00` (`/product/black-and-white-summer-portrait`)
+- `'75'`: **Crayfish** — `$59.00` (`/product/crayfish`)
+- `'87'`: **Leather-Clad Leisure Chair** — `$249.00` (`/product/leather-clad-leisure-chair`)
+- `'59'`: **Teddy Bear** — `$13.99` (`/product/teddy-bear`)
+- `'89'`: **Vintage Typewriter** — `$90.00` (`/product/vintage-typewriter`)
+
+Passing an unknown ID to `new Product(id)` throws `Error('undefined product id: ' + id)`, which `Cart` catches to automatically reset corrupted cart state (`Cart.reset()`).
+
+### 3. Route-by-Route Behavior & Trainee Scenarios
+- **Home (`/`, `src/page/_.html`)**: Static WordPress Twenty Twenty-Four landing page with camouflage blocks and links.
+- **Shop (`/shop`, `src/page/shop/_.html` & `_.js`)**: Displays all 6 products. Clicking any `button[href^="?add-to-cart="]` adds 1 item to `Cart` and opens `<dialog id="_dialog-alert">`.
+- **Product Detail (`/product/<slug>`, `src/page/product/_onload.js`)**:
+  - Shared controller [`_onload.js`](file:///home/mingliangc/wordpress-example/src/page/product/_onload.js) attaches to `form.cart` (main Add to Cart button with quantity input clamped `1..69`), `#commentform` (product review submission), and related-product `button[href^="?add-to-cart="]` buttons.
+- **Cart (`/cart`, `src/page/cart/_.html` & `_.js`)**:
+  - Renders line items from `Cart`, quantity `＋`/`－` buttons, `Remove item` buttons, subtotal, flat-rate shipping (`6.80`), and total.
+- **Checkout (`/checkout`, `src/page/checkout/_.html` & `_.js`)**:
+  - [`CheckoutSummary`](file:///home/mingliangc/wordpress-example/src/page/checkout/_.js#L7-L63) renders the order summary sidebar and listens for form submission on the WooCommerce checkout form, captures `input#email`, saves the order via `OrderSummary.save_checkout()`, clears the cart, and redirects to `/order-received?order_id=#...#/checkout`.
+- **Order Received (`/order-received`, `src/page/order-received/_.html` & `_.js`)**:
+  - Reads `OrderSummary.getLastOrder()` and populates the confirmation summary (`#order-summary` with `data-payment-currency`), line items table, shipping fee, and total payment—ideal for trainee purchase conversion scraping.
+- **Contact Us (`/contact-us`, `src/page/contact-us/_.html` & `_.js`)**:
+  - Contains **three distinct form implementations** to test different form-tracking techniques:
+    1. **Contact Form (`#wpforms-form-66-1`)**: Standard HTML `<form>` `submit` event $\rightarrow$ shows custom alert `"submitted!"` $\rightarrow$ reloads page.
+    2. **Custom Ajax Form (`#custom-form`)**: A `<div>` (not a `<form>`) whose `<button type="submit">` click handler validates inputs and sends an `XMLHttpRequest` `POST` to `/gtg/example/`, then alerts `"Submitted successfully!"` and reloads. (Also fires a background XHR `POST` to `/gtg/example2/` 2 seconds after page load as a decoy/test request).
+    3. **Inquiry Form (`#inquiry-form`)**: Standard `<form>` `submit` event that logs `FormData` and navigates to `/contact-us/inquiry-submitted` (for destination-URL conversion tracking).
+- **My Account (`/my-account`, `src/page/my-account/_.html` & `_.js`)**:
+  - Provides `#form-custom-code` (`#txtCodeHead`, `#txtCodeBody`, supports `Ctrl+S` shortcut) and `#form__server-url` (accepts a Google Docs URL `https://docs.google.com/document/d/<ID>/...` and reloads with `?serverUrlId=<ID>`).
+
+### 4. Cloudflare Pages Function (`/gtg/*`)
+- Defined in [`functions/gtg/[[path]].js`](file:///home/mingliangc/wordpress-example/functions/gtg/%5B%5Bpath%5D%5D.js) and routed via [`public/_routes.json`](file:///home/mingliangc/wordpress-example/public/_routes.json).
+- Proxies Google Tag First-Party Mode requests to `https://<tagId>.fps.goog`:
+  - Extracts `tagId` from `?id=G-xxx` (removing `id` from forwarded query params) or falls back to the last non-empty path segment.
+  - Returns HTTP `400` if no `tagId` can be determined.
+  - Handles CORS `OPTIONS` preflight (`204`), forwards `User-Agent`, `Accept`, `Accept-Language`, and Cloudflare geo headers (`X-Forwarded-Country`, `X-Forwarded-Region`, `X-Forwarded-CountryRegion`), forwards `POST` bodies, and adds `Cache-Control: public, max-age=3600`.
+
+---
+
+## Known Codebase Quirks & Candidate Improvements
+
+When maintaining or fixing bugs in this repository, keep these nuances in mind:
+1. **`RemoteCodeInjector.remoteCodeUrl` When Unset**:
+   - In [`src/main.mpa.js`](file:///home/mingliangc/wordpress-example/src/main.mpa.js#L92), `const hasRemoteCode = dynamicServerCode.remoteCodeUrl !== '';` checks `localStorage['txtRemoteCodeUrl']`. On a fresh browser profile where `localStorage['txtRemoteCodeUrl']` is `undefined`, `undefined !== ''` evaluates to `true`, which skips local `txtCodeHead`/`txtCodeBody` injection and marks the textareas `readonly` until `localStorage['txtRemoteCodeUrl']` is initialized to `''`. Returning `localStorage['txtRemoteCodeUrl'] || ''` from the `remoteCodeUrl` getter resolves this without touching injection timing.
+2. **Legacy SPA / Subpath Links**:
+   - A few links carry over from earlier hash-SPA (`main.js`) or GitHub Pages (`/wordpress-example/`) versions:
+     - `src/page/cart/_.js` uses `href="#${p.url}"` on cart item links instead of `href="${p.url}"`.
+     - `src/page/checkout/_.html` uses `href="/wordpress-example/cart"` on "Return to Cart".
+     - `src/page/my-account/_.html` has a top `<script type="module" src="/src/page/my-account.js"></script>` tag that 404s (since `src/page/my-account/_.js` is loaded by `main.mpa.js`).
+3. **Cart Quantity Input `blur` Handler (`src/page/cart/_.js`)**:
+   - The `blur` listener on `.wc-block-components-quantity-selector__input` has an `else { e.target.value = 1; }` branch that resets any valid quantity `<= 69` to `1` on blur unless guarded by `else if (isNaN(qty) || qty < 1)`.
+4. **MPA Redirect on `/contact-us/inquiry-submitted`**:
+   - `src/page/contact-us/_.js` schedules a `5000ms` timer to return to `/contact-us` *before* setting `location.pathname += '/inquiry-submitted'`. Because `main.mpa.js` triggers a full page load when `location.pathname` changes, that timer is destroyed with the old document unless handled by `src/page/contact-us/inquiry-submitted/_.js`.
+5. **Production Build Drops `console` & `debugger`**:
+   - [`vite.config.js`](file:///home/mingliangc/wordpress-example/vite.config.js#L11-L13) sets `esbuild: { drop: ['console', 'debugger'] }`. Note that Vite only strips `console`/`debugger` from bundled project modules, **not** from runtime-injected trainee snippets in `localStorage` or Google Docs.
