@@ -60,6 +60,12 @@ class CheckoutSummary {
         document.body.querySelector('#wp--skip-link--target > div.entry-content.alignwide.wp-block-post-content.is-layout-flow.wp-block-post-content-is-layout-flow > div > div.wc-block-components-sidebar-layout.wc-block-checkout.is-large > div.wc-block-components-sidebar.wc-block-checkout__sidebar.wp-block-woocommerce-checkout-totals-block > div.wp-block-woocommerce-checkout-order-summary-block > div:nth-child(4) > div > div.wc-block-components-totals-item__value > span')
             .textContent = this.cart.totalPriceText(this.orderSummary.shippingFee);
     }
+
+    setShippingFee(shippingFee) {
+        this.orderSummary.shippingFee = shippingFee;
+        this.displayShippingFeed();
+        this.displayTotalPrice();
+    }
 }
 
 
@@ -68,13 +74,14 @@ export default function () {
     console.log({ cart });
 
 
-    const shippingFee = 6.80;
+    const shippingFee = cart.shippingFee;
     const summary = new CheckoutSummary(cart, shippingFee);
 
     summary.listAllProducts();
     summary.displaySubTotalPrice();
     summary.displayShippingFeed();
     summary.displayTotalPrice();
+    initCheckoutShippingOptions(cart, summary);
 
 
     document.body
@@ -113,6 +120,37 @@ export default function () {
         .addEventListener("click", function (e) {
             e.currentTarget.closest("form").requestSubmit();
         });
+}
+
+function initCheckoutShippingOptions(cart, summary) {
+    const viaEl = document.body.querySelector('.wc-block-components-totals-shipping__via');
+    const radios = document.body.querySelectorAll('#shipping-option input[name="radio-control-0"]');
+    if (!radios.length) return;
+
+    const syncSelection = () => {
+        const currentOption = cart.shippingOption;
+        if (viaEl) viaEl.textContent = currentOption.label;
+        radios.forEach((radio) => {
+            const isChecked = radio.value === currentOption.id;
+            radio.checked = isChecked;
+            const label = radio.closest('label.wc-block-components-radio-control__option');
+            if (label) {
+                label.classList.toggle('wc-block-components-radio-control__option-checked', isChecked);
+                label.classList.toggle('wc-block-components-radio-control__option--checked-option-highlighted', isChecked);
+            }
+        });
+    };
+
+    syncSelection();
+
+    radios.forEach((radio) => {
+        radio.addEventListener('change', (e) => {
+            if (!e.target.checked) return;
+            cart.shippingOption = e.target.value;
+            syncSelection();
+            summary.setShippingFee(cart.shippingFee);
+        });
+    });
 }
 
 

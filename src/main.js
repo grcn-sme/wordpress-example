@@ -290,7 +290,8 @@ async function loadImageFile(url) {
     img.setAttribute('width', img.naturalWidth);
     img.setAttribute('height', img.naturalHeight);
   };
-  img.setAttribute('src', `page${url.pathname}${url.search}`);
+  const imgPath = url.pathname.startsWith('/page/') ? url.pathname : `/page${url.pathname}`;
+  img.setAttribute('src', `${imgPath}${url.search}`);
 
   const appBody = _resetAppBody();
   appBody.appendChild(img);
@@ -482,3 +483,6 @@ function hideLocaltxtCode() {
   txtCodeBody.setAttribute('title', 'disabled, using server code');
 
 }
+
+import { initTheme } from '/src/theme.mjs';
+initTheme();

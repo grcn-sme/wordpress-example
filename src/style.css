@@ -6,20 +6,40 @@
 }
 
 
-/* @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
 
-  :root,
-  dialog {
+  :root:not([data-theme="light"]),
+  :root:not([data-theme="light"]) dialog {
     filter: invert(1) hue-rotate(180deg) brightness(1.1);
     background-color: #ddd;
     text-shadow: 0 0 0 1px;
   }
 
-  img,
-  iframe {
+  :root:not([data-theme="light"]) img,
+  :root:not([data-theme="light"]) iframe {
     filter: invert(1) hue-rotate(180deg);
   }
-} */
+}
+
+:root[data-theme="dark"],
+:root[data-theme="dark"] dialog {
+  filter: invert(1) hue-rotate(180deg) brightness(1.1);
+  background-color: #ddd;
+  text-shadow: 0 0 0 1px;
+}
+
+:root[data-theme="dark"] img,
+:root[data-theme="dark"] iframe {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+#btnDarkMode {
+  padding: 0.25rem 0.65rem;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  border: 1px solid #888;
+  background-color: transparent;
+}
 
 
 @media (prefers-reduced-motion: reduce) {

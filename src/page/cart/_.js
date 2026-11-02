@@ -3,12 +3,13 @@ import { Product } from '../product/product.mjs';
 
 export default function (appBody) {
     const cart = new Cart();
-    const shippingFee = 6.80;
+    const shippingFee = cart.shippingFee;
 
     listAllProducts(cart);
     displaySubTotalPrice(cart);
     displayShippingFee(shippingFee);
     displayTotalPrice(cart, shippingFee);
+    initShippingOptions(cart);
 }
 
 
@@ -149,9 +150,47 @@ function displayShippingFee(shippingFee) {
     document.body.querySelector("#wp--skip-link--target > div.entry-content.alignwide.wp-block-post-content.is-layout-flow.wp-block-post-content-is-layout-flow > div > div:nth-child(4) > div > div > div.wc-block-components-sidebar.wc-block-cart__sidebar.wp-block-woocommerce-cart-totals-block > div.wp-block-woocommerce-cart-order-summary-block > div.wp-block-woocommerce-cart-order-summary-totals-block > div.wp-block-woocommerce-cart-order-summary-shipping-block.wc-block-components-totals-wrapper > div > div > span.wc-block-formatted-money-amount.wc-block-components-formatted-money-amount.wc-block-components-totals-item__value")
         .textContent = formattedFee;
 
-    // shipping fee option
+    // shipping fee options
+    const freeDesc = document.body.querySelector("#radio-control-0-free_shipping\\:1__description > span");
+    if (freeDesc) freeDesc.textContent = Product.formatPrice('USD', 0);
+
     document.body.querySelector("#radio-control-0-flat_rate\\:3__description > span")
-        .textContent = formattedFee;
+        .textContent = Product.formatPrice('USD', 6.80);
+
+    const expressDesc = document.body.querySelector("#radio-control-0-express_shipping\\:2__description > span");
+    if (expressDesc) expressDesc.textContent = Product.formatPrice('USD', 20.00);
+}
+
+function initShippingOptions(cart) {
+    const viaEl = document.body.querySelector('.wc-block-components-totals-shipping__via');
+    const radios = document.body.querySelectorAll('input[name="radio-control-0"]');
+    if (!radios.length) return;
+
+    const syncSelection = () => {
+        const currentOption = cart.shippingOption;
+        if (viaEl) viaEl.textContent = currentOption.label;
+        radios.forEach((radio) => {
+            const isChecked = radio.value === currentOption.id;
+            radio.checked = isChecked;
+            const label = radio.closest('label.wc-block-components-radio-control__option');
+            if (label) {
+                label.classList.toggle('wc-block-components-radio-control__option-checked', isChecked);
+            }
+        });
+    };
+
+    syncSelection();
+
+    radios.forEach((radio) => {
+        radio.addEventListener('change', (e) => {
+            if (!e.target.checked) return;
+            cart.shippingOption = e.target.value;
+            const fee = cart.shippingFee;
+            syncSelection();
+            displayShippingFee(fee);
+            displayTotalPrice(cart, fee);
+        });
+    });
 }
 
 function displayTotalPrice(cart, shippingFee) {

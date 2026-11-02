@@ -1,4 +1,185 @@
 <div class="wp-site-blocks">
+	<link rel="stylesheet" href="/css/wc-blocks.css?ver=wc-9.1.2">
+	<link rel="stylesheet" href="/css/packages-style.css?ver=wc-9.1.2">
+	<link rel="stylesheet" href="/css/woocommerce-layout.css?ver=9.1.2">
+	<link rel="stylesheet" href="/css/woocommerce-smallscreen.css?ver=9.1.2">
+	<link rel="stylesheet" href="/css/woocommerce.css?ver=9.1.2">
+	<link rel="stylesheet" href="/css/woocommerce-blocktheme.css?ver=9.1.2">
+	<link rel="stylesheet" href="/css/order-confirmation-totals.css?ver=wc-9.1.2">
+	<link rel="stylesheet" href="/css/order-confirmation-shipping-address.css?ver=wc-9.1.2">
+	<link rel="stylesheet" href="/css/order-confirmation-billing-address.css?ver=wc-9.1.2">
+	<link rel="stylesheet" href="/css/order-confirmation-additional-information.css?ver=wc-9.1.2">
+	<link rel="stylesheet" href="/css/order-confirmation-additional-fields.css?ver=wc-9.1.2">
+	<link rel="stylesheet" href="/css/order-confirmation-additional-fields-wrapper.css?ver=wc-9.1.2">
+	<link rel="stylesheet" href="/css/order-confirmation-downloads.css?ver=wc-9.1.2">
+	<style>
+		main.wp-block-group {
+			max-width: 960px;
+			margin: 2rem auto;
+			padding: 0 1.5rem;
+		}
+
+		.wc-block-order-confirmation-status {
+			background-color: #f0f9f1;
+			border: 1px solid #b7e1cd;
+			border-left: 5px solid #2e7d32;
+			border-radius: 6px;
+			padding: 1rem 1.5rem;
+			margin-bottom: 2rem;
+		}
+
+		.wc-block-order-confirmation-status p {
+			margin: 0;
+			font-weight: 600;
+			color: #1b5e20;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.wc-block-order-confirmation-status p::before {
+			content: "✓";
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 1.5rem;
+			height: 1.5rem;
+			border-radius: 50%;
+			background-color: #2e7d32;
+			color: #fff;
+			font-size: 0.9rem;
+			font-weight: bold;
+		}
+
+		.wc-block-order-confirmation-summary h1 {
+			font-size: 1.5rem;
+			margin-bottom: 0.75rem;
+		}
+
+		ul.wc-block-order-confirmation-summary-list {
+			list-style: none;
+			margin: 0 0 2.5rem 0;
+			padding: 1.25rem;
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+			gap: 1rem;
+			background-color: #fafafa;
+			border: 1px solid hsla(0, 0%, 7%, 0.11);
+			border-radius: 6px;
+		}
+
+		.wc-block-order-confirmation-summary-list-item {
+			display: flex;
+			flex-direction: column;
+			gap: 0.25rem;
+			padding-right: 0.75rem;
+			border-right: 1px solid hsla(0, 0%, 7%, 0.08);
+		}
+
+		.wc-block-order-confirmation-summary-list-item:last-child {
+			border-right: none;
+		}
+
+		.wc-block-order-confirmation-summary-list-item__key {
+			font-size: 0.75rem;
+			text-transform: uppercase;
+			letter-spacing: 0.04em;
+			color: #555;
+		}
+
+		.wc-block-order-confirmation-summary-list-item__value {
+			font-size: 1rem;
+			font-weight: 700;
+			word-break: break-word;
+		}
+
+		.wc-order-item-product-info {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+		}
+
+		img.wc-order-item-thumbnail {
+			width: 48px;
+			height: 48px;
+			object-fit: cover;
+			border-radius: 4px;
+			border: 1px solid hsla(0, 0%, 7%, 0.11);
+			flex-shrink: 0;
+		}
+
+		#order-total th,
+		#order-total td {
+			font-size: 1.1rem;
+			font-weight: 700;
+			background-color: #fafafa;
+		}
+
+		.woocommerce-order-confirmation-address-wrapper {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+			gap: 1.5rem;
+			margin-top: 2.5rem;
+		}
+
+		.wc-block-order-confirmation-additional-information {
+			margin-top: 1.5rem;
+			padding: 1rem 1.25rem;
+			background-color: #fafafa;
+			border: 1px solid hsla(0, 0%, 7%, 0.11);
+			border-radius: 6px;
+		}
+
+		.wc-block-order-confirmation-additional-information p {
+			margin: 0;
+		}
+
+		.wc-order-confirmation-actions {
+			margin-top: 1.5rem;
+			display: flex;
+			gap: 1rem;
+			align-items: center;
+		}
+
+		.wc-order-confirmation-actions a.button-continue-shopping {
+			display: inline-block;
+			padding: 0.65rem 1.25rem;
+			background-color: #111;
+			color: #fff;
+			text-decoration: none;
+			border-radius: 4px;
+			font-weight: 600;
+		}
+
+		#order-history-wrapper {
+			margin-top: 3rem;
+			padding-top: 2rem;
+			border-top: 1px solid hsla(0, 0%, 7%, 0.11);
+		}
+
+		.wc-order-history-table tr.is-current-order {
+			background-color: #f0f9f1;
+		}
+
+		.wc-order-history-badge {
+			display: inline-block;
+			font-size: 0.7rem;
+			padding: 0.1rem 0.45rem;
+			border-radius: 3px;
+			background-color: #2e7d32;
+			color: #fff;
+			margin-left: 0.4rem;
+			vertical-align: middle;
+		}
+
+		.wc-order-history-delete-btn {
+			padding: 0.25rem 0.6rem;
+			font-size: 0.8rem;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			background: #fff;
+		}
+	</style>
 	<main class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
 		<div data-block-name="woocommerce/order-confirmation-status" data-font-size="large"
 			class="wc-block-order-confirmation-status alignwide has-font-size has-large-font-size" style="">
@@ -86,6 +267,16 @@
 		<div data-block-name="woocommerce/order-confirmation-additional-information"
 			class="wc-block-order-confirmation-additional-information alignwide" style="">
 			<p>Pay with cash upon delivery.</p>
+		</div>
+
+		<div class="wc-order-confirmation-actions alignwide">
+			<a href="/shop" class="button-continue-shopping">Continue shopping</a>
+		</div>
+
+		<div id="order-history-wrapper" class="wc-block-order-confirmation-totals-wrapper alignwide">
+			<h3 class="wp-block-heading" style="font-size:clamp(15.747px, 0.984rem + ((1vw - 3.2px) * 0.86), 24px);">
+				Order history</h3>
+			<div id="order-history-list" class="wc-block-order-confirmation-totals alignwide"></div>
 		</div>
 	</main>
 

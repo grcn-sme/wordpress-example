@@ -71,11 +71,13 @@ This repository is built for **quick live demos and hands-on trainee exercises**
     ├── html.js                 # Trusted Types HTML sanitizer & reactive HtmlFragment helper
     ├── IdbWrapper.mjs          # Promise-based IndexedDB wrapper + Gzip stream helpers
     ├── idb_example.mjs         # Example IndexedDB store ('lsa') CRUD implementation
-    ├── style.css               # Global styles (nav, form states, dialog animations)
+    ├── theme.mjs               # Dark/light mode state & #btnDarkMode toggle helper
+    ├── style.css               # Global styles (dark mode, nav, form states, dialog animations)
     ├── _test/
     │   ├── custom code injector test.html # Test fixture documenting expected script & event load order
-    │   ├── ecommerce.test.js       # Vitest unit tests for Product, Cart, and OrderSummary models
-    │   └── plan-fixes.test.js      # Vitest tests for bug fixes, controllers, and /gtg/* proxy
+    │   ├── ecommerce.test.js       # Vitest unit tests for Product, Cart, shipping options, and OrderSummary
+    │   ├── plan-fixes.test.js      # Vitest tests for bug fixes, controllers, and /gtg/* proxy
+    │   └── features.test.js        # Vitest tests for image routing, shipping UI, IndexedDB order history, and dark mode
     └── page/                   # Route-based HTML templates and JS controllers
         ├── _.html              # Home page (/)
         ├── shop/               # Catalog page (/shop) - _.html, _.js
@@ -164,8 +166,10 @@ As documented in [`src/_test/custom code injector test.html`](file:///home/mingl
 
 | `localStorage` Key | Encoding / Format | Managed By | Description |
 | :--- | :--- | :--- | :--- |
-| `product-cart` | Hex-encoded UTF-8 bytes of comma-joined `Uint8Array` of JSON `string[]` | [`Cart`](file:///home/mingliangc/wordpress-example/src/page/cart/cart.mjs#L4-L143) | Array of product IDs currently in the cart (max `69` per product ID). |
-| `last order` | Hex-encoded UTF-8 bytes of JSON [`OrderSummary`](file:///home/mingliangc/wordpress-example/src/page/order-received/order-received.mjs#L3-L86) | [`OrderSummary`](file:///home/mingliangc/wordpress-example/src/page/order-received/order-received.mjs#L49-L77) | Stores the last completed order (`id`, `date`, `shippingFee`, `userEmailAddress`, `products`). |
+| `product-cart` | Hex-encoded UTF-8 bytes of comma-joined `Uint8Array` of JSON `string[]` | [`Cart`](file:///home/mingliangc/wordpress-example/src/page/cart/cart.mjs#L4-L178) | Array of product IDs currently in the cart (max `69` per product ID). |
+| `shipping-option` | Option ID string (`free_shipping:1`, `flat_rate:3`, `express_shipping:2`) | [`Cart`](file:///home/mingliangc/wordpress-example/src/page/cart/cart.mjs#L54-L85) | Selected shipping rate option (`$0.00` Free, `$6.80` Flat rate, or `$20.00` Express). |
+| `last order` | Hex-encoded UTF-8 bytes of JSON [`OrderSummary`](file:///home/mingliangc/wordpress-example/src/page/order-received/order-received.mjs#L4-L170) | [`OrderSummary`](file:///home/mingliangc/wordpress-example/src/page/order-received/order-received.mjs#L74-L91) | Stores the last completed order (`id`, `date`, `shippingFee`, `userEmailAddress`, `products`). |
+| `theme` | `'dark'` \| `'light'` | [`theme.mjs`](file:///home/mingliangc/wordpress-example/src/theme.mjs) | Persists manual dark/light mode selection toggled via `#btnDarkMode`. |
 | `txtCodeHead` | Raw HTML string | [`/my-account`](file:///home/mingliangc/wordpress-example/src/page/my-account/_.js#L15-L33) | Custom HTML/JS injected into `document.head` before `#app` HTML is mounted. |
 | `txtCodeBody` | Raw HTML string | [`/my-account`](file:///home/mingliangc/wordpress-example/src/page/my-account/_.js#L15-L33) | Custom HTML/JS injected into `document.body` after `#app` HTML and route controllers finish. |
 | `txtRemoteCodeUrl` | Google Docs URL (`https://docs.google.com/document/d/<id>/...`) | [`/my-account`](file:///home/mingliangc/wordpress-example/src/page/my-account/_.js#L35-L57) or `?serverUrlId=<id>` | When non-empty, disables local `txtCodeHead`/`txtCodeBody` and fetches `<doc>/export?format=txt` to inject at the end of `document.body`. |
@@ -187,11 +191,11 @@ Passing an unknown ID to `new Product(id)` throws `Error('undefined product id: 
 - **Product Detail (`/product/<slug>`, `src/page/product/_onload.js`)**:
   - Shared controller [`_onload.js`](file:///home/mingliangc/wordpress-example/src/page/product/_onload.js) attaches to `form.cart` (main Add to Cart button with quantity input clamped `1..69`), `#commentform` (product review submission), and related-product `button[href^="?add-to-cart="]` buttons.
 - **Cart (`/cart`, `src/page/cart/_.html` & `_.js`)**:
-  - Renders line items from `Cart`, quantity `＋`/`－` buttons, `Remove item` buttons, subtotal, flat-rate shipping (`6.80`), and total.
+  - Renders line items from `Cart`, quantity `＋`/`－` buttons, `Remove item` buttons, subtotal, 3 selectable shipping options (`Free shipping` `$0.00`, `Flat rate` `$6.80`, `Express shipping` `$20.00`), and total.
 - **Checkout (`/checkout`, `src/page/checkout/_.html` & `_.js`)**:
-  - [`CheckoutSummary`](file:///home/mingliangc/wordpress-example/src/page/checkout/_.js#L7-L63) renders the order summary sidebar and listens for form submission on the WooCommerce checkout form, captures `input#email`, saves the order via `OrderSummary.save_checkout()`, clears the cart, and redirects to `/order-received?order_id=#...#/checkout`.
+  - [`CheckoutSummary`](file:///home/mingliangc/wordpress-example/src/page/checkout/_.js#L7-L68) renders the order summary sidebar, syncs the 3 shipping options with `Cart`, and listens for form submission on the WooCommerce checkout form, captures `input#email`, saves the order via `OrderSummary.save_checkout()` (to both `localStorage['last order']` and IndexedDB), clears the cart, and redirects to `/order-received?order_id=#...#/checkout`.
 - **Order Received (`/order-received`, `src/page/order-received/_.html` & `_.js`)**:
-  - Reads `OrderSummary.getLastOrder()` and populates the confirmation summary (`#order-summary` with `data-payment-currency`), line items table, shipping fee, and total payment—ideal for trainee purchase conversion scraping.
+  - Resolves `?order_id=` from IndexedDB via [`IdbWrapper`](file:///home/mingliangc/wordpress-example/src/IdbWrapper.mjs) or falls back to `OrderSummary.getLastOrder()`, populates the confirmation summary (`#order-summary` with `data-payment-currency`), line items table with product thumbnails, shipping fee, total payment, and renders an interactive Order History table of past orders stored in IndexedDB (`woocommerce-order-history`).
 - **Contact Us (`/contact-us`, `src/page/contact-us/_.html` & `_.js`)**:
   - Contains **three distinct form implementations** to test different form-tracking techniques:
     1. **Contact Form (`#wpforms-form-66-1`)**: Standard HTML `<form>` `submit` event $\rightarrow$ shows custom alert `"submitted!"` $\rightarrow$ reloads page.

@@ -134,6 +134,35 @@ describe('Cart state management (src/page/cart/cart.mjs)', () => {
         expect(localStorage['product-cart']).toBeUndefined();
     });
 
+    it('supports 3 shipping options (free $0.00, flat rate $6.80, express $20.00) and persists selection', () => {
+        const cart = new Cart();
+        cart.add('83', 1); // $115.00
+
+        expect(Cart.shippingOptions).toEqual([
+            { id: 'free_shipping:1', label: 'Free shipping', cost: 0.00 },
+            { id: 'flat_rate:3', label: 'Flat rate', cost: 6.80 },
+            { id: 'express_shipping:2', label: 'Express shipping', cost: 20.00 },
+        ]);
+
+        // Default is flat_rate:3 ($6.80)
+        expect(cart.shippingOption.id).toBe('flat_rate:3');
+        expect(cart.shippingFee).toBe(6.80);
+        expect(cart.totalPriceText(cart.shippingFee)).toBe('$121.80');
+
+        // Select Free shipping by option ID
+        cart.shippingOption = 'free_shipping:1';
+        expect(cart.shippingFee).toBe(0.00);
+        expect(cart.shippingOption.label).toBe('Free shipping');
+        expect(cart.totalPriceText(cart.shippingFee)).toBe('$115.00');
+
+        // Select Express shipping ($20.00) by cost or ID and verify persistence across Cart instances
+        cart.shippingFee = 20.00;
+        const reloadedCart = new Cart();
+        expect(reloadedCart.shippingOption.id).toBe('express_shipping:2');
+        expect(reloadedCart.shippingFee).toBe(20.00);
+        expect(reloadedCart.totalPriceText(reloadedCart.shippingFee)).toBe('$135.00');
+    });
+
     it('resets corrupted cart data in localStorage when an invalid product ID is encountered', () => {
         const raw = JSON.stringify(['invalid-id']);
         const encoded = new TextEncoder().encode(raw).join(',');

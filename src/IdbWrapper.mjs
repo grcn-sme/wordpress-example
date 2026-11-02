@@ -52,14 +52,15 @@ export class IdbWrapper {
      */
     static open(dbName, version, setup_db_structure) {
         return new Promise((resolve, fail) => {
-            const request = window.indexedDB.open(dbName, version);
+            const idb = (typeof window !== 'undefined' && window.indexedDB) ? window.indexedDB : globalThis.indexedDB;
+            const request = idb.open(dbName, version);
             request.onerror = fail;
 
             request.onsuccess = (event) => {
                 /** @type {IDBDatabase} */
                 const db = event.target.result;
                 console.log({ db });
-                db.onversionchange = db.close;
+                db.onversionchange = () => db.close();
                 const dbw = new IdbWrapper(db);
                 resolve(dbw);
             };
@@ -68,7 +69,7 @@ export class IdbWrapper {
             request.onupgradeneeded = function (ev) {
                 /** @type {IDBDatabase} */
                 const db = ev.target.result;
-                db.onversionchange = db.close;
+                db.onversionchange = () => db.close();
                 setup_db_structure(db, db.objectStoreNames);
             };
 
@@ -207,6 +208,9 @@ export class IdbWrapper {
             const db = this.#db;
             const request = db.transaction(objectStoreName, "readwrite");
             request.onerror = fail;
+            request.oncomplete = ev => {
+                resolve(request.result);
+            };
             request.onsuccess = ev => {
                 // console.log({ event: ev, result: request.result });
                 resolve(request.result);

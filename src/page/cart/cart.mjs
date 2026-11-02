@@ -50,6 +50,40 @@ export class Cart {
     }
 
     static get maxQuantityPerItem() { return 69; }
+
+    static get shippingOptions() {
+        return [
+            { id: 'free_shipping:1', label: 'Free shipping', cost: 0.00 },
+            { id: 'flat_rate:3', label: 'Flat rate', cost: 6.80 },
+            { id: 'express_shipping:2', label: 'Express shipping', cost: 20.00 },
+        ];
+    }
+
+    get shippingOption() {
+        const saved = localStorage['shipping-option'];
+        const options = Cart.shippingOptions;
+        return options.find(o => o.id === saved) || options[1];
+    }
+
+    /** @param {string | number} optionIdOrCost */
+    set shippingOption(optionIdOrCost) {
+        const options = Cart.shippingOptions;
+        const found = options.find(
+            o => o.id === optionIdOrCost || o.cost === Number(optionIdOrCost)
+        );
+        if (found) {
+            localStorage['shipping-option'] = found.id;
+        }
+    }
+
+    get shippingFee() {
+        return this.shippingOption.cost;
+    }
+
+    /** @param {number} fee */
+    set shippingFee(fee) {
+        this.shippingOption = fee;
+    }
     /** 
      * @param {string} productId 
      * @param {number} quantity
@@ -120,6 +154,7 @@ export class Cart {
 
     static reset() {
         localStorage.removeItem('product-cart');
+        localStorage.removeItem('shipping-option');
     }
 
     reset() {

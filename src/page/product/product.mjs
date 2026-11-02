@@ -33,7 +33,7 @@ export class Product {
                 price: 115.0,
                 currency: 'USD',
                 quantity: 1,
-                img_src: './page/product/img/road-sport-vintage-wheel-retro-old.jpg',
+                img_src: '/page/product/img/road-sport-vintage-wheel-retro-old.jpg',
                 url: '/product/3-speed-bike',
             };
         }
@@ -44,7 +44,7 @@ export class Product {
                 price: 115.0,
                 currency: 'USD',
                 quantity: 1,
-                img_src: './page/product/img/white-black-black-and-white-photograph-monochrome-photography.jpg',
+                img_src: '/page/product/img/white-black-black-and-white-photograph-monochrome-photography.jpg',
                 url: '/product/black-and-white-summer-portrait',
 
             };
@@ -56,7 +56,7 @@ export class Product {
                 price: 59.0,
                 currency: 'USD',
                 quantity: 1,
-                img_src: './page/product/img/Procambarus-alleni-Blue-crayfish-1.jpg',
+                img_src: '/page/product/img/Procambarus-alleni-Blue-crayfish-1.jpg',
                 url: '/product/crayfish',
             };
         }
@@ -67,7 +67,7 @@ export class Product {
                 price: 249.0,
                 currency: 'USD',
                 quantity: 1,
-                img_src: './page/product/img/table-wood-house-chair-floor-window.jpg',
+                img_src: '/page/product/img/table-wood-house-chair-floor-window.jpg',
                 url: '/product/leather-clad-leisure-chair',
             };
         }
@@ -78,7 +78,7 @@ export class Product {
                 price: 13.99,
                 currency: 'USD',
                 quantity: 1,
-                img_src: './page/product/img/XL_bear_1946x.webp',
+                img_src: '/page/product/img/XL_bear_1946x.webp',
                 url: '/product/teddy-bear',
             };
         }
@@ -89,7 +89,7 @@ export class Product {
                 price: 90.00,
                 currency: 'USD',
                 quantity: 1,
-                img_src: './page/product/img/writing-typing-keyboard-technology-white-vintage.jpg',
+                img_src: '/page/product/img/writing-typing-keyboard-technology-white-vintage.jpg',
                 url: '/product/vintage-typewriter',
             };
         }
