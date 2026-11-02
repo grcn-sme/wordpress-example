@@ -8,9 +8,11 @@ export function alert(message) {
 }
 
 
-const dialog = document.getElementById('_dialog-alert');
-dialog.setAttribute('closedby', 'closerequest'); // `[closedby="any"]` cannot block click on backdrop when in mobile view
-dialog.addEventListener('click', function (e) {
-    if (e.target === dialog)
-        dialog.close();
-});
+const dialog = typeof document !== 'undefined' && document.getElementById('_dialog-alert') || null;
+if(dialog){
+    dialog.setAttribute('closedby', 'closerequest'); // `[closedby="any"]` cannot block click on backdrop when in mobile view
+    dialog.addEventListener('click', function (e) {
+        if (e.target === dialog)
+            dialog.close();
+    });
+}
